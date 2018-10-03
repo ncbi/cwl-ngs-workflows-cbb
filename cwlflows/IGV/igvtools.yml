@@ -1,0 +1,3 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/igvtools:2.3.93--0
+ dockerOutputDirectory: /data

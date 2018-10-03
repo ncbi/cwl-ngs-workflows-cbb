@@ -1,0 +1,3 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/samtools:1.9--h8ee4bcc_1
+ dockerOutputDirectory: /data

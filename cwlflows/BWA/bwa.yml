@@ -1,0 +1,3 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/bwa:0.7.8--1
+ dockerOutputDirectory: /data

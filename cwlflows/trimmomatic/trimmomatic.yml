@@ -1,0 +1,3 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/trimmomatic:0.38--1
+ dockerOutputDirectory: /data
