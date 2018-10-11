@@ -11,28 +11,35 @@ inputs:
     type: string
   out_stderr:
     type: string
+  paired:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -paired
+    doc: |
+      If this option is present then reads in the BAM file are treated as pairs
   chromsize:
     type: File
     inputBinding:
-      position: 1
+      position: 2
     doc: |
       ChromHMM genome size
   input:
     type: Directory
     inputBinding:
-      position: 2
+      position: 3
     doc: |
       Input directory
   cellmarkfiletable:
     type: File
     inputBinding:
-      position: 3
+      position: 4
     doc: |
       cellmarkfiletable file
   output:
-    type: string
+    type: Directory
     inputBinding:
-      position: 4
+      position: 5
 
 outputs:
   out_stdout:
