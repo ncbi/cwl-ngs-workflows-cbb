@@ -21,8 +21,8 @@ inputs:
     type: Directory
     inputBinding:
       position: 2
-      doc: |
-        Input directory
+    doc: |
+      Input directory
   cellmarkfiletable:
     type: File
     inputBinding:
