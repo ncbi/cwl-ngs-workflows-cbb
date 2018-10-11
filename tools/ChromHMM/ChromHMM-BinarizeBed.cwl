@@ -36,7 +36,7 @@ inputs:
       position: 4
     doc: |
       cellmarkfiletable file
-  output:
+  output_dir:
     type: string
     inputBinding:
       position: 5
@@ -47,9 +47,9 @@ outputs:
   out_stderr:
     type: stderr
   output:
-    type: File[]
+    type: Directory
     outputBinding:
-      glob: $(*.txt)
+      glob: $(inputs.output_dir)
 
 stdout: $(inputs.out_stdout)
 stderr: $(inputs.out_stderr)
