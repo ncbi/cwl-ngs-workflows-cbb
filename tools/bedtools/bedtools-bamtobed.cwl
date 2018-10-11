@@ -13,7 +13,6 @@ inputs:
     type: string
   b:
     type: File
-    default: false
     inputBinding:
       position: 1
       prefix: -i
