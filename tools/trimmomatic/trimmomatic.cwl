@@ -31,7 +31,7 @@ inputs:
     inputBinding:
       prefix: -phred
       separate: false
-      position: 4
+      position: 3
     doc: |
       "33" or "64" specifies the base quality encoding. Default: 64
 
@@ -74,16 +74,6 @@ inputs:
       If required, it should normally be after all other processing steps.
       Reads removed by this step will be counted and included in the "dropped
       reads" count presented in the trimmomatic summary.
-
-  java_opts:
-    type: string?
-    inputBinding:
-      position: 1
-      shellQuote: false
-    doc: |
-      JVM arguments should be a quoted, space separated list
-      (e.g. "-Xms128m -Xmx512m")
-
   leading:
     type: int?
     inputBinding:
@@ -139,15 +129,23 @@ inputs:
     type: File?
 #    format: edam:format_1930  # fastq
     inputBinding:
-      position: 6
+      position: 5
     doc: FASTQ file of R2 reads in Paired End mode
 
   reads1:
     type: File
 #    format: edam:format_1930  # fastq
     inputBinding:
-      position: 5
+      position: 4
     doc: FASTQ file of reads (R1 reads in Paired End mode)
+  reads1_out:
+    type: string
+    inputBinding:
+      position: 6
+  reads2_out:
+    type: string?
+    inputBinding:
+      position: 7
 
   avgqual:
     type: int?
@@ -209,34 +207,12 @@ outputs:
     type: File
     format: edam:format_1930  # fastq
     outputBinding:
-      glob: $(inputs.reads1.nameroot).trimmed.fastq
-  reads1_trimmed_unpaired:
+      glob: $(inputs.reads1_out)
+  reads2_trimmed:
     type: File?
     format: edam:format_1930  # fastq
     outputBinding:
-      glob: $(inputs.reads1.nameroot).trimmed.unpaired.fastq
-  reads2_trimmed_paired:
-    type: File?
-    format: edam:format_1930  # fastq
-    outputBinding:
-      glob: |
-        ${ if (inputs.reads2 ) {
-             return inputs.reads2.nameroot + '.trimmed.fastq';
-           } else {
-             return null;
-           }
-         }
-  reads2_trimmed_unpaired:
-    type: File?
-    format: edam:format_1930  # fastq
-    outputBinding:
-      glob: |
-        ${ if (inputs.reads2 ) {
-             return inputs.reads2.nameroot + '.trimmed.unpaired.fastq';
-           } else {
-             return null;
-           }
-         }
+      glob: $(inputs.reads2_out)
 
 stdout: $(inputs.out_stdout)
 stderr: $(inputs.out_stderr)
