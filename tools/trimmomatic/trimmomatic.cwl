@@ -21,6 +21,11 @@ inputs:
     type: string
   out_stderr:
     type: string
+  threads:
+    type: int
+    inputBinding:
+      prefix: -threads
+      position: 2
   phred:
     type: int?
     inputBinding:
@@ -191,7 +196,7 @@ inputs:
   end_mode:
     type: string
     inputBinding:
-      position: 3
+      position: 1
     doc: |
       Single End (SE) or Paired End (PE) mode
 
@@ -205,26 +210,11 @@ outputs:
     format: edam:format_1930  # fastq
     outputBinding:
       glob: $(inputs.reads1.nameroot).trimmed.fastq
-
-  output_log:
-    type: File
-    outputBinding:
-      glob: trim.log
-    label: Trimmomatic log
-    doc: |
-      log of all read trimmings, indicating the following details:
-        the read name
-        the surviving sequence length
-        the location of the first surviving base, aka. the amount trimmed from the start
-        the location of the last surviving base in the original read
-        the amount trimmed from the end
-
   reads1_trimmed_unpaired:
     type: File?
     format: edam:format_1930  # fastq
     outputBinding:
       glob: $(inputs.reads1.nameroot).trimmed.unpaired.fastq
-
   reads2_trimmed_paired:
     type: File?
     format: edam:format_1930  # fastq
@@ -236,7 +226,6 @@ outputs:
              return null;
            }
          }
-
   reads2_trimmed_unpaired:
     type: File?
     format: edam:format_1930  # fastq
@@ -252,44 +241,7 @@ outputs:
 stdout: $(inputs.out_stdout)
 stderr: $(inputs.out_stderr)
 
-baseCommand: [ java, org.usadellab.trimmomatic.Trimmomatic ]
-
-arguments:
-- valueFrom: trim.log
-  prefix: -trimlog 
-  position: 4
-- valueFrom: $(runtime.cores)
-  position: 4
-  prefix: -threads
-- valueFrom: $(inputs.reads1.nameroot).trimmed.fastq
-  position: 7
-- valueFrom: |
-    ${
-      if (inputs.end_mode == "PE" && inputs.reads2) {
-        return inputs.reads1.nameroot + '.trimmed.unpaired.fastq';
-      } else {
-        return null;
-      }
-    }
-  position: 8
-- valueFrom: |
-    ${
-      if (inputs.end_mode == "PE" && inputs.reads2) {
-        return inputs.reads2.nameroot + '.trimmed.fastq';
-      } else {
-        return null;
-      }
-    }
-  position: 9
-- valueFrom: |
-    ${
-      if (inputs.end_mode == "PE" && inputs.reads2) {
-        return inputs.reads2.nameroot + '.trimmed.unpaired.fastq';
-      } else {
-        return null;
-      }
-    }
-  position: 10
+baseCommand: [ 'trimmomatic']
 
 doc: |
   Trimmomatic is a fast, multithreaded command line tool that can be used to trim and crop
