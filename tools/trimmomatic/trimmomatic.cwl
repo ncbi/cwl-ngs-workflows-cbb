@@ -22,7 +22,7 @@ inputs:
   out_stderr:
     type: string
   phred:
-    type: trimmomatic-phred.yaml#phred?
+    type: int?
     inputBinding:
       prefix: -phred
       separate: false
@@ -111,7 +111,7 @@ inputs:
       <requiredQuality> specifies the average quality required
 
   illuminaClip:
-    type: trimmomatic-illumina_clipping.yaml#illuminaClipping?
+    type: string?
     inputBinding:
       valueFrom: |
         ${ if ( self ) { 
@@ -204,9 +204,8 @@ inputs:
       the balance between preserving as much read length as possible vs.
       removal of incorrect bases. A low value of this parameter (<0.2) favours
       longer reads, while a high value (>0.8) favours read correctness.
-
   end_mode:
-    type: trimmomatic-end_mode.yaml#end_mode
+    type: string
     inputBinding:
       position: 3
     doc: |
