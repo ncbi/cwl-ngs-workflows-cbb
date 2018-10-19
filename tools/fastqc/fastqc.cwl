@@ -4,7 +4,7 @@ class: CommandLineTool
 
 requirements:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/fastqc:0.11.7--5
+    dockerPull: quay.io/biocontainers/fastqc:0.11.7--4
     dockerOutputDirectory: /data
 
 inputs:
