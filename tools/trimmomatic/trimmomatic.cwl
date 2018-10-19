@@ -148,14 +148,14 @@ inputs:
 
   reads2:
     type: File?
-    format: edam:format_1930  # fastq
+#    format: edam:format_1930  # fastq
     inputBinding:
       position: 6
     doc: FASTQ file of R2 reads in Paired End mode
 
   reads1:
     type: File
-    format: edam:format_1930  # fastq
+#    format: edam:format_1930  # fastq
     inputBinding:
       position: 5
     doc: FASTQ file of reads (R1 reads in Paired End mode)
