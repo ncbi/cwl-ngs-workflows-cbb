@@ -115,6 +115,7 @@ inputs:
     inputBinding:
       prefix: 'ILLUMINACLIP:/usr/local/share/trimmomatic/adapters/'
       position: 11
+      separate: false
     doc: Cut adapter and other illumina-specific sequences from the read.
 
   crop:
