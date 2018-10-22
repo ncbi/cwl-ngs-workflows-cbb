@@ -21,6 +21,13 @@ inputs:
     type: string
   out_stderr:
     type: string
+
+  end_mode:
+    type: string
+    inputBinding:
+      position: 1
+    doc: |
+      Single End (SE) or Paired End (PE) mode
   threads:
     type: int
     inputBinding:
@@ -34,7 +41,36 @@ inputs:
       position: 3
     doc: |
       "33" or "64" specifies the base quality encoding. Default: 64
+  reads1:
+    type: File
+    #    format: edam:format_1930  # fastq
+    inputBinding:
+      position: 4
+    doc: FASTQ file of reads (R1 reads in Paired End mode)
+  reads2:
+    type: File?
+    #    format: edam:format_1930  # fastq
+    inputBinding:
+      position: 5
+    doc: FASTQ file of R2 reads in Paired End mode
+  reads1_out:
+    type: string
+    inputBinding:
+      position: 6
+    reads2_out:
+      type: string?
+      inputBinding:
+        position: 7
 
+  illuminaClip:
+    type: string?
+    inputBinding:
+      position: 11
+      valueFrom: |
+        ${
+            return 'ILLUMINACLIP:/usr/local/share/trimmomatic/adapters/' + self;
+         }
+    doc: Cut adapter and other illumina-specific sequences from the read.
   tophred64:
     type: boolean?
     inputBinding:
@@ -42,19 +78,6 @@ inputs:
       prefix: TOPHRED64
       separate: false
     doc: This (re)encodes the quality part of the FASTQ file to base 64.
-
-  headcrop:
-    type: int?
-    inputBinding:
-      position: 13
-      prefix: 'HEADCROP:'
-      separate: false
-    doc: |
-      Removes the specified number of bases, regardless of quality, from the
-      beginning of the read.
-      The numbser specified is the number of bases to keep, from the start of
-      the read.
-
   tophred33:
     type: boolean?
     inputBinding:
@@ -62,29 +85,6 @@ inputs:
       prefix: TOPHRED33
       separate: false
     doc: This (re)encodes the quality part of the FASTQ file to base 33.
-
-  minlen:
-    type: int?
-    inputBinding:
-      position: 100
-      prefix: 'MINLEN:'
-      separate: false
-    doc: |
-      This module removes reads that fall below the specified minimal length.
-      If required, it should normally be after all other processing steps.
-      Reads removed by this step will be counted and included in the "dropped
-      reads" count presented in the trimmomatic summary.
-  leading:
-    type: int?
-    inputBinding:
-      position: 14
-      prefix: 'LEADING:'
-      separate: false
-    doc: |
-      Remove low quality bases from the beginning. As long as a base has a
-      value below this threshold the base is removed and the next base will be
-      investigated.
-
   slidingwindow:
     type: trimmomatic-sliding_window.yaml#slidingWindow?
     inputBinding:
@@ -104,75 +104,6 @@ inputs:
       quality data later in the read.
       <windowSize> specifies the number of bases to average across
       <requiredQuality> specifies the average quality required
-
-  illuminaClip:
-    type: string?
-    inputBinding:
-      position: 11
-      valueFrom: |
-        ${
-            return 'ILLUMINACLIP:/usr/local/share/trimmomatic/adapters/' + self;
-         }
-    doc: Cut adapter and other illumina-specific sequences from the read.
-
-  crop:
-    type: int?
-    inputBinding:
-      position: 13
-      prefix: 'CROP:'
-      separate: false
-    doc: |
-      Removes bases regardless of quality from the end of the read, so that the
-      read has maximally the specified length after this step has been
-      performed. Steps performed after CROP might of course further shorten the
-      read. The value is the number of bases to keep, from the start of the read.
-
-  reads2:
-    type: File?
-    #    format: edam:format_1930  # fastq
-    inputBinding:
-      position: 5
-    doc: FASTQ file of R2 reads in Paired End mode
-
-  reads1:
-    type: File
-    #    format: edam:format_1930  # fastq
-    inputBinding:
-      position: 4
-    doc: FASTQ file of reads (R1 reads in Paired End mode)
-  reads1_out:
-    type: string
-    inputBinding:
-      position: 6
-  reads2_out:
-    type: string?
-    inputBinding:
-      position: 7
-
-  avgqual:
-    type: int?
-    inputBinding:
-      position: 101
-      prefix: 'AVGQUAL:'
-      separate: false
-    doc: |
-      Drop the read if the average quality is below the specified level
-
-  trailing:
-    type: int?
-    inputBinding:
-      position: 14
-      prefix: 'TRAILING:'
-      separate: false
-    doc: |
-      Remove low quality bases from the end. As long as a base has a value
-      below this threshold the base is removed and the next base (which as
-      trimmomatic is starting from the 3' prime end would be base preceding
-      the just removed base) will be investigated. This approach can be used
-      removing the special Illumina "low quality segment" regions (which are
-      marked with quality score of 2), but we recommend Sliding Window or
-      MaxInfo instead
-
   maxinfo:
     type: trimmomatic-max_info.yaml#maxinfo?
     inputBinding:
@@ -193,12 +124,73 @@ inputs:
       the balance between preserving as much read length as possible vs.
       removal of incorrect bases. A low value of this parameter (<0.2) favours
       longer reads, while a high value (>0.8) favours read correctness.
-  end_mode:
-    type: string
+
+  crop:
+    type: int?
     inputBinding:
-      position: 1
+      position: 20
+      prefix: 'CROP:'
+      separate: false
     doc: |
-      Single End (SE) or Paired End (PE) mode
+      Removes bases regardless of quality from the end of the read, so that the
+      read has maximally the specified length after this step has been
+      performed. Steps performed after CROP might of course further shorten the
+      read. The value is the number of bases to keep, from the start of the read.
+  headcrop:
+    type: int?
+    inputBinding:
+      position: 21
+      prefix: 'HEADCROP:'
+      separate: false
+    doc: |
+      Removes the specified number of bases, regardless of quality, from the
+      beginning of the read.
+      The numbser specified is the number of bases to keep, from the start of
+      the read.
+
+  leading:
+    type: int?
+    inputBinding:
+      position: 22
+      prefix: 'LEADING:'
+      separate: false
+    doc: |
+      Remove low quality bases from the beginning. As long as a base has a
+      value below this threshold the base is removed and the next base will be
+      investigated.
+  trailing:
+    type: int?
+    inputBinding:
+      position: 23
+      prefix: 'TRAILING:'
+      separate: false
+    doc: |
+      Remove low quality bases from the end. As long as a base has a value
+      below this threshold the base is removed and the next base (which as
+      trimmomatic is starting from the 3' prime end would be base preceding
+      the just removed base) will be investigated. This approach can be used
+      removing the special Illumina "low quality segment" regions (which are
+      marked with quality score of 2), but we recommend Sliding Window or
+      MaxInfo instead
+  avgqual:
+    type: int?
+    inputBinding:
+      position: 24
+      prefix: 'AVGQUAL:'
+      separate: false
+    doc: |
+      Drop the read if the average quality is below the specified level
+  minlen:
+    type: int?
+    inputBinding:
+      position: 25
+      prefix: 'MINLEN:'
+      separate: false
+    doc: |
+      This module removes reads that fall below the specified minimal length.
+      If required, it should normally be after all other processing steps.
+      Reads removed by this step will be counted and included in the "dropped
+      reads" count presented in the trimmomatic summary.
 
 outputs:
   out_stdout:
