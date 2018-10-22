@@ -6,15 +6,15 @@ hints:
 - $import: trimmomatic.yml
 
 requirements:
- SchemaDefRequirement:
-   types:
+  SchemaDefRequirement:
+    types:
     - $import: trimmomatic-end_mode.yaml
     - $import: trimmomatic-sliding_window.yaml
     - $import: trimmomatic-phred.yaml
     - $import: trimmomatic-illumina_clipping.yaml
     - $import: trimmomatic-max_info.yaml
- InlineJavascriptRequirement: {}
- ShellCommandRequirement: {}
+  InlineJavascriptRequirement: {}
+  ShellCommandRequirement: {}
 
 inputs:
   out_stdout:
@@ -108,9 +108,11 @@ inputs:
   illuminaClip:
     type: string?
     inputBinding:
-      prefix: 'ILLUMINACLIP:'
       position: 11
-      separate: false
+      valueFrom: |
+        ${
+            return 'ILLUMINACLIP:/usr/local/share/trimmomatic/adapters/' + self;
+         }
     doc: Cut adapter and other illumina-specific sequences from the read.
 
   crop:
@@ -127,14 +129,14 @@ inputs:
 
   reads2:
     type: File?
-#    format: edam:format_1930  # fastq
+    #    format: edam:format_1930  # fastq
     inputBinding:
       position: 5
     doc: FASTQ file of R2 reads in Paired End mode
 
   reads1:
     type: File
-#    format: edam:format_1930  # fastq
+    #    format: edam:format_1930  # fastq
     inputBinding:
       position: 4
     doc: FASTQ file of reads (R1 reads in Paired End mode)
@@ -205,12 +207,10 @@ outputs:
     type: stderr
   reads1_trimmed:
     type: File
-    format: edam:format_1930  # fastq
     outputBinding:
       glob: $(inputs.reads1_out)
   reads2_trimmed:
     type: File?
-    format: edam:format_1930  # fastq
     outputBinding:
       glob: $(inputs.reads2_out)
 
@@ -231,11 +231,11 @@ doc: |
   depending on the Illumina pipeline used).
 
 $namespaces:
- edam: http://edamontology.org/
- s: http://schema.org/
+  edam: http://edamontology.org/
+  s: http://schema.org/
 $schemas:
- - http://edamontology.org/EDAM_1.16.owl
- - https://schema.org/docs/schema_org_rdfa.html
+- http://edamontology.org/EDAM_1.16.owl
+- https://schema.org/docs/schema_org_rdfa.html
 
 s:license: "https://www.apache.org/licenses/LICENSE-2.0"
 s:copyrightHolder: "EMBL - European Bioinformatics Institute"
