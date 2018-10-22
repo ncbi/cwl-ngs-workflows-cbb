@@ -43,13 +43,11 @@ inputs:
       "33" or "64" specifies the base quality encoding. Default: 64
   reads1:
     type: File
-    #    format: edam:format_1930  # fastq
     inputBinding:
       position: 4
     doc: FASTQ file of reads (R1 reads in Paired End mode)
   reads2:
     type: File?
-    #    format: edam:format_1930  # fastq
     inputBinding:
       position: 5
     doc: FASTQ file of R2 reads in Paired End mode
@@ -57,10 +55,10 @@ inputs:
     type: string
     inputBinding:
       position: 6
-    reads2_out:
-      type: string?
-      inputBinding:
-        position: 7
+  reads2_out:
+    type: string?
+    inputBinding:
+      position: 7
 
   illuminaClip:
     type: string?
