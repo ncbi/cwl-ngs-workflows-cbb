@@ -34,7 +34,7 @@ inputs:
     doc: |
       string(s): paths to files that contain input read1 (and, if needed,  read2)
   readFilesIn_2:
-    type: File
+    type: File?
     inputBinding:
       position: 4
     doc: |
@@ -195,6 +195,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: --outSAMtype
+  outStd:
+    type: string
+      inputBinding:
+        position: 2
+        prefix: --outStd
 
 
 outputs:
