@@ -195,6 +195,7 @@ inputs:
     inputBinding:
       position: 1
       prefix: --outSAMtype
+      itemSeparator: " "
   outStd:
     type: string
     inputBinding:
