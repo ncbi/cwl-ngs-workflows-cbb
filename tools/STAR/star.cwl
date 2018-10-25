@@ -34,19 +34,19 @@ inputs:
     doc: |
       string(s): paths to files that contain input read1 (and, if needed,  read2)
   readFilesIn_2:
-      type: File
-      inputBinding:
-        position: 4
-      doc: |
-        string(s): paths to files that contain input read1 (and, if needed,  read2)
+    type: File
+    inputBinding:
+      position: 4
+    doc: |
+      string(s): paths to files that contain input read1 (and, if needed,  read2)
   outFileNamePrefix:
-      type: string
-      inputBinding:
-        position: 5
-        prefix: --outFileNamePrefix
-      doc: |
-        string: output files name prefix (including full or relative path). Can
-        only be defined on the command line.
+    type: string
+    inputBinding:
+      position: 5
+      prefix: --outFileNamePrefix
+    doc: |
+      string: output files name prefix (including full or relative path). Can
+      only be defined on the command line.
   limitOutSJcollapsed:
     type: int?
     inputBinding:
@@ -117,22 +117,22 @@ inputs:
       15
       int>0: minimum overhang (i.e. block size) for spliced alignments
   alignEndsType:
-      type: string?
-      inputBinding:
-        position: 1
-        prefix: --alignEndsType
-      doc: |
-        Local
-        string: type of read ends alignment
-        Local           ... standard local alignment with soft-clipping allowed
-        EndToEnd        ... force end-to-end read alignment, do not soft-clip
-        Extend5pOfRead1 ... fully extend only the 5p of the read1, all other ends: local alignment
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: --alignEndsType
+    doc: |
+      Local
+      string: type of read ends alignment
+      Local           ... standard local alignment with soft-clipping allowed
+      EndToEnd        ... force end-to-end read alignment, do not soft-clip
+      Extend5pOfRead1 ... fully extend only the 5p of the read1, all other ends: local alignment
   outFilterMatchNminOverLread:
-        type: float?
-        inputBinding:
-          position: 1
-          prefix: --outFilterMatchNminOverLread
-        doc: '0.0
+    type: float?
+    inputBinding:
+      position: 1
+      prefix: --outFilterMatchNminOverLread
+    doc: '0.0
 
         float: outFilterMatchNmin normalized to read length (sum of mates'' lengths
         for paired-end reads)
@@ -158,11 +158,11 @@ inputs:
       50
       int>0: max number of loci anchors are allowed to map to
   alignSJDBoverhangMin:
-      type: int?
-      inputBinding:
-        position: 1
-        prefix: --alignSJDBoverhangMin
-      doc: '3
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: --alignSJDBoverhangMin
+    doc: '3
 
         int>0: minimum overhang (i.e. block size) for annotated (sjdb) spliced alignments
 
@@ -178,13 +178,23 @@ inputs:
       Normal  ... standard filtering using only current alignment
       BySJout ... keep only those reads that contain junctions that passed filtering into SJ.out.tab
   limitGenomeGenerateRAM:
-      type: float?
-      inputBinding:
-        position: 1
-        prefix: --limitGenomeGenerateRAM
-      doc: |
-        31000000000
-        int>0: maximum available RAM (bytes) for genome generation
+    type: float?
+    inputBinding:
+      position: 1
+      prefix: --limitGenomeGenerateRAM
+    doc: |
+      31000000000
+      int>0: maximum available RAM (bytes) for genome generation
+  twopassMode:
+    type: string
+    inputBinding:
+      position: 1
+      prefix: --twopassMode
+  outSAMtype:
+    type: string[]
+    inputBinding:
+      position: 1
+      prefix: --outSAMtype
 
 
 outputs:
@@ -249,7 +259,4 @@ outputs:
 stdout: $(inputs.out_stdout)
 stderr: $(inputs.out_stderr)
 
-baseCommand: ["STAR",
-              "--twopassMode", "Basic",
-              "--outSAMtype", "BAM", "Unsorted"
-]
+baseCommand: ["STAR"]
