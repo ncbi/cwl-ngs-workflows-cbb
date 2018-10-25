@@ -197,9 +197,9 @@ inputs:
       prefix: --outSAMtype
   outStd:
     type: string
-      inputBinding:
-        position: 2
-        prefix: --outStd
+    inputBinding:
+      position: 2
+      prefix: --outStd
 
 
 outputs:
