@@ -195,7 +195,7 @@ inputs:
     inputBinding:
       position: 1
       prefix: --outSAMtype
-      itemSeparator: " "
+      shellQuote: False
   outStd:
     type: string
     inputBinding:
