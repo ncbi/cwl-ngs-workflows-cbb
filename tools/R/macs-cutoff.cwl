@@ -5,8 +5,7 @@ class: CommandLineTool
 
 requirements:
 - class: InlineJavascriptRequirement
-- $import: r-ggplot2.yml
-
+- $import: R.yml
 
 hints:
   InitialWorkDirRequirement:
@@ -42,14 +41,16 @@ hints:
           write.table(10^-inflpoint, out_inflection, quote = F, row.names = F, col.names = F)
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
+  macs_out_dir:
+    type: Directory
   peak_cutoff_file:
-    type: File
+    type: string
     inputBinding:
       position: 1
+      valueFrom: |
+        ${
+          return inputs.macs_out_dir.path + "/" + self;
+        }
   out_pdf:
     type: string
     inputBinding:
@@ -59,12 +60,7 @@ inputs:
     inputBinding:
       position: 3
 
-
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   out_pdf:
     type: File
     outputBinding:
@@ -73,8 +69,5 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.out_inflection)
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
 
 baseCommand: ["Rscript", "MACScutoff.R"]

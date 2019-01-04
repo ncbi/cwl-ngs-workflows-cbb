@@ -3,30 +3,21 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
-  DockerRequirement:
-    dockerPull: quay.io/biocontainers/fastqc:0.11.7--4
-    dockerOutputDirectory: /data
+- class: InlineJavascriptRequirement
+- $import: fastqc.yml
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
   threads:
     type: int
     inputBinding:
       prefix: -t
       position: 1
-  in_fastqc:
+  fastq:
     type: File
     inputBinding:
       position: 2
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   out_zip:
     type: File
     outputBinding:
@@ -35,9 +26,5 @@ outputs:
     type: File
     outputBinding:
       glob: "*.html"
-
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
 
 baseCommand: ["fastqc", "--outdir", ".", "--extract"]

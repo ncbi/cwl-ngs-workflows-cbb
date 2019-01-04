@@ -5,15 +5,11 @@ class: CommandLineTool
 
 hints:
     DockerRequirement:
-        dockerImageId: biocontainers/tpmcalculator:0.0.1
+        dockerImageId: biocontainers/tpmcalculator:0.0.2
         dockerFile:
           $include: https://raw.githubusercontent.com/ncbi/TPMCalculator/master/Dockerfile
 
 inputs:
-    out_stdout:
-        type: string
-    out_stderr:
-        type: string
     g:
         type: File
         inputBinding:
@@ -21,15 +17,8 @@ inputs:
             prefix: -g
         doc: |
             GTF file
-    d:
-        type: Directory?
-        inputBinding:
-            position: 2
-            prefix: -d
-        doc: |
-           Directory with the BAM files 
     b:
-        type: File?
+        type: File
         inputBinding:
             position: 2
             prefix: -b
@@ -77,34 +66,28 @@ inputs:
             prefix: -o
         doc: |
             Minimum overlap between a reads and a feature. Default: 8.
-    e:
-        type: boolean?
-        inputBinding:
-            position: 3
-            prefix: -e
-        doc: |
-           Extended output. This will include transcript level TPM values. Default: No. 
 
 outputs:
-    out_stdout:
-        type: stdout
-    out_stderr:
-        type: stderr
-    out_output:
-        type: File[]
+    gene_out:
+        type: File
         outputBinding:
-            glob: "*.out"
-    ent_output:
-        type: File[]
+            glob: $(inputs.b.nameroot)_genes.out
+    gene_ent:
+        type: File
         outputBinding:
-            glob: "*.ent"
-    uni_output:
-        type: File[]
+            glob: $(inputs.b.nameroot)_genes.ent
+    gene_uni:
+        type: File
         outputBinding:
-            glob: "*.uni"
+            glob: $(inputs.b.nameroot)_genes.uni
+    transcripts_out:
+        type: File
+        outputBinding:
+            glob: $(inputs.b.nameroot)_transcripts.out
+    transcripts_ent:
+        type: File
+        outputBinding:
+            glob: $(inputs.b.nameroot)_transcripts.ent
 
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
-
-baseCommand: ["TPMCalculator"]
+baseCommand: ["TPMCalculator", "-e"]
 

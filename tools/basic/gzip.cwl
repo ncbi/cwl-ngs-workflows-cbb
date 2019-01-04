@@ -4,26 +4,18 @@ class: CommandLineTool
 
 requirements:
   - class: InlineJavascriptRequirement
-  - $import: rseqc.yml
+  - $import: gzip.yml
 
 inputs:
-  o:
-    type: string
-  i:
+  f:
     type: File
     inputBinding:
-      position: 1
-      prefix: -i
-  q:
-    type: int?
-    inputBinding:
       position: 2
-      prefix: -q
 
 outputs:
   output:
     type: stdout
 
-stdout: $(inputs.o)
+stdout: $(inputs.f.basename).gz
 
-baseCommand: [bam_stat.py]
+baseCommand: ["gzip", "-c"]

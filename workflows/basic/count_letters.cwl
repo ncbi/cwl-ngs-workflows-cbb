@@ -19,6 +19,8 @@ steps:
       msg: line
       out_stdout: { default: "echo.stdout" }
     out: [out_stdout]
+    doc: |
+      Echo the line to a file named echo.stdout
   wc:
     run: ../../tools/basic/wc.cwl
     in:

@@ -7,10 +7,6 @@ requirements:
 - $import: samtools.yml
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
   isbam:
     type: boolean
     default: false
@@ -174,16 +170,9 @@ inputs:
       prefix: -o
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   output:
     type: File
     outputBinding:
       glob: $(inputs.output_name)
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
 
 baseCommand: [samtools, view]

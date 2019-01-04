@@ -9,11 +9,7 @@ requirements:
 
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
-  input:
+  c:
     type: File
     inputBinding:
       position: 1
@@ -21,13 +17,13 @@ inputs:
       separate: false
     doc: |
       Input bam file.
-  correlation:
+  savp:
     type: string
     inputBinding:
       position: 2
       prefix: -savp=
       separate: false
-  metrics:
+  out:
     type: string
     inputBinding:
       position: 3
@@ -35,20 +31,13 @@ inputs:
       separate: false
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
-  output_correlation:
+  output_savp:
     type: File
     outputBinding:
-      glob: $(inputs.correlation)
-  output_metrics:
+      glob: $(inputs.savp)
+  output_out:
     type: File
     outputBinding:
-      glob: $(inputs.metrics)
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
+      glob: $(inputs.out)
 
 baseCommand: ["run_spp.R", "-rf"]

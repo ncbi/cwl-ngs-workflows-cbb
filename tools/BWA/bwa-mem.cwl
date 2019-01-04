@@ -11,8 +11,6 @@ requirements:
 inputs:
   out_stdout:
     type: string
-  out_stderr:
-    type: string
   threads:
     type: int?
     inputBinding:
@@ -36,10 +34,7 @@ inputs:
 outputs:
   out_stdout:
     type: stdout
-  out_stderr:
-    type: stderr
 
 stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
 
 baseCommand: ["bwa", "mem"]

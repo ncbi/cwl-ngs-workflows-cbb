@@ -17,11 +17,6 @@ requirements:
   ShellCommandRequirement: {}
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
-
   end_mode:
     type: string
     inputBinding:
@@ -55,10 +50,18 @@ inputs:
     type: string
     inputBinding:
       position: 6
-  reads2_out:
+  reads1_out2:
     type: string?
     inputBinding:
       position: 7
+  reads2_out:
+    type: string?
+    inputBinding:
+      position: 8
+  reads2_out2:
+    type: string?
+    inputBinding:
+      position: 9
 
   illuminaClip:
     type: string?
@@ -191,10 +194,6 @@ inputs:
       reads" count presented in the trimmomatic summary.
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   reads1_trimmed:
     type: File
     outputBinding:
@@ -203,9 +202,6 @@ outputs:
     type: File?
     outputBinding:
       glob: $(inputs.reads2_out)
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
 
 baseCommand: [ 'trimmomatic']
 

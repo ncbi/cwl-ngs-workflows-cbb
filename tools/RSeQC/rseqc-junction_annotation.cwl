@@ -3,53 +3,48 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: rseqc.yml
+  - class: InlineJavascriptRequirement
+  - $import: rseqc.yml
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
-  input-file:
+  i:
     type: File
     inputBinding:
       position: 1
       prefix: -i
-  refgene:
+  r:
     type: File
     inputBinding:
       position: 2
       prefix: -r
-  min-intron:
+  m:
     type: int?
     inputBinding:
       position: 3
       prefix: -m
-  mapq:
+  q:
     type: int?
     inputBinding:
       position: 4
       prefix: -q
-  outprefix:
+  o:
     type: string
     inputBinding:
       position: 5
       prefix: -o
 
-
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
-  output:
+  bed:
+    type: File
+    outputBinding:
+      glob: $(inputs.o).junction.bed
+  xls:
+    type: File
+    outputBinding:
+      glob: $(inputs.o).junction.xls
+  pdf:
     type: File[]
     outputBinding:
-      glob: $(inputs.outprefix)*
-
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
+      glob: $(inputs.o)*.pdf
 
 baseCommand: [junction_annotation.py]

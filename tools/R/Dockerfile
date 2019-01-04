@@ -1,0 +1,46 @@
+# Base Image
+FROM ubuntu:18.04
+
+# Metadata
+LABEL base.image="ubuntu:18.04"
+LABEL version="1"
+LABEL software="R"
+LABEL software.version="0.0.1"
+LABEL description="This image provides R with ggplot2, dplyr and bioconductor"
+LABEL tags="R"
+
+# Maintainer
+MAINTAINER Roberto Vera Alvarez <r78v10a07@gmail.com>
+
+USER root
+
+RUN apt-get update && \
+    apt-get install -y apt-utils && \
+    apt-get install -y tzdata && \
+    apt-get install -y software-properties-common
+
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+
+RUN apt-get update && \
+    apt-get install -y libxml2-dev libcurl4-gnutls-dev libhttrack-dev  \
+        libjsoncpp-dev libssl-dev && \
+    apt-get install -y r-base r-base-dev r-recommended && \
+    apt-get clean && \
+    apt-get purge && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN Rscript --vanilla -e "install.packages(\"ggplot2\", repo=\"https://cran.r-project.org\")" && \
+    Rscript --vanilla -e "install.packages(\"dplyr\", repo=\"https://cran.r-project.org\")" && \
+    Rscript --vanilla -e "install.packages(\"BiocManager\", repo=\"https://cran.r-project.org\")" && \
+    Rscript --vanilla -e "BiocManager::install(\"biomaRt\", version = \"3.8\")" && \
+    Rscript --vanilla -e "BiocManager::install(\"ChIPQC\", version = \"3.8\")"
+
+RUN Rscript --vanilla -e "install.packages(\"calibrate\", repo=\"https://cran.r-project.org\")"
+RUN Rscript --vanilla -e "BiocManager::install(\"impute\", version = \"3.8\")"
+RUN Rscript --vanilla -e "install.packages(\"samr\", repo=\"https://cran.r-project.org\")"
+
+WORKDIR /data/
+
+CMD ["R"]
+

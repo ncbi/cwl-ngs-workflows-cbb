@@ -3,33 +3,27 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: rseqc.yml
+  - class: InlineJavascriptRequirement
+  - $import: rseqc.yml
 
 inputs:
-  out_stdout:
+  o:
     type: string
-  out_stderr:
-    type: string
-  input-file:
+  i:
     type: File
     inputBinding:
       position: 1
       prefix: -i
-  refgene:
+  r:
     type: File
     inputBinding:
       position: 2
       prefix: -r
 
 outputs:
-  out_stdout:
+  output:
     type: stdout
-  out_stderr:
-    type: stderr
 
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
+stdout: $(inputs.o)
 
 baseCommand: [read_distribution.py]

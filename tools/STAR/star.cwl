@@ -7,10 +7,6 @@ requirements:
 - $import: star.yml
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
   threads:
     type: int
     inputBinding:
@@ -204,12 +200,8 @@ inputs:
 
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   aligned:
-    type: File?
+    type: File
     outputBinding:
       glob: |
         ${
@@ -261,8 +253,5 @@ outputs:
           return p+"Processed.out.bam";
         }
 
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
 
 baseCommand: ["STAR"]
