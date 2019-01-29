@@ -6,11 +6,11 @@ label: BWA-mem
 doc: BWA is a software package for mapping DNA sequences against a large reference genome
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: bwa.yml
+  - class: InlineJavascriptRequirement
+  - $import: bwa.yml
 
 inputs:
-  out_stdout:
+  in_stdout:
     type: string
   t:
     type: int?
@@ -47,6 +47,10 @@ s:author:
     s:name: Roberto Vera Alvarez
 
 s:codeRepository: https://github.com/lh3/bwa
-$namespaces:
-  s: https://schema.org/
 s:license: https://spdx.org/licenses/OPL-1.0
+
+$namespaces:
+  s: http://schema.org/
+
+$schemas:
+  - http://schema.org/docs/schema_org_rdfa.html

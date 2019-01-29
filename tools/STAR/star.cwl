@@ -266,6 +266,10 @@ s:author:
     s:name: Roberto Vera Alvarez
 
 s:codeRepository: https://github.com/alexdobin/STAR
-$namespaces:
-  s: https://schema.org/
 s:license: https://spdx.org/licenses/OPL-1.0
+
+$namespaces:
+  s: http://schema.org/
+
+$schemas:
+  - http://schema.org/docs/schema_org_rdfa.html
