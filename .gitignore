@@ -97,3 +97,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
+tools/basic/t.txt
+version.txt
