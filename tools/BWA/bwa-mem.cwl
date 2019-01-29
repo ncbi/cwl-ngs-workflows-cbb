@@ -36,7 +36,7 @@ outputs:
   out_stdout:
     type: stdout
 
-stdout: $(inputs.out_stdout)
+stdout: $(inputs.in_stdout)
 
 baseCommand: ["bwa", "mem"]
 

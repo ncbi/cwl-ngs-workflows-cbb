@@ -9,7 +9,6 @@ requirements:
 - class: InlineJavascriptRequirement
 - $import: bwa.yml
 
-
 inputs:
   e:
     type: int?
@@ -103,7 +102,7 @@ outputs:
   output:
     type: File
     outputBinding:
-      glob: $(inputs.output_filename)
+      glob: $(inputs.f)
 
 baseCommand: ["bwa", "aln"]
 
