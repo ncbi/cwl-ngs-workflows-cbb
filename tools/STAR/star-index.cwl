@@ -2,35 +2,60 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
+label: STAR-index
+doc: Spliced Transcripts Alignment to a Reference
+
 requirements:
-- $import: star.yml
+  - $import: star.yml
 
 inputs:
-  out_stdout:
+  runMode:
     type: string
-  out_stderr:
+    default: "genomeGenerate"
+    inputBinding:
+      position: 1
+      prefix: --runMode
+  genomeChrBinNbits:
+    type: int
+    default: 16
+    inputBinding:
+      position: 2
+      prefix: --genomeChrBinNbits
+  limitGenomeGenerateRAM:
+    type: int
+    default: 30000000000
+    inputBinding:
+      position: 3
+      prefix: --limitGenomeGenerateRAM
+  sjdbOverhang:
+    type: int
+    default: 124
+    inputBinding:
+      position: 4
+      prefix: --sjdbOverhang
+  genomeDir:
     type: string
-  threads:
+    default: '.'
+    inputBinding:
+      position: 5
+      prefix: --genomeDir
+  runThreadN:
     type: int
     inputBinding:
       prefix: --runThreadN
-      position: 1
-  genome_fa:
+      position: 6
+  genomeFastaFiles:
     type: File
     inputBinding:
-      position: 2
+      position: 7
       prefix: --genomeFastaFiles
-  genome_gtf:
+  sjdbGTFfile:
     type: File
     inputBinding:
-      position: 3
+      position: 8
       prefix: --sjdbGTFfile
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   indices_txt:
     type: File[]
     outputBinding:
@@ -56,12 +81,15 @@ outputs:
     outputBinding:
       glob: "Log.out"
 
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
+baseCommand: ["STAR"]
 
-baseCommand: ["STAR", "--runMode", "genomeGenerate",
-              "--genomeChrBinNbits", "16",
-              "--limitGenomeGenerateRAM", "30000000000",
-              "--sjdbOverhang", "124",
-              "--genomeDir", "."
-]
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
+s:codeRepository: https://github.com/alexdobin/STAR
+$namespaces:
+  s: https://schema.org/
+s:license: https://spdx.org/licenses/OPL-1.0

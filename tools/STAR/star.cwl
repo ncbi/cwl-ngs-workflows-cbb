@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: STAR.
+label: STAR
 doc: Spliced Transcripts Alignment to a Reference
 
 requirements:
@@ -265,7 +265,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: https://gitlab.com/r78v10a07/cwl-workflow
+s:codeRepository: https://github.com/alexdobin/STAR
 $namespaces:
   s: https://schema.org/
 s:license: https://spdx.org/licenses/OPL-1.0
