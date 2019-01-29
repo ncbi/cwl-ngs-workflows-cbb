@@ -1,7 +1,9 @@
 #!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
 class: CommandLineTool
+
+label: BWA-index
+doc: BWA is a software package for mapping DNA sequences against a large reference genome
 
 requirements:
   InitialWorkDirRequirement:
@@ -11,7 +13,7 @@ hints:
   - $import: bwa.yml
 
 inputs:
-  algorithm:
+  a:
     type: string?
     inputBinding:
       prefix: -a
@@ -22,7 +24,7 @@ inputs:
     inputBinding:
       valueFrom: $(self.basename)
       position: 4
-  block_size:
+  b:
     type: int?
     inputBinding:
 
@@ -42,17 +44,15 @@ outputs:
     outputBinding:
       glob: $(inputs.sequences.basename)
 
-baseCommand:
-- bwa
-- index
+baseCommand: ["bwa", "index"]
 
-doc: |
-  Usage:   bwa index [options] <in.fasta>
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
 
-  Options: -a STR    BWT construction algorithm: bwtsw or is [auto]
-           -p STR    prefix of the index [same as fasta name]
-           -b INT    block size for the bwtsw algorithm (effective with -a bwtsw) [10000000]
-           -6        index files named as <in.fasta>.64.* instead of <in.fasta>.*
-
-  Warning: `-a bwtsw' does not work for short genomes, while `-a is' and
-           `-a div' do not work not for long genomes.
+s:codeRepository: https://github.com/lh3/bwa
+$namespaces:
+  s: https://schema.org/
+s:license: https://spdx.org/licenses/OPL-1.0

@@ -1,19 +1,16 @@
 #!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
 class: CommandLineTool
+
+label: BWA-samse
+doc: BWA is a software package for mapping DNA sequences against a large reference genome
 
 requirements:
 - class: InlineJavascriptRequirement
 - $import: bwa.yml
 
-
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
-  output_filename:
+  f:
     type: string
     inputBinding:
       position: 1
@@ -37,20 +34,21 @@ inputs:
     inputBinding:
       position: 4
 
-
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   output:
     type: File
     outputBinding:
       glob: $(inputs.output_filename)
 
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
-
 baseCommand: ["bwa", "samse"]
 
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
+s:codeRepository: https://github.com/lh3/bwa
+$namespaces:
+  s: https://schema.org/
+s:license: https://spdx.org/licenses/OPL-1.0
