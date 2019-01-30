@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: R-3.7_ubuntu-18.04
+  dockerFile:
+    $include: Dockerfile_R-3.7_ubuntu-18.04

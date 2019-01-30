@@ -2,6 +2,11 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
+label: echo
+doc: |
+  Trimmomatic is a fast, multithreaded command line tool that can be used to trim and crop
+  Illumina (FASTQ) data as well as to remove adapters
+
 hints:
 - $import: trimmomatic.yml
 
@@ -205,23 +210,19 @@ outputs:
 
 baseCommand: [ 'trimmomatic']
 
-doc: |
-  Trimmomatic is a fast, multithreaded command line tool that can be used to trim and crop
-  Illumina (FASTQ) data as well as to remove adapters. These adapters can pose a real problem
-  depending on the library preparation and downstream application.
-  There are two major modes of the program: Paired end mode and Single end mode. The
-  paired end mode will maintain correspondence of read pairs and also use the additional
-  information contained in paired reads to better find adapter or PCR primer fragments
-  introduced by the library preparation process.
-  Trimmomatic works with FASTQ files (using phred + 33 or phred + 64 quality scores,
-  depending on the Illumina pipeline used).
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
+s:codeRepository: https://github.com/alexdobin/STAR
+s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:
   edam: http://edamontology.org/
   s: http://schema.org/
+
 $schemas:
 - http://edamontology.org/EDAM_1.16.owl
 - https://schema.org/docs/schema_org_rdfa.html
-
-s:license: "https://www.apache.org/licenses/LICENSE-2.0"
-s:copyrightHolder: "EMBL - European Bioinformatics Institute"

@@ -2,10 +2,12 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
+label: MACS2-callpeak
+doc: BASH echo command
+
 requirements:
 - class: InlineJavascriptRequirement
-- $import: macs.yml
-
+- $import: macs2.yml
 
 inputs:
   call-summits:
@@ -159,7 +161,17 @@ outputs:
 
 baseCommand: ["macs2","callpeak"]
 
-#arguments:
-#- valueFrom: $(inputs.treatment[0].path.replace(/^.*[\\\/]/, '').replace(/\.[^/.]+$/, ''))
-#  prefix: -n
-#  position: 1
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
+s:codeRepository: https://github.com/taoliu/MACS
+s:license: https://spdx.org/licenses/OPL-1.0
+
+$namespaces:
+  s: http://schema.org/
+
+$schemas:
+  - http://schema.org/docs/schema_org_rdfa.html

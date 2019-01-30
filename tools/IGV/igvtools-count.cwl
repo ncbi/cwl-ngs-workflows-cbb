@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: igvtools-toTDF
+label: igvtools-count
 doc: The igvtools utility provides a set of tools for pre-processing data files
 
 requirements:
@@ -27,11 +27,11 @@ inputs:
     type: string
     inputBinding:
       position: 4
-  f:
-    type: string?
+  includeDuplicates:
+    type: boolean?
     inputBinding:
       position: 1
-      prefix: --fileType
+      prefix: --includeDuplicates
 
 
 outputs:
@@ -40,7 +40,7 @@ outputs:
     outputBinding:
       glob: $(inputs.o)
 
-baseCommand: ["igvtools", "toTDF"]
+baseCommand: ["igvtools", "count"]
 
 s:author:
   - class: s:Person

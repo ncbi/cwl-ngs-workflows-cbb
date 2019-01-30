@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: tpmcalculator
+  dockerFile:
+    $include: https://raw.githubusercontent.com/ncbi/TPMCalculator/master/Dockerfile

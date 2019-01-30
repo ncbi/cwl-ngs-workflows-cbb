@@ -1,5 +1,0 @@
- class: DockerRequirement
- dockerImageId: ubuntu/r
- dockerOutputDirectory: /data
- dockerFile: >
-   $import: Dockerfile

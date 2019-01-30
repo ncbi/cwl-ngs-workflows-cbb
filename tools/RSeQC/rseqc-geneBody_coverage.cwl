@@ -2,15 +2,15 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
+label: RSeQC-geneBody_coverage
+doc: RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data
+
+
 requirements:
 - class: InlineJavascriptRequirement
 - $import: rseqc.yml
 
 inputs:
-  out_stdout:
-    type: string
-  out_stderr:
-    type: string
   input-file:
     type: File[]?
     inputBinding:
@@ -21,22 +21,22 @@ inputs:
     inputBinding:
       position: 1
       prefix: -i
-  refgene:
+  r:
     type: File
     inputBinding:
       position: 2
       prefix: -r
-  minimum_length:
+  l:
     type: int?
     inputBinding:
       position: 3
       prefix: -l
-  format:
+  f:
     type: string?
     inputBinding:
       position: 4
       prefix: -f
-  outprefix:
+  o:
     type: string
     inputBinding:
       position: 5
@@ -51,10 +51,21 @@ outputs:
   output:
     type: File[]
     outputBinding:
-      glob: $(inputs.outprefix)*
-
-
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
+      glob: $(inputs.o)*
 
 baseCommand: [geneBody_coverage.py]
+
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
+s:codeRepository: http://rseqc.sourceforge.net
+s:license: https://spdx.org/licenses/OPL-1.0
+
+$namespaces:
+  s: http://schema.org/
+
+$schemas:
+  - http://schema.org/docs/schema_org_rdfa.html
