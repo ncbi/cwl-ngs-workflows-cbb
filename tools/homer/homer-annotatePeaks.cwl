@@ -3,23 +3,23 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 requirements:
-  - class: InlineJavascriptRequirement
-  - $import: homer.yml
+- class: InlineJavascriptRequirement
+- $import: homer.yml
 
 inputs:
   macs_out_dir:
-    type: Directory?
+    type: Directory
   input:
-    type: string?
+    type: string
     inputBinding:
       position: 1
       valueFrom: ${ return inputs.macs_out_dir.path + "/" + self;}
     doc: |
       Peak/BED file
   o:
-    type: string?
+    type: string
   genome:
-    type: string?
+    type: string
     inputBinding:
       position: 2
     doc: |
