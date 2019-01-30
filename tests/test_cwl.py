@@ -9,5 +9,5 @@ class TestSet(unittest.TestCase):
         fac = cwltool.factory.Factory()
 
         echo = fac.make("./tools/basic/echo.cwl")
-        result = echo(out_stdout="echo.stdout",msg="foo")
+        result = echo(stdout="echo.stdout",msg="foo")
         self.assertEqual(result['out_stdout']['basename'], 'echo.stdout')

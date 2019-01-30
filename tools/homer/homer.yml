@@ -1,6 +1,4 @@
   class: DockerRequirement
-  dockerPull: quay.io/biocontainers/homer:4.9.1
-  dockerOutputDirectory: /data
-#  dockerImageId: quay.io/biocontainers/homer-hg19:4.9.1
-#  dockerFile: >
-#    $import: Dockerfile-hg19
+  dockerImageId: homer-hg19:4.9.1
+  dockerFile:
+    $include: Dockerfile-hg19
