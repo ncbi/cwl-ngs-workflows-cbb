@@ -7,7 +7,7 @@ doc: NGS read Quality Control analysis
 
 requirements:
   - class: InlineJavascriptRequirement
-  - $import: R-3.7_ubuntu-18.04.yml
+  - $import: R-3.5_ubuntu-18.04.yml
 
 hints:
   InitialWorkDirRequirement:
