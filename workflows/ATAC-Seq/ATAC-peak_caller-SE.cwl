@@ -46,7 +46,7 @@ outputs:
     outputSource: homer_annotate_peaks/output
     type: File
   homer_annotate_peaks_annStats:
-    outputSource: homer_annotate_peaks/annStats
+    outputSource: homer_annotate_peaks/annStats_out
     type: File?
 
 steps:
@@ -60,7 +60,7 @@ steps:
       input: input_bed
     out: [tags_directory]
   phantompeakqualtools:
-    run: ../../tools/R/phantompeakqualtools.cwl
+    run: ../../tools/phantompeakqualtools/phantompeakqualtools.cwl
     in:
       savp:
         valueFrom: ${ return inputs.c.nameroot + "_cross_correlation.pdf";}
@@ -132,10 +132,10 @@ steps:
       gtf: genome_gtf
       input:
         valueFrom: ${ return inputs.macs_out_dir.basename + '.narrowPeak';}
-      output:
+      o:
         valueFrom: ${ return inputs.macs_out_dir.basename + '_annotation.txt';}
       annStats:
         valueFrom: ${ return inputs.macs_out_dir.basename + '_annStats.txt';}
       d: homer_tags/tags_directory
       fpkm: {default: True}
-    out: [output,annStats]
+    out: [output,annStats_out]

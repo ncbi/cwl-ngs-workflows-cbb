@@ -7,8 +7,7 @@ doc: Quality metrics for ChIPseq data.
 
 requirements:
 - class: InlineJavascriptRequirement
-- $import: R-3.5
-  _ubuntu-18.04.yml
+- $import: R-3.5_ubuntu-18.04.yml
 
 hints:
   InitialWorkDirRequirement:
