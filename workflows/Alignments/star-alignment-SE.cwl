@@ -3,20 +3,17 @@ cwlVersion: v1.0
 class: Workflow
 
 requirements:
-- class: InlineJavascriptRequirement
-- class: StepInputExpressionRequirement
+  - class: InlineJavascriptRequirement
+  - class: StepInputExpressionRequirement
+  - class: SubworkflowFeatureRequirement
 
-label: "RNA-Seq Quantification workflow or paired-end samples"
-doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM values for genes and transcripts"
+label: "STAR alignment workflow for single-end samples"
+doc: "This workflow aligns the fastq files using STAR for single-end samples"
 
 inputs:
-  sample: string
   reads_1: File
-  reads_2: File?
   threads: int
   genomeDir: Directory
-  gtf: File
-  mapq: int
 
 outputs:
   star_stats:
@@ -31,15 +28,6 @@ outputs:
   bam_index:
     outputSource: bam_index/out_sam
     type: File
-  tpm_out_output:
-    outputSource: quantification/out_output
-    type: File[]
-  tpm_ent_output:
-    outputSource: quantification/ent_output
-    type: File[]
-  tpm_uni_output:
-    outputSource: quantification/uni_output
-    type: File[]
 
 steps:
   alignment:
@@ -49,8 +37,8 @@ steps:
       readFilesCommand: { default: zcat}
       genomeDir: genomeDir
       readFilesIn: reads_1
-      readFilesIn_2: reads_2
-      outFileNamePrefix: sample
+      outFileNamePrefix:
+        valueFrom: ${ return inputs.readFilesIn.nameroot.replace('.fastq', '') ;}
       twopassMode: { default: "Basic"}
       outSAMtype: { default: ["BAM", "Unsorted"]}
       outStd: { default: "Log"}
@@ -98,17 +86,6 @@ steps:
     out: [out_sam]
     doc: |
       Creates the BAM index file
-  quantification:
-    run: ../../tools/TPMCalculator/tpmcalculator.cwl
-    in:
-      g: gtf
-      b: bam_sort/out_sam
-      p: { default: True}
-      q: mapq
-      e: { default: True}
-    out: [out_output, ent_output, uni_output]
-    doc: |
-      Calculate TPM values for genes and transcripts
 
 s:author:
   - class: s:Person
@@ -116,7 +93,6 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: https://github.com/alexdobin/STAR
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

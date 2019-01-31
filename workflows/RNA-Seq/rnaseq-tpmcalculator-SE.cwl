@@ -8,11 +8,10 @@ requirements:
   - class: SubworkflowFeatureRequirement
 
 label: "RNA-Seq Quantification workflow or single-end samples"
-doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM values for genes and transcripts"
+doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM values from TPMCalculator"
 
 inputs:
-  reads_1: File
-  threads: int
+  bam_sort: File
   genomeDir: Directory
   genomeName: string
   gtf: File
@@ -20,18 +19,6 @@ inputs:
   r: File
 
 outputs:
-  star_stats:
-    outputSource: alignment/mappingstats
-    type: File?
-  bam_stats_out:
-    outputSource: bam_stats/out_stdout
-    type: File
-  sorted_bam:
-    outputSource: bam_sort/out_sam
-    type: File
-  bam_index:
-    outputSource: bam_index/out_sam
-    type: File
   gzip_gene_out_out:
     outputSource: gzip_gene_out/output
     type: File
@@ -76,67 +63,11 @@ outputs:
     type: File
 
 steps:
-  alignment:
-    run: ../../tools/STAR/star.cwl
-    in:
-      threads: threads
-      readFilesCommand: { default: zcat}
-      genomeDir: genomeDir
-      readFilesIn: reads_1
-      outFileNamePrefix:
-        valueFrom: ${ return inputs.readFilesIn.nameroot.replace('.fastq', '') ;}
-      twopassMode: { default: "Basic"}
-      outSAMtype: { default: ["BAM", "Unsorted"]}
-      outStd: { default: "Log"}
-      limitOutSJcollapsed: { default: 1000000}
-      limitSjdbInsertNsj: { default: 1000000}
-      outFilterMultimapNmax: { default: 100}
-      outFilterMismatchNmax: { default: 3}
-      outFilterMismatchNoverLmax: { default: 0.3}
-      seedSearchStartLmax: { default: 12}
-      alignSJoverhangMin: { default: 15}
-      alignEndsType: { default: "Local"}
-      outFilterMatchNminOverLread: { default: 0}
-      outFilterScoreMinOverLread: { default: 0.3}
-      winAnchorMultimapNmax: { default: 50}
-      alignSJDBoverhangMin: { default: 3}
-      outFilterType: { default: "BySJout"}
-    out: [aligned, mappingstats]
-    doc: |
-      Align the reads using STAR and tuned parameters
-  bam_stats:
-    run: ../../tools/samtools/samtools-stats.cwl
-    in:
-      out_stdout:
-        valueFrom: ${ return inputs.in_bam.nameroot + ".stats";}
-      in_bam: alignment/aligned
-    out: [out_stdout]
-    doc: |
-      Samtools stats for extracting BAM statistics
-  bam_sort:
-    run: ../../tools/samtools/samtools-sort.cwl
-    in:
-      threads: threads
-      out_bam:
-        valueFrom: ${ return inputs.in_bam.nameroot.replace('Aligned.out', '') + "_sorted.bam";}
-      in_bam: alignment/aligned
-    out: [out_sam]
-    doc: |
-      Sort BAM file
-  bam_index:
-    run: ../../tools/samtools/samtools-index.cwl
-    in:
-      out_bai:
-        valueFrom: ${ return inputs.in_bam.basename + ".bai";}
-      in_bam: bam_sort/out_sam
-    out: [out_sam]
-    doc: |
-      Creates the BAM index file
   quantification:
     run: ../../tools/TPMCalculator/tpmcalculator.cwl
     in:
       g: gtf
-      b: bam_sort/out_sam
+      b: bam_sort
       q: q
     out: [gene_out, gene_ent, gene_uni, transcripts_out, transcripts_ent]
     doc: |
@@ -179,7 +110,7 @@ steps:
   qc_rseqc:
     run: ../RSeQC/rseqc-bam-qc-SE.cwl
     in:
-      i: bam_sort/out_sam
+      i: bam_sort
       q: q
       r: r
     out: [bam_stat_out, experiment_out, gzip_junction_annotation_bed_out, gzip_junction_annotation_xls_out, junction_annotation_pdf_out, junction_saturation_out, read_distribution_out, read_quality_out]
@@ -188,7 +119,7 @@ steps:
   bam_to_tdf:
     run: ../../tools/IGV/igvtools-count.cwl
     in:
-      i: bam_sort/out_sam
+      i: bam_sort
       o:
         valueFrom: ${ return inputs.i.nameroot + ".tdf";}
       g: genomeName

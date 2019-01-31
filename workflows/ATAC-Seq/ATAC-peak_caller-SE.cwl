@@ -6,7 +6,7 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
 
-label: "ChIP-Seq and ATAC-Seq peak caller workflow for single-end samples"
+label: "ATAC-Seq peak caller workflow for single-end samples"
 doc: "This workflow execute peak caller and QC from ChIP-Seq and ATAC-Seq for single-end samples"
 
 inputs:

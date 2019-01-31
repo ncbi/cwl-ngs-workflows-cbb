@@ -6,8 +6,8 @@ requirements:
 - class: InlineJavascriptRequirement
 - class: StepInputExpressionRequirement
 
-label: "ChIP-Seq and ATAC-Seq alignment workflow for single-end samples"
-doc: "This workflow aligns the fastq files from ChIP-Seq and ATAC-Seq using BWA for single-end samples"
+label: "BWA alignment workflow for single-end samples"
+doc: "This workflow aligns the fastq files using BWA for single-end samples"
 
 inputs:
   reads: File
