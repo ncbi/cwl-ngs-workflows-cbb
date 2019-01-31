@@ -6,7 +6,7 @@ label: igvtools-toTDF
 doc: The igvtools utility provides a set of tools for pre-processing data files
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: igvtools.yml

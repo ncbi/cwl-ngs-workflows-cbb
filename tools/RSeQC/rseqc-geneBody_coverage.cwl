@@ -7,7 +7,7 @@ doc: RSeQC package provides a number of useful modules that can comprehensively 
 
 
 requirements:
-- class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: rseqc.yml

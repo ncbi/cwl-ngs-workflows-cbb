@@ -6,7 +6,7 @@ label: MACS2-callpeak
 doc: BASH echo command
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: macs2.yml

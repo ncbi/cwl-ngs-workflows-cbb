@@ -6,7 +6,7 @@ label: STAR
 doc: Spliced Transcripts Alignment to a Reference
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: star.yml

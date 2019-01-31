@@ -6,7 +6,7 @@ label: BWA-mem
 doc: BWA is a software package for mapping DNA sequences against a large reference genome
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: bwa.yml

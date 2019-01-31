@@ -5,8 +5,11 @@ class: CommandLineTool
 label: Samtools-stats
 doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
 
+requirements:
+  InlineJavascriptRequirement: {}
+
 hints:
-- $import: samtools.yml
+  - $import: samtools.yml
 
 inputs:
   stdout:

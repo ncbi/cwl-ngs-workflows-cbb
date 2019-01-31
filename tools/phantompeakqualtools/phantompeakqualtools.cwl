@@ -6,7 +6,7 @@ label: Phantompeakqualtools
 doc: This package computes informative enrichment and quality measures for ChIP-seq/DNase-seq/FAIRE-seq/MNase-seq data
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: phantompeakqualtools.yml

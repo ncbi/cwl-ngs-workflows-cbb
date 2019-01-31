@@ -6,7 +6,7 @@ label: TPMCalculator
 doc: TPMCalculator quantifies mRNA abundance directly from the alignments by parsing BAM files
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: tpmcalculator.yml

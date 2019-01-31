@@ -6,6 +6,7 @@ label: R-3.5_Bioconductor-3.8_MACS2-cutoff
 doc: Inflection point calculated from MACS2 peaks file
 
 requirements:
+  InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
       - entryname: MACScutoff.R
@@ -39,7 +40,6 @@ requirements:
           write.table(10^-inflpoint, out_inflection, quote = F, row.names = F, col.names = F)
 
 hints:
-  - class: InlineJavascriptRequirement
   - $import: R-3.5_ubuntu-18.04.yml
 
 inputs:

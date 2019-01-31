@@ -6,7 +6,7 @@ label: Samtools-view
 doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: samtools.yml

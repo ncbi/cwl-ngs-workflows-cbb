@@ -6,10 +6,10 @@ label: Samtools-index
 doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
 
 requirements:
-- class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
-- $import: samtools.yml
+  - $import: samtools.yml
 
 inputs:
   in_bam:

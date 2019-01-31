@@ -6,7 +6,7 @@ label: bedtools-bamtobed
 doc: The bedtools utilities are a swiss-army knife of tools for a wide-range of genomics analysis tasks
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
 
 hints:
   - $import: bedtools.yml

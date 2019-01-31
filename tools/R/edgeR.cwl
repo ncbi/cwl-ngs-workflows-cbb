@@ -6,6 +6,7 @@ label: R-3.5_Bioconductor-3.8_EdgeR
 doc: Differential expression analysis of RNA-seq expression profiles with biological replication
 
 requirements:
+  InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
       - entryname: edgeR.R
@@ -31,7 +32,6 @@ requirements:
           head(data)
 
 hints:
-  - class: InlineJavascriptRequirement
   - $import: R-3.5_ubuntu-18.04.yml
 
 inputs:
