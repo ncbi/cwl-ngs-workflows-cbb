@@ -6,10 +6,6 @@ label: R-3.5_readQC
 doc: NGS read Quality Control analysis
 
 requirements:
-  - class: InlineJavascriptRequirement
-  - $import: R-3.5_ubuntu-18.04.yml
-
-hints:
   InitialWorkDirRequirement:
     listing:
       - entryname: readQC.R
@@ -89,6 +85,10 @@ hints:
             theme_classic()
           dev.off()
           ## GC content analysis end ##
+
+hints:
+  - class: InlineJavascriptRequirement
+  - $import: R-3.5_ubuntu-18.04.yml
 
 inputs:
   tags_directory:

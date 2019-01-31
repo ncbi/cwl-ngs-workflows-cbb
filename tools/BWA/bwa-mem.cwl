@@ -7,6 +7,8 @@ doc: BWA is a software package for mapping DNA sequences against a large referen
 
 requirements:
   - class: InlineJavascriptRequirement
+
+hints:
   - $import: bwa.yml
 
 inputs:

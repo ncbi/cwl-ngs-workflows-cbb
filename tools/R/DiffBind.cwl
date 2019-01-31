@@ -6,10 +6,6 @@ label: R-3.5_Bioconductor-3.8_DiffBind
 doc: Compute differentially bound sites from multiple ChIP-seq experiments using affinity (quantitative) data
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: R-3.5_ubuntu-18.04.yml
-
-hints:
   InitialWorkDirRequirement:
     listing:
       - entryname: diffbind.R
@@ -97,6 +93,9 @@ hints:
                         "Diffbind_deseq2_report.bed", quote=FALSE, sep="\t",
                         row.names=FALSE, col.names=FALSE)
 
+hints:
+  - class: InlineJavascriptRequirement
+  - $import: R-3.5_ubuntu-18.04.yml
 
 
 inputs:

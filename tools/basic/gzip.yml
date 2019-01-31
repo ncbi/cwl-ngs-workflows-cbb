@@ -1,3 +1,2 @@
  class: DockerRequirement
  dockerPull: ubuntu:18.04
- dockerOutputDirectory: /data

@@ -6,10 +6,6 @@ label: R-3.5_Bioconductor-3.8_ChIPQC
 doc: Quality metrics for ChIPseq data.
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: R-3.5_ubuntu-18.04.yml
-
-hints:
   InitialWorkDirRequirement:
     listing:
       - entryname: ChIPQC.R
@@ -30,6 +26,10 @@ hints:
           }
           sample = ChIPQCsample(bamfile)
           ChIPQCreport(sample, reportFolder=ChipQC_folder, reportName="ChIPQCreport")
+
+hints:
+  - class: InlineJavascriptRequirement
+  - $import: R-3.5_ubuntu-18.04.yml
 
 inputs:
   input:

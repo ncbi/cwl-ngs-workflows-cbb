@@ -1,3 +1,2 @@
  class: DockerRequirement
  dockerPull: quay.io/biocontainers/phantompeakqualtools:1.2--0
- dockerOutputDirectory: /data

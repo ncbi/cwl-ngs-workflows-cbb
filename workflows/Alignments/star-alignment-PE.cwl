@@ -40,7 +40,7 @@ steps:
       readFilesIn: reads_1
       readFilesIn_2: reads_2
       outFileNamePrefix:
-        valueFrom: ${ return inputs.readFilesIn.nameroot.replace('.fastq', '') ;}
+        valueFrom: ${ return inputs.readFilesIn.nameroot.replace('_1.fastq', '') ;}
       twopassMode: { default: "Basic"}
       outSAMunmapped: { default: "Within"}
       outSAMtype: { default: ["BAM", "Unsorted"]}

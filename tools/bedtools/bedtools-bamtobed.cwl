@@ -7,6 +7,8 @@ doc: The bedtools utilities are a swiss-army knife of tools for a wide-range of 
 
 requirements:
   - class: InlineJavascriptRequirement
+
+hints:
   - $import: bedtools.yml
 
 inputs:

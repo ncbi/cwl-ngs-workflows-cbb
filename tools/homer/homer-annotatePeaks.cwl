@@ -6,8 +6,10 @@ label: HOMER-annotatePeaks
 doc: Software for motif discovery and next generation sequencing analysis
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: homer.yml
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: homer.yml
 
 inputs:
   macs_out_dir:

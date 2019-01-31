@@ -8,7 +8,9 @@ doc: RSeQC package provides a number of useful modules that can comprehensively 
 
 requirements:
 - class: InlineJavascriptRequirement
-- $import: rseqc.yml
+
+hints:
+  - $import: rseqc.yml
 
 inputs:
   input-file:

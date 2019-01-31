@@ -6,10 +6,6 @@ label: R-3.5_Bioconductor-3.8_EdgeR
 doc: Differential expression analysis of RNA-seq expression profiles with biological replication
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: R-3.5_ubuntu-18.04.yml
-
-hints:
   InitialWorkDirRequirement:
     listing:
       - entryname: edgeR.R
@@ -33,6 +29,10 @@ hints:
           data <- as.data.frame(fread(args[5]))
           data <- data[,c(c(1,2,3,4,5),match(factors$File,names(data)))]
           head(data)
+
+hints:
+  - class: InlineJavascriptRequirement
+  - $import: R-3.5_ubuntu-18.04.yml
 
 inputs:
   logfc:

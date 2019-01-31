@@ -6,8 +6,10 @@ label: ChromHMM-BinarizeBed
 doc: Chromatin state discovery and characterization
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: ChromHMM.yml
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: ChromHMM.yml
 
 inputs:
   paired:

@@ -1,3 +1,2 @@
  class: DockerRequirement
  dockerPull: quay.io/biocontainers/macs2:2.1.1.20160309--py27h7eb728f_3
- dockerOutputDirectory: /data

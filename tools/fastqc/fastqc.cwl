@@ -6,8 +6,10 @@ label: FastQC
 doc: BASH echo command
 
 requirements:
-- class: InlineJavascriptRequirement
-- $import: fastqc.yml
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: fastqc.yml
 
 inputs:
   threads:

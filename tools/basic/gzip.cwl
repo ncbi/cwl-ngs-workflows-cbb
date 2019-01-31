@@ -7,6 +7,8 @@ doc: Compress files
 
 requirements:
   - class: InlineJavascriptRequirement
+
+hints:
   - $import: gzip.yml
 
 inputs:

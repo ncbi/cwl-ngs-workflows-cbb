@@ -7,6 +7,8 @@ doc: TPMCalculator quantifies mRNA abundance directly from the alignments by par
 
 requirements:
   - class: InlineJavascriptRequirement
+
+hints:
   - $import: tpmcalculator.yml
 
 inputs:

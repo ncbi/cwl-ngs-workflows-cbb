@@ -7,19 +7,19 @@ doc: |
   Trimmomatic is a fast, multithreaded command line tool that can be used to trim and crop
   Illumina (FASTQ) data as well as to remove adapters
 
-hints:
-- $import: trimmomatic.yml
-
 requirements:
   SchemaDefRequirement:
     types:
-    - $import: trimmomatic-end_mode.yaml
-    - $import: trimmomatic-sliding_window.yaml
-    - $import: trimmomatic-phred.yaml
-    - $import: trimmomatic-illumina_clipping.yaml
-    - $import: trimmomatic-max_info.yaml
+      - $import: trimmomatic-end_mode.yaml
+      - $import: trimmomatic-sliding_window.yaml
+      - $import: trimmomatic-phred.yaml
+      - $import: trimmomatic-illumina_clipping.yaml
+      - $import: trimmomatic-max_info.yaml
   InlineJavascriptRequirement: {}
   ShellCommandRequirement: {}
+
+hints:
+  - $import: trimmomatic.yml
 
 inputs:
   end_mode:
@@ -224,5 +224,5 @@ $namespaces:
   s: http://schema.org/
 
 $schemas:
-- http://edamontology.org/EDAM_1.16.owl
-- https://schema.org/docs/schema_org_rdfa.html
+  - http://edamontology.org/EDAM_1.16.owl
+  - https://schema.org/docs/schema_org_rdfa.html
