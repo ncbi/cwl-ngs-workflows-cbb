@@ -77,7 +77,7 @@ steps:
     in:
       stdout:
         valueFrom: ${ return inputs.b.nameroot + ".bed";}
-      b: bam_sort/out_sam
+      i: bam_sort/out_sam
     out: [out_stdout]
 
 s:author:
