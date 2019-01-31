@@ -33,7 +33,7 @@ steps:
   alignment:
     run: ../../tools/BWA/bwa-mem.cwl
     in:
-      out_stdout:
+      in_stdout:
         valueFrom: ${ return inputs.input.nameroot.replace('.fastq', '') + ".sam";}
       threads: threads
       prefix: genome_prefix
@@ -53,7 +53,7 @@ steps:
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl
     in:
-      out_stdout:
+      stdout:
         valueFrom: ${ return inputs.in_bam.nameroot + ".stats";}
       in_bam: sam_to_bam/output
     out: [out_stdout]
@@ -75,7 +75,7 @@ steps:
   bamtobed:
     run: ../../tools/bedtools/bedtools-bamtobed.cwl
     in:
-      out_stdout:
+      stdout:
         valueFrom: ${ return inputs.b.nameroot + ".bed";}
       b: bam_sort/out_sam
     out: [out_stdout]
