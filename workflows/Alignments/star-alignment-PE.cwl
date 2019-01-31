@@ -48,7 +48,7 @@ steps:
       limitOutSJcollapsed: { default: 1000000}
       limitSjdbInsertNsj: { default: 1000000}
       outFilterMultimapNmax: { default: 100}
-      outFilterMismatchNmax: { default: 3}
+      outFilterMismatchNmax: { default: 33}
       outFilterMismatchNoverLmax: { default: 0.3}
       seedSearchStartLmax: { default: 12}
       alignSJoverhangMin: { default: 15}
@@ -56,7 +56,7 @@ steps:
       outFilterMatchNminOverLread: { default: 0}
       outFilterScoreMinOverLread: { default: 0.3}
       winAnchorMultimapNmax: { default: 50}
-      alignSJDBoverhangMin: { default: 3}
+      alignSJDBoverhangMin: { default: 1}
       outFilterType: { default: "BySJout"}
     out: [aligned, mappingstats]
     doc: |
