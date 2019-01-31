@@ -12,7 +12,6 @@ doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM val
 
 inputs:
   bam_sort: File
-  genomeDir: Directory
   genomeName: string
   gtf: File
   q: int
