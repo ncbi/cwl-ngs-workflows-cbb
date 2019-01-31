@@ -79,7 +79,7 @@ steps:
       input: input_bam
     out: [report]
   macs_callpeak:
-    run: ../../tools/MACS/macs-callpeak.cwl
+    run: ../../tools/MACS/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
