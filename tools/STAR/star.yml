@@ -1,3 +1,2 @@
  class: DockerRequirement
  dockerPull: quay.io/biocontainers/star:2.6.1a--1
- dockerOutputDirectory: /data
