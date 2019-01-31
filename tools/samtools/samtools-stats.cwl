@@ -9,7 +9,7 @@ hints:
 - $import: samtools.yml
 
 inputs:
-  out_stdout:
+  stdout:
     type: string
   in_bam:
     type: File

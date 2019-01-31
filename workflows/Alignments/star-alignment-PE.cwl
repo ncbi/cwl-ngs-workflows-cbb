@@ -64,7 +64,7 @@ steps:
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl
     in:
-      out_stdout:
+      stdout:
         valueFrom: ${ return inputs.in_bam.nameroot + ".stats";}
       in_bam: alignment/aligned
     out: [out_stdout]
