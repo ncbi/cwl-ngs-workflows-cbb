@@ -19,13 +19,13 @@ outputs:
   star_stats:
     outputSource: alignment/mappingstats
     type: File?
-  bam_stats_out:
+  stats_bam:
     outputSource: bam_stats/out_stdout
     type: File
   sorted_bam:
     outputSource: bam_sort/out_sam
     type: File
-  bam_index:
+  indexed_bam:
     outputSource: bam_index/out_sam
     type: File
 
