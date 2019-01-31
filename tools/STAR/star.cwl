@@ -202,6 +202,11 @@ inputs:
     inputBinding:
       position: 2
       prefix: --outStd
+  outSAMunmapped:
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: --outSAMunmapped
 
 
 outputs:

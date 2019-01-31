@@ -42,6 +42,7 @@ steps:
       outFileNamePrefix:
         valueFrom: ${ return inputs.readFilesIn.nameroot.replace('.fastq', '') ;}
       twopassMode: { default: "Basic"}
+      outSAMunmapped: { default: "Within"}
       outSAMtype: { default: ["BAM", "Unsorted"]}
       outStd: { default: "Log"}
       limitOutSJcollapsed: { default: 1000000}
