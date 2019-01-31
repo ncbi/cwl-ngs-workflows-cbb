@@ -20,7 +20,7 @@ outputs:
   out_stdout:
     type: stdout
 
-stdout: $(inputs.out_stdout)
+stdout: $(inputs.stdout)
 
 baseCommand: [samtools, stats]
 
