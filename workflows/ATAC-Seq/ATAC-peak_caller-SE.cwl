@@ -107,7 +107,7 @@ steps:
         valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis_inflection.txt');}
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
-    run: ../../tools/MACS/macs-callpeak.cwl
+    run: ../../tools/MACS/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
