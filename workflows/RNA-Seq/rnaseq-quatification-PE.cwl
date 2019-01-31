@@ -6,7 +6,7 @@ requirements:
 - class: InlineJavascriptRequirement
 - class: StepInputExpressionRequirement
 
-label: "RNA-Seq Quantification workflow PE"
+label: "RNA-Seq Quantification workflow or paired-end samples"
 doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM values for genes and transcripts"
 
 inputs:

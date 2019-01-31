@@ -7,7 +7,7 @@ requirements:
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
 
-label: "RNA-Seq Quantification workflow SE"
+label: "RNA-Seq Quantification workflow or single-end samples"
 doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM values for genes and transcripts"
 
 inputs:

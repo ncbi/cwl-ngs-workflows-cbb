@@ -6,7 +6,7 @@ requirements:
 - class: InlineJavascriptRequirement
 - class: StepInputExpressionRequirement
 
-label: "RSeQC workflow"
+label: "RSeQC workflow or single-end samples"
 doc: "This workflow runs the RSeQC quality control workflow"
 
 inputs:
