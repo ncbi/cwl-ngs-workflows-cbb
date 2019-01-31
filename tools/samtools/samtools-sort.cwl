@@ -5,7 +5,7 @@ class: CommandLineTool
 label: Samtools-sort
 doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
 
-requirements:
+hints:
 - $import: samtools.yml
 
 inputs:

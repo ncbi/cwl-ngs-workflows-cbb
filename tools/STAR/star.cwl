@@ -7,6 +7,8 @@ doc: Spliced Transcripts Alignment to a Reference
 
 requirements:
   - class: InlineJavascriptRequirement
+
+hints:
   - $import: star.yml
 
 inputs:

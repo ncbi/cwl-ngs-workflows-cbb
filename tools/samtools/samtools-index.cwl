@@ -7,6 +7,8 @@ doc: Samtools is a suite of programs for interacting with high-throughput sequen
 
 requirements:
 - class: InlineJavascriptRequirement
+
+hints:
 - $import: samtools.yml
 
 inputs:
