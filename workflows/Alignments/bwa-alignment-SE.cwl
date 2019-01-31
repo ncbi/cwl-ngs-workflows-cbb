@@ -35,7 +35,7 @@ steps:
     in:
       in_stdout:
         valueFrom: ${ return inputs.input.nameroot.replace('.fastq', '') + ".sam";}
-      threads: threads
+      t: threads
       prefix: genome_prefix
       index: genomeDir
       input: reads
