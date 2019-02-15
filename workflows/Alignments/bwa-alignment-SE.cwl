@@ -19,13 +19,13 @@ outputs:
   bam_stats_out:
     outputSource: bam_stats/out_stdout
     type: File
-  sorted_bam:
+  sorted_bam_out:
     outputSource: bam_sort/out_sam
     type: File
-  bam_index:
+  bam_index_out:
     outputSource: bam_index/out_sam
     type: File
-  bed_file:
+  bed_file_out:
     outputSource: bamtobed/out_stdout
     type: File
 
@@ -76,7 +76,7 @@ steps:
     run: ../../tools/bedtools/bedtools-bamtobed.cwl
     in:
       stdout:
-        valueFrom: ${ return inputs.b.nameroot + ".bed";}
+        valueFrom: ${ return inputs.i.nameroot + ".bed";}
       i: bam_sort/out_sam
     out: [out_stdout]
 
