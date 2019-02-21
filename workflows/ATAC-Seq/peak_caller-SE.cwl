@@ -58,6 +58,7 @@ steps:
       checkGC: { default: True}
       genome: genome_fasta
       input: input_bed
+      format: { default: "bed"}
     out: [tags_directory]
   phantompeakqualtools:
     run: ../../tools/phantompeakqualtools/phantompeakqualtools.cwl

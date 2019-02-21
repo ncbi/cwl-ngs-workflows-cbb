@@ -39,6 +39,7 @@ RUN Rscript --vanilla -e "install.packages(\"ggplot2\", repo=\"https://cran.r-pr
 RUN Rscript --vanilla -e "install.packages(\"calibrate\", repo=\"https://cran.r-project.org\")"
 RUN Rscript --vanilla -e "BiocManager::install(\"impute\", version = \"3.8\")"
 RUN Rscript --vanilla -e "install.packages(\"samr\", repo=\"https://cran.r-project.org\")"
+RUN Rscript --vanilla -e "install.packages(\"optparse\", repo=\"https://cran.r-project.org\")"
 
 WORKDIR /data/
 

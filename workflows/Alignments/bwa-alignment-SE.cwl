@@ -14,6 +14,7 @@ inputs:
   threads: int
   genomeDir: Directory
   genome_prefix: string
+  readsquality: int
 
 outputs:
   bam_stats_out:
@@ -48,7 +49,7 @@ steps:
       output_name:
         valueFrom: ${ return inputs.input.nameroot + ".bam";}
       input: alignment/out_stdout
-      readsquality:  { default: 10}
+      readsquality:  readsquality
     out: [output]
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl

@@ -1,4 +1,4 @@
   class: DockerRequirement
-  dockerImageId: homer-hg19:4.9.1
-  dockerFile:
-    $include: Dockerfile-hg19
+  dockerImageId: homer-ecoli-mg1655
+#  dockerFile:
+#    $include: Dockerfile-hg19
