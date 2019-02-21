@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Bioconductor-3.8_ChIPQC
+label: R-3.5_Bioconductor-3.8_Deseq2
 doc: Quality metrics for ChIPseq data.
 
 requirements:
