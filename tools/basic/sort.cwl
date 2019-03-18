@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: sort
+doc: SORT command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,25 +12,20 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
-  c:
-    type: boolean?
+  k:
+    type: string?
     inputBinding:
       position: 1
-      prefix: -c
-  n:
+      prefix: -k
+  u:
     type: boolean?
     inputBinding:
-      position: 1
-      prefix: -n
-  d:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -d
+      position: 2
+      prefix: -u
   file:
     type: File
     inputBinding:
-      position: 2
+      position: 3
   outFileName:
     type: string
 
@@ -40,7 +35,7 @@ outputs:
 
 stdout: $(inputs.outFileName)
 
-baseCommand: ["gzip"]
+baseCommand: ["sort"]
 
 s:author:
   - class: s:Person

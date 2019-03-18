@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: shuf
+doc: SHUF command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,21 +12,17 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
-  c:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -c
   n:
-    type: boolean?
+    type: int
     inputBinding:
       position: 1
       prefix: -n
-  d:
-    type: boolean?
+  random-source:
+    type: File?
     inputBinding:
       position: 1
-      prefix: -d
+      prefix: --random-source=
+      separate: false
   file:
     type: File
     inputBinding:
@@ -40,7 +36,7 @@ outputs:
 
 stdout: $(inputs.outFileName)
 
-baseCommand: ["gzip"]
+baseCommand: ["shuf"]
 
 s:author:
   - class: s:Person

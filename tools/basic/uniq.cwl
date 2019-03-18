@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: uniq
+doc: UNIQ command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -17,16 +17,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -c
-  n:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -n
-  d:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -d
   file:
     type: File
     inputBinding:
@@ -40,7 +30,7 @@ outputs:
 
 stdout: $(inputs.outFileName)
 
-baseCommand: ["gzip"]
+baseCommand: ["uniq"]
 
 s:author:
   - class: s:Person

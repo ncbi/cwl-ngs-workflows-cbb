@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: split
+doc: SPLIT command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,35 +12,57 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
-  c:
-    type: boolean?
+  a:
+    type: string?
     inputBinding:
       position: 1
-      prefix: -c
-  n:
-    type: boolean?
+      prefix: -a
+  b:
+    type: int?
     inputBinding:
       position: 1
-      prefix: -n
+      prefix: -b
+  C:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -C
   d:
     type: boolean?
     inputBinding:
-      position: 1
+      position: 2
       prefix: -d
+  numeric-suffixes:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: --numeric-suffixes
+  l:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -l
+  t:
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: -t
   file:
     type: File
     inputBinding:
       position: 2
   outFileName:
     type: string
+    inputBinding:
+      position: 3
 
 outputs:
   output:
-    type: stdout
+    type: File[]
+    outputBinding:
+      glob: $(inputs.outFileName)*
 
-stdout: $(inputs.outFileName)
-
-baseCommand: ["gzip"]
+baseCommand: ["split"]
 
 s:author:
   - class: s:Person

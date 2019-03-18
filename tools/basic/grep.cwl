@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: grep
+doc: GREP command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,25 +12,19 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
-  c:
+  v:
     type: boolean?
     inputBinding:
       position: 1
-      prefix: -c
-  n:
-    type: boolean?
+      prefix: -v
+  pattern:
+    type: string
     inputBinding:
-      position: 1
-      prefix: -n
-  d:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -d
+      position: 2
   file:
     type: File
     inputBinding:
-      position: 2
+      position: 3
   outFileName:
     type: string
 
@@ -40,7 +34,7 @@ outputs:
 
 stdout: $(inputs.outFileName)
 
-baseCommand: ["gzip"]
+baseCommand: ["grep"]
 
 s:author:
   - class: s:Person

@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: bc
+doc: BC command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,21 +12,6 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
-  c:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -c
-  n:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -n
-  d:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -d
   file:
     type: File
     inputBinding:
@@ -40,7 +25,7 @@ outputs:
 
 stdout: $(inputs.outFileName)
 
-baseCommand: ["gzip"]
+baseCommand: ["sort"]
 
 s:author:
   - class: s:Person

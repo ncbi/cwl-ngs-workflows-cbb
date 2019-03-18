@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: gzip
-doc: Compress files
+label: wc
+doc: WC command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,21 +12,31 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
+  l:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -l
   c:
     type: boolean?
     inputBinding:
       position: 1
       prefix: -c
-  n:
+  m:
     type: boolean?
     inputBinding:
       position: 1
-      prefix: -n
-  d:
+      prefix: -m
+  L:
     type: boolean?
     inputBinding:
       position: 1
-      prefix: -d
+      prefix: -L
+  w:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -w
   file:
     type: File
     inputBinding:
@@ -40,7 +50,7 @@ outputs:
 
 stdout: $(inputs.outFileName)
 
-baseCommand: ["gzip"]
+baseCommand: ["wc"]
 
 s:author:
   - class: s:Person
