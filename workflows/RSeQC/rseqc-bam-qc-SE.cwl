@@ -76,14 +76,20 @@ steps:
   gzip_junction_annotation_bed:
     run: ../../tools/basic/gzip.cwl
     in:
-      f: junction_annotation/bed
+      c: { default: True}
+      file: junction_annotation/bed
+      outFileName:
+        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip Bed file
   gzip_junction_annotation_xls:
     run: ../../tools/basic/gzip.cwl
     in:
-      f: junction_annotation/xls
+      c: { default: True}
+      file: junction_annotation/xls
+      outFileName:
+        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip XLS file

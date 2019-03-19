@@ -15,7 +15,7 @@ MAINTAINER Roberto Vera Alvarez <r78v10a07@gmail.com>
 USER root
 
 ENV URL=http://homer.ucsd.edu/homer/configureHomer.pl
-ENV FOLDER=/usr/local
+ENV FOLDER=homer
 
 RUN apt-get update && \
     apt-get install -y apt-utils && \
@@ -28,8 +28,13 @@ RUN apt-get update && \
     apt-get purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN mkdir -p $FOLDER && \
-    cd $FOLDER && \
+RUN adduser --disabled-password --gecos '' ubuntu
+USER ubuntu
+RUN chmod a+rwx /home/ubuntu/
+
+RUN cd /home/ubuntu/ && \
+    mkdir $FOLDER && \
+    cd $FOLDER \
     wget $URL && \
     perl configureHomer.pl -install homer
 
@@ -37,6 +42,9 @@ ENV DST=/tmp
 RUN cd $DST
 COPY NC_000913.3.fasta NC_000913.3.gff ./
 RUN loadGenome.pl -name ecoli_mg1655 -fasta NC_000913.3.fasta -gff NC_000913.3.gff  -org null
+RUN rm NC_000913.3.fasta NC_000913.3.gff
+
+ENV PATH="/home/ubuntu/homer/bin:${PATH}"
 WORKDIR /data/
 
 CMD ["/bin/bash"]

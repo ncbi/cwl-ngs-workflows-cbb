@@ -12,7 +12,6 @@ doc: "This workflow runs the RNA-Seq Quantification workflow calculating TPM val
 
 inputs:
   bam_sort: File
-  genomeName: string
   gtf: File
   q: int
   r: File
@@ -57,9 +56,6 @@ outputs:
   read_quality_out:
     outputSource: qc_rseqc/read_quality_out
     type: File[]
-  bam_to_tdf_out:
-    outputSource: bam_to_tdf/out_tdf
-    type: File
 
 steps:
   quantification:
@@ -130,16 +126,6 @@ steps:
     out: [bam_stat_out, experiment_out, gzip_junction_annotation_bed_out, gzip_junction_annotation_xls_out, junction_annotation_pdf_out, junction_saturation_out, read_distribution_out, read_quality_out]
     doc: |
       Execute QC on the BAM files
-  bam_to_tdf:
-    run: ../../tools/IGV/igvtools-count.cwl
-    in:
-      i: bam_sort
-      o:
-        valueFrom: ${ return inputs.i.nameroot + ".tdf";}
-      g: genomeName
-    out: [out_tdf]
-    doc:
-      Convert BAM to TDF
 
 s:author:
   - class: s:Person

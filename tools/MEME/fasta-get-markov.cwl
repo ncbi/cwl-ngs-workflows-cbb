@@ -2,55 +2,52 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: BWA-mem
-doc: BWA is a software package for mapping DNA sequences against a large reference genome
+label: MEME-fasta-get-markov
+doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: bwa.yml
+  - $import: meme.yml
 
 inputs:
-  in_stdout:
-    type: string
-  t:
+  nostatus:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -nostatus
+  nosummary:
+    type: boolean?
+    inputBinding:
+      position: 2
+      prefix: -nosummary
+  dna:
+    type: boolean?
+    inputBinding:
+      position: 3
+      prefix: -dna
+  m:
     type: int?
     inputBinding:
-      position: 1
-      prefix: -t
-  a:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -a
-  M:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -M
-  prefix:
-    type: string
-    inputBinding:
       position: 4
-      valueFrom: |
-        ${
-          return inputs.index.path + "/" + self;
-        }
-  index:
-    type: Directory
-  input:
+      prefix: -m
+  i:
     type: File
     inputBinding:
       position: 5
+  o:
+    type: string
+    inputBinding:
+      position: 6
 
 outputs:
-  out_stdout:
-    type: stdout
+  output:
+    type: File
+    outputBinding:
+      glob: $(inputs.o)
 
-stdout: $(inputs.in_stdout)
-
-baseCommand: ["bwa", "mem"]
+baseCommand: ["fasta-get-markov"]
 
 s:author:
   - class: s:Person
@@ -58,7 +55,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: https://github.com/lh3/bwa
+s:codeRepository: http://meme-suite.org
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

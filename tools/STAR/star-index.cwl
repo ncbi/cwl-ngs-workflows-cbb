@@ -21,12 +21,6 @@ inputs:
     inputBinding:
       position: 2
       prefix: --genomeChrBinNbits
-  limitGenomeGenerateRAM:
-    type: int
-    default: 30000000000
-    inputBinding:
-      position: 3
-      prefix: --limitGenomeGenerateRAM
   sjdbOverhang:
     type: int
     default: 124

@@ -2,14 +2,14 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: BWA-mem
-doc: BWA is a software package for mapping DNA sequences against a large reference genome
+label: multiBamSummary
+doc: computes the read coverages for genomic regions for typically two or more BAM files
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: bwa.yml
+  - $import: deeptools.yml
 
 inputs:
   in_stdout:
@@ -19,16 +19,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -t
-  a:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -a
-  M:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -M
   prefix:
     type: string
     inputBinding:

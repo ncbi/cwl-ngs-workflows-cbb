@@ -3,8 +3,9 @@ cwlVersion: v1.0
 class: Workflow
 
 requirements:
-- class: InlineJavascriptRequirement
-- class: StepInputExpressionRequirement
+    - class: InlineJavascriptRequirement
+    - class: StepInputExpressionRequirement
+    - class: SubworkflowFeatureRequirement
 
 label: "BWA alignment workflow for single-end samples"
 doc: "This workflow aligns the fastq files using BWA for single-end samples"
@@ -14,20 +15,16 @@ inputs:
   threads: int
   genomeDir: Directory
   genome_prefix: string
-  readsquality: int
 
 outputs:
+  sam_to_bam_out:
+    outputSource: sam_to_bam/output
+    type: File
+  bam_flagstat_out:
+    outputSource: bam_flagstat/out_stdout
+    type: File
   bam_stats_out:
     outputSource: bam_stats/out_stdout
-    type: File
-  sorted_bam_out:
-    outputSource: bam_sort/out_sam
-    type: File
-  bam_index_out:
-    outputSource: bam_index/out_sam
-    type: File
-  bed_file_out:
-    outputSource: bamtobed/out_stdout
     type: File
 
 steps:
@@ -40,6 +37,8 @@ steps:
       prefix: genome_prefix
       index: genomeDir
       input: reads
+      a: { default: True}
+      M: { default: True}
     out: [out_stdout]
   sam_to_bam:
     run: ../../tools/samtools/samtools-view.cwl
@@ -49,7 +48,7 @@ steps:
       output_name:
         valueFrom: ${ return inputs.input.nameroot + ".bam";}
       input: alignment/out_stdout
-      readsquality:  readsquality
+      readsquality:  { default: 0}
     out: [output]
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl
@@ -58,27 +57,12 @@ steps:
         valueFrom: ${ return inputs.in_bam.nameroot + ".stats";}
       in_bam: sam_to_bam/output
     out: [out_stdout]
-  bam_sort:
-    run: ../../tools/samtools/samtools-sort.cwl
-    in:
-      threads: threads
-      out_bam:
-        valueFrom: ${ return inputs.in_bam.nameroot + "_sorted.bam";}
-      in_bam: sam_to_bam/output
-    out: [out_sam]
-  bam_index:
-    run: ../../tools/samtools/samtools-index.cwl
-    in:
-      out_bai:
-        valueFrom: ${ return inputs.in_bam.nameroot + ".bam.bai";}
-      in_bam: bam_sort/out_sam
-    out: [out_sam]
-  bamtobed:
-    run: ../../tools/bedtools/bedtools-bamtobed.cwl
+  bam_flagstat:
+    run: ../../tools/samtools/samtools-flagstat.cwl
     in:
       stdout:
-        valueFrom: ${ return inputs.i.nameroot + ".bed";}
-      i: bam_sort/out_sam
+        valueFrom: ${ return inputs.in_bam.nameroot + ".flagstat";}
+      in_bam: sam_to_bam/output
     out: [out_stdout]
 
 s:author:

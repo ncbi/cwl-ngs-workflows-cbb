@@ -13,26 +13,14 @@ inputs:
   homer_genome: string
   genome_fasta: File
   genome_gtf: File
-  input_bed: File
-  input_bam:
-    type: File
-    secondaryFiles: .bai
+  tagAlign_gz: File
   macs_callpeaks_g: string
   macs_callpeaks_q: float
 
 outputs:
-  phantompeakqualtools_output_savp:
-    outputSource: phantompeakqualtools/output_savp
-    type: File
-  phantompeakqualtools_output_out:
-    outputSource: phantompeakqualtools/output_out
-    type: File
   readQC_plots:
     outputSource: readQC/plots
     type: File[]
-  ChIPQC_report:
-    outputSource: ChIPQC/report
-    type: Directory
   macs_cutoff_pdf:
     outputSource: macs_cutoff/out_pdf
     type: File
@@ -50,6 +38,15 @@ outputs:
     type: File?
 
 steps:
+  gzip_cat:
+    run: ../../tools/basic/gzip.cwl
+    in:
+      c: { default: True}
+      d: { default: True}
+      file: tagAlign_gz
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot;}
+    out: [output]
   homer_tags:
     run: ../../tools/homer/homer-makeTagDirectory.cwl
     in:
@@ -57,34 +54,20 @@ steps:
         valueFrom: ${ return inputs.input.nameroot + "_tags";}
       checkGC: { default: True}
       genome: genome_fasta
-      input: input_bed
+      input: gzip_cat/output
       format: { default: "bed"}
     out: [tags_directory]
-  phantompeakqualtools:
-    run: ../../tools/phantompeakqualtools/phantompeakqualtools.cwl
-    in:
-      savp:
-        valueFrom: ${ return inputs.c.nameroot + "_cross_correlation.pdf";}
-      out:
-        valueFrom: ${ return inputs.c.nameroot + "_metrics.txt";}
-      c: input_bam
-    out: [output_savp, output_out]
   readQC:
     run: ../../tools/R/readQC.cwl
     in:
       tags_directory: homer_tags/tags_directory
     out: [plots]
-  ChIPQC:
-    run: ../../tools/R/ChIPQC.cwl
-    in:
-      input: input_bam
-    out: [report]
   macs_callpeak:
     run: ../../tools/MACS/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
-      f: { default: "BAM"}
+      f: { default: "BED"}
       g: macs_callpeaks_g
       cutoff-analysis: { default: True}
       nomodel: { default: True}
@@ -94,7 +77,7 @@ steps:
       q: macs_callpeaks_q
       outdir:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
-      t: input_bam
+      t: gzip_cat/output
     out: [outdir]
   macs_cutoff:
     run: ../../tools/R/macs-cutoff.cwl
@@ -112,7 +95,7 @@ steps:
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
-      f: { default: "BAM"}
+      f: { default: "BED"}
       g: macs_callpeaks_g
       cutoff-analysis: { default: True}
       call-summits: { default: True}
@@ -123,12 +106,12 @@ steps:
       q_file: macs_cutoff/out_inflection
       outdir:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
-      t: input_bam
+      t: gzip_cat/output
     out: [outdir]
   homer_annotate_peaks:
     run: ../../tools/homer/homer-annotatePeaks.cwl
     in:
-      macs_out_dir: macs_callpeak/outdir
+      macs_out_dir: macs_callpeak_q_value/outdir
       genome: homer_genome
       gtf: genome_gtf
       input:

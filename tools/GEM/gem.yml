@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: gem_ubuntu-18.04:3.4
+  dockerFile:
+    $include: Dockerfile

@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: meme_ubuntu-18.04:5.04
+  dockerFile:
+    $include: Dockerfile

@@ -145,7 +145,7 @@ inputs:
   headcrop:
     type: int?
     inputBinding:
-      position: 21
+      position: 20
       prefix: 'HEADCROP:'
       separate: false
     doc: |
@@ -157,7 +157,7 @@ inputs:
   leading:
     type: int?
     inputBinding:
-      position: 22
+      position: 20
       prefix: 'LEADING:'
       separate: false
     doc: |
@@ -167,7 +167,7 @@ inputs:
   trailing:
     type: int?
     inputBinding:
-      position: 23
+      position: 20
       prefix: 'TRAILING:'
       separate: false
     doc: |
@@ -181,7 +181,7 @@ inputs:
   avgqual:
     type: int?
     inputBinding:
-      position: 24
+      position: 20
       prefix: 'AVGQUAL:'
       separate: false
     doc: |
@@ -189,7 +189,7 @@ inputs:
   minlen:
     type: int?
     inputBinding:
-      position: 25
+      position: 20
       prefix: 'MINLEN:'
       separate: false
     doc: |
