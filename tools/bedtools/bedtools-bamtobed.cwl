@@ -3,7 +3,7 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 label: bedtools-bamtobed
-doc: The bedtools utilities are a swiss-army knife of tools for a wide-range of genomics analysis tasks
+description: The bedtools utilities are a swiss-army knife of tools for a wide-range of genomics analysis tasks
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -14,13 +14,13 @@ hints:
 inputs:
   stdout:
     type: string
+    description: Stdout from program
   i:
     type: File
     inputBinding:
       position: 1
       prefix: -i
-    doc: |
-      Input BAM format
+    description: Input BAM format
 
 outputs:
   out_stdout:
