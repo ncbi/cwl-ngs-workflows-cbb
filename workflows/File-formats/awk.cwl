@@ -2,6 +2,9 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
+label: awk
+description: "AWK command"
+
 inputs:
   F:
     type: string?
