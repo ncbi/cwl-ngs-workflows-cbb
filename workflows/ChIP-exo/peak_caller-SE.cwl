@@ -104,7 +104,7 @@ steps:
       shift: { default: 0}
       extsize: { default: 147}
       q_file: macs_cutoff/out_inflection
-      outdir:
+      outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
     out: [outdir]
@@ -124,6 +124,12 @@ steps:
       fpkm: {default: True}
     out: [output,annStats_out]
 
+$namespaces:
+  s: http://schema.org/
+
+$schemas:
+  - http://schema.org/docs/schema_org_rdfa.html
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
@@ -131,9 +137,3 @@ s:author:
     s:name: Roberto Vera Alvarez
 
 s:license: https://spdx.org/licenses/OPL-1.0
-
-$namespaces:
-  s: http://schema.org/
-
-$schemas:
-  - http://schema.org/docs/schema_org_rdfa.html
