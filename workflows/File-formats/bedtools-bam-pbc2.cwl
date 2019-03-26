@@ -8,7 +8,7 @@ inputs:
     description: BAM file to be analyzed
 
 outputs:
-  out:
+  output:
     type: File
     outputSource: first_awk/output
 
@@ -16,8 +16,7 @@ steps:
   first_awk:
     run: awk.cwl
     in:
-      outFileName:
-        valueFrom: ${ return inputs.file.nameroot + ".awk";}
+      outFileName: { default: 'lola' }
       file: bamtobed/out_stdout
-      text: { default: 'BEGIN{OFS="\t"}{print $1,$2,$3,$6}' }
+      text: { default: 'lolo' }
     out: [output]
