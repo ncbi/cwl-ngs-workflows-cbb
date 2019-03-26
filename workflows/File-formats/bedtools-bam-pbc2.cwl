@@ -3,8 +3,8 @@ cwlVersion: v1.0
 class: Workflow
 
 requirements:
-  - class: InlineJavascriptRequirement
-  - class: StepInputExpressionRequirement
+  InlineJavascriptRequirement: {}
+  StepInputExpressionRequirement: {}
 
 label: "Compute library complexity"
 description: "This workflow compute library complexity"
