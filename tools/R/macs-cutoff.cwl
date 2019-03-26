@@ -53,11 +53,11 @@ inputs:
         ${
           return inputs.macs_out_dir.path + "/" + self;
         }
-  out_pdf:
+  out_pdf_name:
     type: string
     inputBinding:
       position: 2
-  out_inflection:
+  out_inflection_name:
     type: string
     inputBinding:
       position: 3

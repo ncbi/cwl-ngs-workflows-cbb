@@ -85,9 +85,9 @@ steps:
       macs_out_dir: macs_callpeak/outdir
       peak_cutoff_file:
         valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.txt');}
-      out_pdf:
+      out_pdf_name:
         valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.pdf');}
-      out_inflection:
+      out_inflection_name:
         valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis_inflection.txt');}
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
