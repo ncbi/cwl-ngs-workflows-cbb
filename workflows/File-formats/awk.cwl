@@ -8,21 +8,21 @@ description: "AWK command"
 inputs:
   F:
     type: string?
-    description: Awk separator
     inputBinding:
       position: 1
       prefix: -F
+    description: Awk separator
 
   text:
     type: string
-    description: Awk text
     inputBinding:
       position: 2
+    description: Awk text
   file:
     type: File
-    description: Input file
     inputBinding:
       position: 3
+    description: Input file
   outFileName:
     type: string
     description: Out put file name
@@ -30,8 +30,6 @@ inputs:
 outputs:
   output:
     type: stdout
-
-stdout: $(inputs.outFileName)
 
 baseCommand: ["awk"]
 

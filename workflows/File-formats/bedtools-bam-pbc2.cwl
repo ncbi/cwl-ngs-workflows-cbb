@@ -2,6 +2,9 @@
 cwlVersion: v1.0
 class: Workflow
 
+label: Testworkflow
+description: "My test workflow"
+
 inputs:
   bam_file:
     type: File
@@ -9,6 +12,9 @@ inputs:
   out_file_name:
     type: string
     description: Output file name
+  awk_text:
+    type: string
+    description: awk expression
 
 outputs:
   output:
@@ -21,5 +27,5 @@ steps:
     in:
       outFileName: out_file_name
       file: bam_file
-      text: { default: 'lolo' }
+      text: awk_text
     out: [output]
