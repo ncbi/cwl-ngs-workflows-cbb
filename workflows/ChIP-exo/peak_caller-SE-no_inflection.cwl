@@ -69,7 +69,7 @@ steps:
       shift: { default: 0}
       extsize: { default: 147}
       q: macs_callpeaks_q
-      outdir:
+      outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
     out: [outdir]

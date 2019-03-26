@@ -147,7 +147,7 @@ inputs:
       prefix: --broad-cutoff
     doc: |
       Cutoff for broad region. This option is not available unless --broad is set. If -p is set, this is a pvalue cutoff, otherwise, it's a qvalue cutoff. DEFAULT: 0.1
-  outdir:
+  outdir_name:
     type: string
     inputBinding:
       position: 2
