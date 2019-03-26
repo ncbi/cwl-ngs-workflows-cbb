@@ -6,6 +6,9 @@ inputs:
   bam_file:
     type: File
     description: BAM file to be analyzed
+  out_file_name:
+    type: string
+    description: Output file name
 
 outputs:
   output:
@@ -16,7 +19,7 @@ steps:
   first_awk:
     run: awk.cwl
     in:
-      outFileName: { default: 'lola' }
-      file: bamtobed/out_stdout
+      outFileName: out_file_name
+      file: bam_file
       text: { default: 'lolo' }
     out: [output]
