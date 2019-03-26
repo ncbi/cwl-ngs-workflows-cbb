@@ -18,12 +18,8 @@ ENV URL=http://homer.ucsd.edu/homer/configureHomer.pl
 ENV FOLDER=/usr/local
 
 RUN apt-get update && \
-    apt-get install -y apt-utils && \
-    apt-get install -y tzdata && \
-    apt-get install -y software-properties-common
-
-RUN apt-get update && \
-    apt-get install -y gcc g++ perl wget zip make unzip && \
+    apt-get install -y apt-utils tzdata && \
+    apt-get install -y software-properties-common gcc g++ perl wget zip make unzip && \
     apt-get clean && \
     apt-get purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -33,6 +29,10 @@ RUN mkdir -p $FOLDER && \
     wget $URL && \
     perl configureHomer.pl -install homer && \
     perl configureHomer.pl -install hg19
+
+RUN adduser --disabled-password --gecos '' ubuntu
+USER ubuntu
+RUN chmod a+rwx /home/ubuntu/
 
 WORKDIR /data/
 

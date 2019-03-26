@@ -18,12 +18,12 @@ inputs:
       position: 2
     doc: |
       Input file: BED, SAM, bowtie, etc.
-  tags_directory:
+  tags_directory_name:
     type: string
     inputBinding:
       position: 1
     doc: |
-      Output directory with tags files
+      Output directory name with tags files
   fragLength:
     type: string?
     inputBinding:

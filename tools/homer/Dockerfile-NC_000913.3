@@ -4,7 +4,7 @@ FROM ubuntu:18.04
 # Metadata
 LABEL base.image="ubuntu:18.04"
 LABEL version="1"
-LABEL software="R"
+LABEL software="Homer"
 LABEL software.version="4.10"
 LABEL description="This image provides homer with E_coli, K-12, MG1655 "
 LABEL tags="Homer"
@@ -18,11 +18,7 @@ ENV URL=http://homer.ucsd.edu/homer/configureHomer.pl
 ENV FOLDER=homer
 
 RUN apt-get update && \
-    apt-get install -y apt-utils && \
-    apt-get install -y tzdata && \
-    apt-get install -y software-properties-common
-
-RUN apt-get update && \
+    apt-get install -y apt-utils tzdata software-properties-common && \
     apt-get install -y gcc g++ perl wget zip make unzip && \
     apt-get clean && \
     apt-get purge && \
@@ -34,17 +30,19 @@ RUN chmod a+rwx /home/ubuntu/
 
 RUN cd /home/ubuntu/ && \
     mkdir $FOLDER && \
-    cd $FOLDER \
+    cd $FOLDER && \
     wget $URL && \
-    perl configureHomer.pl -install homer
-
-ENV DST=/tmp
-RUN cd $DST
-COPY NC_000913.3.fasta NC_000913.3.gff ./
-RUN loadGenome.pl -name ecoli_mg1655 -fasta NC_000913.3.fasta -gff NC_000913.3.gff  -org null
-RUN rm NC_000913.3.fasta NC_000913.3.gff
+    perl ./configureHomer.pl -install homer
 
 ENV PATH="/home/ubuntu/homer/bin:${PATH}"
+
+ENV DST=/home/ubuntu/
+COPY chr1.fa  $DST/
+COPY NC_000913.3.gff $DST/
+RUN cd $DST && \
+    loadGenome.pl -name ecoli_mg1655 -fasta chr1.fa -gff NC_000913.3.gff  -org null && \
+    rm chr1.fa NC_000913.3.gff
+
 WORKDIR /data/
 
 CMD ["/bin/bash"]

@@ -6,8 +6,8 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
 
-label: "ChIP-exo peak caller workflow for single-end samples"
-doc: "This workflow execute peak caller and QC from ChIP-exo for single-end samples"
+label: "ChIP-exo peak caller workflow for single-end samples with no P-Value inflection"
+doc: "This workflow execute peak caller and QC from ChIP-exo for single-end samples with no P-Value inflection"
 
 inputs:
   homer_genome: string
@@ -21,14 +21,8 @@ outputs:
   readQC_plots:
     outputSource: readQC/plots
     type: File[]
-  macs_cutoff_pdf:
-    outputSource: macs_cutoff/out_pdf
-    type: File
-  macs_cutoff_inflection:
-    outputSource: macs_cutoff/out_inflection
-    type: File
-  macs_callpeak_q_value_outdir:
-    outputSource: macs_callpeak_q_value/outdir
+  macs_callpeak_outdir:
+    outputSource: macs_callpeak/outdir
     type: Directory
   homer_annotate_peaks_output:
     outputSource: homer_annotate_peaks/output
@@ -50,7 +44,7 @@ steps:
   homer_tags:
     run: ../../tools/homer/homer-makeTagDirectory.cwl
     in:
-      tags_directory_name:
+      tags_directory:
         valueFrom: ${ return inputs.input.nameroot + "_tags";}
       checkGC: { default: True}
       genome: genome_fasta
@@ -79,39 +73,10 @@ steps:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
     out: [outdir]
-  macs_cutoff:
-    run: ../../tools/R/macs-cutoff.cwl
-    in:
-      macs_out_dir: macs_callpeak/outdir
-      peak_cutoff_file:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.txt');}
-      out_pdf:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.pdf');}
-      out_inflection:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis_inflection.txt');}
-    out: [out_pdf,out_inflection]
-  macs_callpeak_q_value:
-    run: ../../tools/MACS/macs2-callpeak.cwl
-    in:
-      n:
-        valueFrom: ${ return inputs.t.nameroot;}
-      f: { default: "BED"}
-      g: macs_callpeaks_g
-      cutoff-analysis: { default: True}
-      call-summits: { default: True}
-      nomodel: { default: True}
-      B: { default: True}
-      shift: { default: 0}
-      extsize: { default: 147}
-      q_file: macs_cutoff/out_inflection
-      outdir:
-        valueFrom: ${ return inputs.t.nameroot + "_peaks";}
-      t: gzip_cat/output
-    out: [outdir]
   homer_annotate_peaks:
     run: ../../tools/homer/homer-annotatePeaks.cwl
     in:
-      macs_out_dir: macs_callpeak_q_value/outdir
+      macs_out_dir: macs_callpeak/outdir
       genome: homer_genome
       gtf: genome_gtf
       input:
