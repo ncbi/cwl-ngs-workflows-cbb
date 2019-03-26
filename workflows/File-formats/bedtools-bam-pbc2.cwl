@@ -13,15 +13,8 @@ outputs:
         outputSource: first_awk/output
 
 steps:
-    bamtobed:
-        run: ../../tools/bedtools/bedtools-bamtobed.cwl
-        in:
-          stdout:
-            valueFrom: ${ return inputs.i.nameroot + ".bed";}
-          i: bam_file
-        out: [out_stdout]
     first_awk:
-        run: ../../tools/basic/awk.cwl
+        run: https://gitlab.com/r78v10a07/cwl-workflow/raw/master/tools/basic/awk.cwl
         in:
           outFileName:
             valueFrom: ${ return inputs.file.nameroot + ".awk";}
