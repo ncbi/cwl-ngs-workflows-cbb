@@ -159,7 +159,7 @@ outputs:
   outdir:
     type: Directory
     outputBinding:
-      glob: $(inputs.outdir)
+      glob: $(inputs.outdir_name)
 
 baseCommand: ["macs2","callpeak"]
 

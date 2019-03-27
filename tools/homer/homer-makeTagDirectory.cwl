@@ -127,7 +127,7 @@ outputs:
   tags_directory:
     type: Directory
     outputBinding:
-      glob: $(inputs.tags_directory)
+      glob: $(inputs.tags_directory_name)
 
 baseCommand: [makeTagDirectory]
 

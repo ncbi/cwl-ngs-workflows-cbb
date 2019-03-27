@@ -7,12 +7,12 @@ requirements:
   - class: StepInputExpressionRequirement
 
 label: "Compute library complexity"
-description: "This workflow compute library complexity"
+doc: "This workflow compute library complexity"
 
 inputs:
     bam_file:
         type: File
-        description: BAM file to be analyzed
+        doc: BAM file to be analyzed
 
 outputs:
     out:

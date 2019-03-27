@@ -3,7 +3,7 @@ cwlVersion: v1.0
 class: CommandLineTool
 
 label: awk
-description: AWK command
+doc: AWK command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -14,24 +14,24 @@ hints:
 inputs:
   F:
     type: string?
-    description: Awk separator
+    doc: Awk separator
     inputBinding:
       position: 1
       prefix: -F
 
   text:
     type: string
-    description: Awk text
+    doc: Awk text
     inputBinding:
       position: 2
   file:
     type: File
-    description: Input file
+    doc: Input file
     inputBinding:
       position: 3
   outFileName:
     type: string
-    description: Out put file name
+    doc: Out put file name
 
 outputs:
   output:

@@ -44,7 +44,7 @@ steps:
   homer_tags:
     run: ../../tools/homer/homer-makeTagDirectory.cwl
     in:
-      tags_directory:
+      tags_directory_name:
         valueFrom: ${ return inputs.input.nameroot + "_tags";}
       checkGC: { default: True}
       genome: genome_fasta
@@ -63,7 +63,6 @@ steps:
         valueFrom: ${ return inputs.t.nameroot;}
       f: { default: "BED"}
       g: macs_callpeaks_g
-      cutoff-analysis: { default: True}
       nomodel: { default: True}
       B: { default: True}
       shift: { default: 0}
