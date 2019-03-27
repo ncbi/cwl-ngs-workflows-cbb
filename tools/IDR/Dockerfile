@@ -16,12 +16,10 @@ MAINTAINER Roberto Vera Alvarez <r78v10a07@gmail.com>
 USER root
 
 RUN apt-get update && \
-    apt-get install -y apt-utils && \
-    apt-get install -y tzdata && \
-    apt-get install -y software-properties-common
-
-RUN apt-get update && \
-    apt-get install -y git gcc python3-dev python3-numpy python3-setuptools python3-matplotlib && \
+    apt-get install -y apt-utils tzdata && \
+    apt-get install -y software-properties-common \
+                       git gcc python3-dev python3-numpy \
+                       python3-setuptools python3-matplotlib && \
     apt-get clean && \
     apt-get purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -36,6 +34,10 @@ RUN cd $DST && \
         python3 setup.py install && \
         cd $DST && \
         rm -rf $FOLDER
+
+RUN adduser --disabled-password --gecos '' ubuntu
+USER ubuntu
+RUN chmod a+rwx /home/ubuntu/
 
 WORKDIR /data/
 
