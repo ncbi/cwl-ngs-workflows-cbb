@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: sra-toolkit
+  dockerFile:
+    $include: Dockerfile
