@@ -40,7 +40,7 @@ RUN cd $FOLDER && \
         wget $URL && \
         unzip -d ./ IGV_${VERSION}.${SUBVERSION}.zip && \
         mkdir bin && \
-        echo "#!/bin/bash\njava -Xmx1024m --module-path=/home/ubuntu/IGV_${VERSION}.${SUBVERSION}/lib  --module=org.igv/org.broad.igv.tools.IgvTools" > /home/ubuntu/bin/igvtools && \
+        echo "#!/bin/bash\njava -Xmx1024m --module-path=/home/ubuntu/IGV_${VERSION}.${SUBVERSION}/lib  --module=org.igv/org.broad.igv.tools.IgvTools \"\$@\"" > /home/ubuntu/bin/igvtools && \
         chmod a+x /home/ubuntu/bin/igvtools
 
 ENV PATH="/home/ubuntu/bin:${PATH}"
