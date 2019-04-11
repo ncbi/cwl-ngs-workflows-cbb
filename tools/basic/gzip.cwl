@@ -12,16 +12,6 @@ hints:
   - $import: ubuntu.yml
 
 inputs:
-  c:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -c
-  n:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -n
   d:
     type: boolean?
     inputBinding:
@@ -31,16 +21,30 @@ inputs:
     type: File
     inputBinding:
       position: 2
-  outFileName:
-    type: string
 
 outputs:
   output:
-    type: stdout
+    type: File
+    outputBinding:
+      glob: |
+        ${
+          if (inputs.d){
+            return inputs.file.nameroot;
+          }else{
+            return inputs.file.basename + '.gz';
+          }
+        }
+      
+stdout: |
+    ${
+        if (inputs.d){
+            return inputs.file.nameroot;
+        }else{
+            return inputs.file.basename + '.gz';
+        }
+    }
 
-stdout: $(inputs.outFileName)
-
-baseCommand: ["gzip"]
+baseCommand: ["gzip", "-c"]
 
 s:author:
   - class: s:Person

@@ -76,8 +76,6 @@ steps:
     in:
       c: { default: True}
       file: quantification/gene_out
-      outFileName:
-        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip TPMCalculator gene.out file
@@ -86,8 +84,6 @@ steps:
     in:
       c: { default: True}
       file: quantification/gene_ent
-      outFileName:
-        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip TPMCalculator gene.ent file
@@ -96,8 +92,6 @@ steps:
     in:
       c: { default: True}
       file: quantification/gene_uni
-      outFileName:
-        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip TPMCalculator gene.uni file
@@ -106,8 +100,6 @@ steps:
     in:
       c: { default: True}
       file: quantification/transcripts_out
-      outFileName:
-        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip TPMCalculator transcripts.out file
@@ -116,8 +108,6 @@ steps:
     in:
       c: { default: True}
       file: quantification/transcripts_ent
-      outFileName:
-        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip TPMCalculator transcripts.ent file
