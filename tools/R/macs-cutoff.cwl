@@ -66,11 +66,11 @@ outputs:
   out_pdf:
     type: File
     outputBinding:
-      glob: $(inputs.out_pdf)
+      glob: $(inputs.out_pdf_name)
   out_inflection:
     type: File
     outputBinding:
-      glob: $(inputs.out_inflection)
+      glob: $(inputs.out_inflection_name)
 
 baseCommand: ["Rscript", "MACScutoff.R"]
 

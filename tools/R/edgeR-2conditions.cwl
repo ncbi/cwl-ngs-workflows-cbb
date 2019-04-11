@@ -2,16 +2,16 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Bioconductor-3.8_Deseq2
-doc: Quality metrics for ChIPseq data.
+label: R-3.5_Bioconductor-3.8_EdgeR
+doc: Differential expression analysis of RNA-seq expression profiles with biological replication
 
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
-      - entryname: deseq2.R
+      - entryname: edgeR.R
         entry: |
-            library(optparse)
+          library(optparse)
 
             option_list = list(
                 make_option("--factor", type = "character", default = NULL, help = "Factor file"),
@@ -55,7 +55,7 @@ requirements:
             }
 
             require(data.table)
-            library(DESeq2)
+            library(edgeR)
             library(ggplot2)
             library(gplots)
 
@@ -95,63 +95,51 @@ requirements:
             print(paste("Genes with reads:", nrow(data.set)))
             print(paste("Samples to analyze:", ncol(data.counts)))
 
-            # Running Deseq2
-            dds <- DESeqDataSetFromMatrix(countData = data.counts,
-                                          colData = factors.set,
-                                          design = ~ condition)
+            y <- DGEList(counts=data.counts, group=factors.set$condition, genes=data.set[,c("Gene_Chr_Start")])
+            y <- calcNormFactors(y)
+            y<-estimateCommonDisp(y)
+            y<-estimateTagwiseDisp(y)
+            et<-exactTest(y, pair=conditions)
+            res<-as.data.frame(topTags(et, n=nrow(data.counts)))
+            res <- na.omit(res)
+            file_name = paste('condition_',opt$condition1, '_vs_',opt$condition2,'_edgeR.csv',sep='')
+            write.table(res, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
 
-            dds <- DESeq(dds)
-
-            resultsNames(dds)
-            condition <- resultsNames(dds)[2]
-            print(paste('Processing Deseq2 condition:', condition))
-            res <- lfcShrink(dds, coef=condition, type="apeglm")
-
-            res <- results(dds, alpha=opt$fdr)
-            resOrdered <- res[order(res$padj),]
-
-            resOrdered_data <- as.data.frame(resOrdered)
-            resOrdered_data <- data.frame("Gene_Id"=rownames(resOrdered_data),resOrdered_data)
-            resOrdered_data <- resOrdered_data[!is.na(resOrdered_data$padj), ]
-
-            file_name = paste(condition,'_deseq2.csv',sep='')
-            write.table(resOrdered_data, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
-
-            count <- nrow(resOrdered_data[(resOrdered_data$padj <= opt$fdr & resOrdered_data$log2FoldChange >= opt$fc),])
+            count <- nrow(res[(res$FDR <= opt$fdr & res$logFC >= opt$fc),])
             print(paste('Genes with FDR >= ', opt$fdr, " and logFC >= ", opt$fc, ": ", count, sep=''))
-            count <- nrow(resOrdered_data[(resOrdered_data$padj <= opt$fdr & resOrdered_data$log2FoldChange <= -1.0 * opt$fc),])
+            count <- nrow(res[(res$FDR <= opt$fdr & res$logFC <= -1.0 * opt$fc),])
             print(paste('Genes with FDR >= ', opt$fdr, " and logFC <= ", opt$fc, ": ", count, sep=''))
 
-            pdf(paste(condition,'_deseq2_volcano.pdf',sep=''))
-            with(resOrdered_data, plot(log2FoldChange, -log10(padj), pch=20, main=paste("Volcano plot\n",condition, sep='')))
-            with(subset(resOrdered_data, (padj <= opt$fdr & abs(log2FoldChange) >= opt$fc)), points(log2FoldChange, -log10(padj), pch=20, col=highlight_color))
+            pdf(paste('condition_',opt$condition1, '_vs_',opt$condition2,'_edgeR_volcano.pdf',sep=''))
+            with(res, plot(logFC, -log10(FDR), pch=20, main=paste("Volcano plot\n",'condition_',opt$condition1, '_vs_',opt$condition2, sep='')))
+            with(subset(res, (FDR <= opt$fdr & abs(logFC) >= opt$fc)), points(logFC, -log10(FDR), pch=20, col=highlight_color))
             dev.off()
 
-            rld <- vst(dds)
-            data.pca <- plotPCA(rld, intgroup=c(opt$sample_column,"condition"), returnData=TRUE)
-            percentVar <- round(100 * attr(data.pca, "percentVar"))
-            file_name <- paste(condition, "_deseq2_pca.csv", sep="")
-            write.table(data.pca, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
+            yy <- cpm(y, log=TRUE, prior.count = 1)
+            resOrdered_data <- res[(res$FDR <= opt$fdr & abs(res$logFC) >= opt$fc),]
+            topVarGenes <- rownames(resOrdered_data)
+            selY <- yy[topVarGenes,]
+
+            pca <- prcomp(t(yy), scale. = TRUE)
+            data.pca <- as.data.frame(pca$x[,c('PC1', 'PC2')])
+            data.pca$condition <- factors.set$condition
 
             ggplot(data.pca, aes(PC1, PC2, color=condition)) +
-                    geom_point(size=1) +
-                    ggtitle("PCA") +
-                    xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-                    ylab(paste0("PC2: ",percentVar[2],"% variance"))
-            ggsave(paste(condition,'_deseq2_pca.pdf',sep=''))
-
-            resOrdered_data <- resOrdered_data[(resOrdered_data$padj <= opt$fdr & abs(resOrdered_data$log2FoldChange) >= opt$fc),]
-            topVarGenes <- rownames(resOrdered_data)
+                geom_point(size=1) +
+                ggtitle("PCA") +
+                xlab("PC1") +
+                ylab("PC2")
+            ggsave(paste('condition_',opt$condition1, '_vs_',opt$condition2,'_edgeR_pca.pdf',sep=''))
 
             pal <- colorRampPalette(c("white","blue"))
-            pdf(paste(condition,'_deseq2_expression_heatmap.pdf',sep=''))
-            heatmap.2(assay(rld)[ topVarGenes, ], col=pal, Rowv=T, Colv=T,
+            pdf(paste('condition_',opt$condition1, '_vs_',opt$condition2,'_edgeR_expression_heatmap.pdf',sep=''))
+            heatmap.2(selY, col=pal, Rowv=T, Colv=T,
                       dendrogram = c("both"),
                       trace="none",
                       density.info=c("density"),
                       key.xlab="Expression value",
                       key.ylab="Density",
-                      main=paste("Expression\n",condition, sep=''),
+                      main=paste("Expression\n",'condition_',opt$condition1, '_vs_',opt$condition2, sep=''),
                       cexCol=.5,
                       offsetCol=.0,
                       cexRow=.5,
@@ -160,14 +148,14 @@ requirements:
                       key=T,)
             dev.off()
 
-            pdf(paste(condition,'_deseq2_correlation_heatmap.pdf',sep=''))
-            heatmap.2(cor(assay(rld)[ topVarGenes, ]), col=pal, Rowv=T, Colv=T,
+            pdf(paste('condition_',opt$condition1, '_vs_',opt$condition2,'_edgeR_correlation_heatmap.pdf',sep=''))
+            heatmap.2(cor(selY), col=pal, Rowv=T, Colv=T,
                       dendrogram = c("column"),
                       trace="none",
                       density.info=c("density"),
                       key.xlab="Expression value",
                       key.ylab="Density",
-                      main=paste("Correlation\n",condition, sep=''),
+                      main=paste("Correlation\n",'condition_',opt$condition1, '_vs_',opt$condition2, sep=''),
                       cexCol=.5,
                       offsetCol=.0,
                       cexRow=.5,
@@ -175,9 +163,6 @@ requirements:
                       breaks=20,
                       key=T,)
             dev.off()
-
-
-
 
 
 hints:
@@ -236,7 +221,7 @@ outputs:
     outputBinding:
       glob: condition*
 
-baseCommand: ["Rscript","deseq2.R"]
+baseCommand: ["Rscript", "--vanilla", "edgeR.R"]
 
 s:author:
   - class: s:Person
@@ -244,7 +229,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: https://bioconductor.org/packages/release/bioc/html/DESeq2.html
+s:codeRepository: https://bioconductor.org/packages/release/bioc/html/edgeR.html
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:
