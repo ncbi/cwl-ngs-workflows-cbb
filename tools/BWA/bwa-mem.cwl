@@ -29,6 +29,16 @@ inputs:
     inputBinding:
       position: 1
       prefix: -M
+  T:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -T
+  h:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -h
   prefix:
     type: string
     inputBinding:

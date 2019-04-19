@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: python:3.6
+  dockerFile:
+    $include: Dockerfile

@@ -37,8 +37,8 @@ steps:
       prefix: genome_prefix
       index: genomeDir
       input: reads
-      a: { default: True}
-      M: { default: True}
+      T: { default: 30}
+      h: { default: 5}
     out: [out_stdout]
   sam_to_bam:
     run: ../../tools/samtools/samtools-view.cwl

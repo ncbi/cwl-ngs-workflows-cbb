@@ -20,12 +20,21 @@ outputs:
         type: File
 
 steps:
+    remove_comments:
+        run: ../../tools/basic/grep.cwl
+        in:
+          v: {default: True}
+          pattern: {default: '^#'}
+          outFileName:
+            valueFrom: ${ return inputs.file.nameroot + ".grep";}
+          file: bed
+        out: [output]
     bedtocoord:
         run: ../../tools/basic/awk.cwl
         in:
           outFileName:
             valueFrom: ${ return inputs.file.nameroot + ".coord";}
-          file: bed
+          file: remove_comments/output
           text: { default: '{printf("%s:%d-%d\n",$1,$2,$3)}'}
         out: [output]
     sort:

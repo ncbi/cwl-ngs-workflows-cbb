@@ -25,11 +25,8 @@ outputs:
   bam_flagstat_out:
     outputSource: alignment/bam_flagstat_out
     type: File
-  picard_qc_out:
-    outputSource: picard_mark_duplicates/metrics_out
-    type: File
-  sorted_bam_out:
-    outputSource: final_bam/output
+  final_bam_out:
+    outputSource: final_bam/out_sam
     type: File
   final_bam_flagstat_out:
     outputSource: final_bam_flagstat/out_stdout
@@ -74,17 +71,16 @@ steps:
       threads: threads
       isbam: { default: True}
       output_name:
-        valueFrom: ${ return inputs.input.nameroot + "_filtered.bam";}
+        valueFrom: ${ return inputs.input.nameroot + ".bam";}
       input: alignment/sam_to_bam_out
       readsquality:  readsquality
-      readswithoutbits: { default: 1804 }
     out: [output]
   pbc:
     run: ../File-formats/bedtools-bam-pbc.cwl
     in:
       bam_file: filtered_bam/output
     out: [out]
-  filtered_bam_sorted:
+  final_bam:
     run: ../../tools/samtools/samtools-sort.cwl
     in:
       threads: threads
@@ -92,54 +88,31 @@ steps:
         valueFrom: ${ return inputs.in_bam.nameroot + "_sorted.bam";}
       in_bam: filtered_bam/output
     out: [out_sam]
-  picard_mark_duplicates:
-    run: ../../tools/Picard/picard-MarkDuplicates.cwl
-    in:
-      input: filtered_bam_sorted/out_sam
-      output:
-        valueFrom: ${ return inputs.input.nameroot.replace('_filtered_sorted', '_dupmark.bam');}
-      metrics:
-        valueFrom: ${ return inputs.input.nameroot.replace('_filtered_sorted', '_dup.qc');}
-      validation: { default: LENIENT }
-      remove_duplicates: { default: "false" }
-      sorted: { default: "true" }
-    out: [output_bam,metrics_out]
-  final_bam:
-    run: ../../tools/samtools/samtools-view.cwl
-    in:
-      threads: threads
-      isbam: { default: True}
-      output_name:
-        valueFrom: ${ return inputs.input.nameroot.replace('_dupmark', '_sorted.bam');}
-      input: picard_mark_duplicates/output_bam
-      readsquality:  readsquality
-      readswithoutbits: { default: 1804 }
-    out: [output]
   final_bam_flagstat:
     run: ../../tools/samtools/samtools-flagstat.cwl
     in:
       stdout:
         valueFrom: ${ return inputs.in_bam.nameroot.replace('_sorted', '_filtered.flagstat')}
-      in_bam: final_bam/output
+      in_bam: final_bam/out_sam
     out: [out_stdout]
   bam_index:
     run: ../../tools/samtools/samtools-index.cwl
     in:
       out_bai:
         valueFrom: ${ return inputs.in_bam.nameroot + ".bam.bai";}
-      in_bam: final_bam/output
+      in_bam: final_bam/out_sam
     out: [out_sam]
   bamtobed:
     run: ../../tools/bedtools/bedtools-bamtobed.cwl
     in:
       stdout:
         valueFrom: ${ return inputs.i.nameroot + ".bed";}
-      i: final_bam/output
+      i: final_bam/out_sam
     out: [out_stdout]
   subsample:
     run: ../File-formats/subample-pseudoreplicates.cwl
     in:
-      bam_file:  final_bam/output
+      bam_file:  final_bam/out_sam
       nreads: subsample_nreads
     out: [tagalign_out, subsample_out, pseudoreplicate_gzip_out]
   phantompeakqualtools:

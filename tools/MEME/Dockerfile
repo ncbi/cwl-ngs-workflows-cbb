@@ -16,9 +16,7 @@ MAINTAINER Roberto Vera Alvarez <r78v10a07@gmail.com>
 USER root
 
 RUN apt-get update && \
-    apt-get install -y apt-utils && \
-    apt-get install -y tzdata && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y apt-utils tzdata software-properties-common && \
     apt-get install -y wget gcc autoconf automake \
                        libtool ant openmpi-bin \
                        python-dev python3-dev \
