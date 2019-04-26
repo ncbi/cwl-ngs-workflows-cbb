@@ -7,10 +7,10 @@ baseCommand:
   - fastqc
   - '--outdir'
   - .
-  - '--noextract'
+  - '--extract'
 inputs:
   - id: fastq
-    type: File[]
+    type: 'File[]'
     inputBinding:
       position: 2
   - id: threads
@@ -20,11 +20,11 @@ inputs:
       prefix: '-t'
 outputs:
   - id: out_html
-    type: File
+    type: 'File[]'
     outputBinding:
       glob: '*.html'
   - id: out_zip
-    type: File
+    type: 'File[]'
     outputBinding:
       glob: '*.zip'
 doc: BASH echo command
