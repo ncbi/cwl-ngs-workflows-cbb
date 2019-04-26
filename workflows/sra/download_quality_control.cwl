@@ -25,19 +25,19 @@ outputs:
   - id: fastqc_zip
     outputSource:
       - fastqc/out_zip
-    type: 'File[]'
+    type: File
     'sbg:x': -116.87628936767578
     'sbg:y': -250.42794799804688
   - id: fastqc_html
     outputSource:
       - fastqc/out_html
-    type: 'File[]'
+    type: File
     'sbg:x': -116.87628936767578
     'sbg:y': -85.7220687866211
   - id: fastq
     outputSource:
       - fastq_dump/output
-    type: 'File[]'
+    type: File[]
     'sbg:x': -115.3968505859375
     'sbg:y': 52
 steps:

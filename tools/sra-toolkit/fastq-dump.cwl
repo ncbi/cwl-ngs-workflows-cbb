@@ -32,7 +32,7 @@ inputs:
       prefix: '--split-files'
 outputs:
   - id: output
-    type: 'File[]'
+    type: File[]
     outputBinding:
       glob: $(inputs.accession)*
 doc: Fastq-dump from SRA database

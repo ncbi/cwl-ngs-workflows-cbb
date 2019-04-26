@@ -7,7 +7,7 @@ baseCommand:
   - fastqc
   - '--outdir'
   - .
-  - '--extract'
+  - '--noextract'
 inputs:
   - id: fastq
     type: File[]
