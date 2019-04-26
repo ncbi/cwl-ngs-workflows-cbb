@@ -10,7 +10,7 @@ baseCommand:
   - '--extract'
 inputs:
   - id: fastq
-    type: File
+    type: File[]
     inputBinding:
       position: 2
   - id: threads
