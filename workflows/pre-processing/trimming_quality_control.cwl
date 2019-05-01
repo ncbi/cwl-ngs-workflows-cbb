@@ -1,7 +1,7 @@
 class: Workflow
 cwlVersion: v1.0
-id: trimming_quality_control
-label: trimming_quality_control
+id: trimming_quality_control__s_e
+label: trimming_quality_control_SE
 $namespaces:
   s: 'http://schema.org/'
   sbg: 'https://www.sevenbridges.com/'
@@ -58,21 +58,21 @@ outputs:
   - id: out_zip
     outputSource:
       - fastqc/out_zip
-    type: File
-    'sbg:x': 540.8861083984375
-    'sbg:y': 7.81494665145874
+    type: 'File[]'
+    'sbg:x': 411.92138671875
+    'sbg:y': -146.68312072753906
   - id: out_html
     outputSource:
       - fastqc/out_html
-    type: File
-    'sbg:x': 539.44482421875
-    'sbg:y': 218.28469848632812
+    type: 'File[]'
+    'sbg:x': 482.99334716796875
+    'sbg:y': 222.1226348876953
   - id: reads1_trimmed
     outputSource:
       - trimmomatic/reads1_trimmed
-    type: File
-    'sbg:x': 536.4512329101562
-    'sbg:y': 428.72607421875
+    type: File[]
+    'sbg:x': 362.7100830078125
+    'sbg:y': 423.6991882324219
 steps:
   - id: trimmomatic
     in:
@@ -112,7 +112,8 @@ steps:
   - id: fastqc
     in:
       - id: fastq
-        source: trimmomatic/reads1_trimmed
+        source:
+          - trimmomatic/reads1_trimmed
       - id: threads
         source: threads
     out:
@@ -123,6 +124,7 @@ steps:
     'sbg:x': 269.4527587890625
     'sbg:y': 126.12478637695312
 requirements:
+  - class: SubworkflowFeatureRequirement
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
 $schemas:

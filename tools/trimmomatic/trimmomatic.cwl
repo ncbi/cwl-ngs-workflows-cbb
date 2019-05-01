@@ -185,11 +185,11 @@ inputs:
       MaxInfo instead
 outputs:
   - id: reads1_trimmed
-    type: File
+    type: File[]
     outputBinding:
       glob: $(inputs.reads1_out)
   - id: reads2_trimmed
-    type: File?
+    type: File[]?
     outputBinding:
       glob: $(inputs.reads2_out)
 doc: >
