@@ -21,7 +21,9 @@ inputs:
 
 outputs:
   out_stdout:
-    type: stdout
+    type: File
+    outputBinding:
+      glob: $(inputs.stdout)
 
 stdout: $(inputs.stdout)
 

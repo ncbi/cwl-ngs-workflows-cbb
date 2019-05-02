@@ -68,7 +68,6 @@ inputs:
     type: File
     inputBinding:
       position: 4
-
     doc: |
       Input bam file.
   readsquality:
@@ -151,7 +150,6 @@ inputs:
     type: string?
     inputBinding:
       position: 5
-
     doc: |
       [region ...]
   readsingroupfile:
