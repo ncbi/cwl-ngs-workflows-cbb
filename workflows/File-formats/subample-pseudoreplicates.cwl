@@ -55,7 +55,7 @@ steps:
         in:
           n: nreads
           outFileName:
-            valueFrom: ${ return inputs.file.nameroot + ".filt.nodup.sample.SE.tagAlign";}
+            valueFrom: ${ return inputs.file.nameroot + ".filt.nodup.sample.tagAlign";}
           random-source: create_tagalign/output
           file: filter_chrM/output
         out: [output]

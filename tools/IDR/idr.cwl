@@ -20,7 +20,7 @@ inputs:
         doc: |
             Files containing peaks and scores.
     peak_list:
-        type: File[]?
+        type: File?
         inputBinding:
             position: 2
             prefix: --peak-list
@@ -93,10 +93,14 @@ inputs:
             one without.  Use this option with care.
 
 outputs:
-    output:
+    idr_peaks:
+        type: File
+        outputBinding:
+          glob: $(inputs.output_file)
+    plots:
         type: File[]
         outputBinding:
-          glob: $(inputs.output_file)*
+          glob: $(inputs.output_file)*.png
 
 baseCommand: ["idr"]
 

@@ -29,7 +29,7 @@ steps:
         run: ../../tools/basic/awk.cwl
         in:
           outFileName:
-            valueFrom: ${ return inputs.file.nameroot + ".SE.tagAlign";}
+            valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
           file: bamtobed/out_stdout
           text: { default: 'BEGIN{OFS="\t"}{$4="N";$5="1000";print $0}'  }
         out: [output]

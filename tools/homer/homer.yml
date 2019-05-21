@@ -1,4 +1,2 @@
   class: DockerRequirement
-  dockerImageId: homer-ecoli-mg1655
-  dockerFile:
-    $include: Dockerfile-NC_000913.3
+  dockerImageId: homer

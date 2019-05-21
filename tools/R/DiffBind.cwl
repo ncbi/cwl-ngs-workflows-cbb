@@ -17,7 +17,9 @@ requirements:
                 make_option("--factor", type = "character", default = NULL, help = "Factor file"),
                 make_option("--bedDir", type = "character", default = NULL, help = "Directory with BED files"),
                 make_option("--bamDir", type = "character", default = NULL, help = "Directory with BAM files"),
-                make_option("--paired", action="store_true", default = FALSE, help = "True if paired comparison is requiered")
+                make_option("--peakcaller", type = "character", default = "narrow", help = "Peakcaller diffbind identificator"),
+                make_option("--paired", action="store_true", default = FALSE, help = "True if paired comparison is requiered"),
+                make_option("--minMembers", type = "integer", default = 2, help = "Minimum member per condition")
             )
 
             opt_parser = OptionParser(option_list = option_list)
@@ -42,20 +44,22 @@ requirements:
             bed <- c()
             bam <- c()
             for(i in samples$SampleID){
-                f <- paste(opt$bedDir,"/", i,"_tr_sorted_peaks","/", i,"_tr_sorted_peaks.narrowPeak.gz", sep="")
+                f <- paste(opt$bedDir,"/", i,"_sorted_peaks","/", i,"_sorted_peaks.narrowPeak", sep="")
                 bed <- c(bed,f)
-                f <- paste(opt$bamDir,"/", i,"_tr_sorted.bam", sep="")
+                f <- paste(opt$bamDir,"/", i,"_sorted.bam", sep="")
                 bam <- c(bam,f)
             }
             samples$Peaks <- bed
             samples$bamReads <- bam
+            samples$PeakCaller <- opt$peakcaller
+            samples
             DBdata <- dba(sampleSheet=samples)
             DBdata <- dba.count(DBdata)
             if (opt$paired){
                 print("Doing paired analysis")
-                DBdata <- dba.contrast(DBdata, categories=DBA_CONDITION, block=DBA_REPLICATE, minMembers = 2)
+                DBdata <- dba.contrast(DBdata, categories=DBA_CONDITION, block=DBA_REPLICATE, minMembers = opt$minMembers)
             }else{
-                DBdata <- dba.contrast(DBdata, categories=DBA_CONDITION, minMembers = 2)
+                DBdata <- dba.contrast(DBdata, categories=DBA_CONDITION, minMembers = opt$minMembers)
             }
             DBdata <- dba.analyze(DBdata, method=DBA_DESEQ2)
             DBdata <- dba.analyze(DBdata, method=DBA_EDGER)
@@ -147,6 +151,16 @@ inputs:
     inputBinding:
       position: 4
       prefix: --paired
+  peakcaller:
+    type: string?
+    inputBinding:
+      position: 5
+      prefix: --peakcaller
+  minMembers:
+    type: int?
+    inputBinding:
+      position: 6
+      prefix: --minMembers
 
 outputs:
   outpng:

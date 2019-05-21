@@ -25,14 +25,9 @@ ENV URL_CLIP_SEQ=http://groups.csail.mit.edu/cgs/gem/download/Read_Distribution_
 ENV FOLDER=/usr/local
 
 RUN apt-get update && \
-    apt-get install -y apt-utils && \
-    apt-get install -y tzdata && \
-    apt-get install -y software-properties-common
-
-RUN apt-get update && \
-    apt-get install -y wget openjdk-8-jdk
-
-RUN apt-get clean && \
+    apt-get install -y apt-utils tzdata software-properties-common \
+                       wget openjdk-8-jdk && \
+    apt-get clean && \
     apt-get purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -46,6 +41,10 @@ RUN mkdir -p $FOLDER && \
     wget $URL_CHIP_EXO && \
     wget $URL_BRANCH_SEQ && \
     wget $URL_CLIP_SEQ
+
+RUN adduser --disabled-password --gecos '' ubuntu
+USER ubuntu
+RUN chmod a+rwx /home/ubuntu/
 
 WORKDIR /data/
 
