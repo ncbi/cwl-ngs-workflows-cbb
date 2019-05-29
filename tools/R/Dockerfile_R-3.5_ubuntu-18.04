@@ -37,10 +37,10 @@ RUN Rscript --vanilla -e "install.packages('ggplot2', repo='https://cran.r-proje
     Rscript --vanilla -e "install.packages('robustbase', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "install.packages('dendextend', repo='https://cran.r-project.org')"
 
-RUN Rscript --vanilla -e "BiocManager::install('impute', version = '3.8')" && \
-    Rscript --vanilla -e "BiocManager::install('apeglm', version = '3.8')" && \
-    Rscript --vanilla -e "BiocManager::install('biomaRt', version = '3.8')" && \
-    Rscript --vanilla -e "BiocManager::install('ChIPQC', version = '3.8')"
+RUN Rscript --vanilla -e "BiocManager::install('impute', version = '3.9')" && \
+    Rscript --vanilla -e "BiocManager::install('apeglm', version = '3.9')" && \
+    Rscript --vanilla -e "BiocManager::install('biomaRt', version = '3.9')" && \
+    Rscript --vanilla -e "BiocManager::install('ChIPQC', version = '3.9')"
 
 RUN adduser --disabled-password --gecos '' ubuntu
 USER ubuntu

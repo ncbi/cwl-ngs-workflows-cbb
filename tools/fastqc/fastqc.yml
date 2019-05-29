@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/fastqc:0.11.7--4
+ dockerPull: quay.io/biocontainers/fastqc:0.11.8--1
