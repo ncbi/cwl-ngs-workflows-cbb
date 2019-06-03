@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/bedtools:2.27.0--1
+ dockerPull: quay.io/biocontainers/bedtools:2.28.0--hdf88d34_0

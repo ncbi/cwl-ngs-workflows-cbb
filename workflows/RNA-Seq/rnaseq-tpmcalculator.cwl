@@ -8,112 +8,89 @@ $namespaces:
   s: 'http://schema.org/'
   sbg: 'https://www.sevenbridges.com/'
 inputs:
-  - id: genome_name
-    type: string
-    'sbg:x': -234.2749786376953
-    'sbg:y': 1020.5091552734375
-  - id: gtf
-    type: File
-    'sbg:x': -237.77017211914062
-    'sbg:y': 723.1954956054688
-  - id: q
-    type: int
-    'sbg:x': -228.5542755126953
-    'sbg:y': 555.3705444335938
-  - id: r
-    type: File
-    'sbg:x': -219.33836364746094
-    'sbg:y': 361.7411193847656
   - id: sorted_bam
     type: File
-    'sbg:x': -241.45652770996094
-    'sbg:y': 884.723388671875
+  - id: genome_name
+    type: string
+  - id: gtf
+    type: File
+  - id: q
+    type: int
+  - id: r
+    type: File
+  - id: p
+    type: boolean?
 outputs:
   - id: bam_stat_out
     outputSource:
       - qc_rseqc/bam_stat_out
     type: File
-    'sbg:x': 480.5213623046875
-    'sbg:y': 1284
+  - id: bam_to_tdf_out
+    outputSource:
+      - bam_to_tdf/out_tdf
+    type: File
   - id: experiment_out
     outputSource:
       - qc_rseqc/experiment_out
     type: File
-    'sbg:x': 480.5213623046875
-    'sbg:y': 1177
   - id: gzip_gene_ent_out
     outputSource:
       - gzip_gene_ent/output
     type: File
-    'sbg:x': 804.8026123046875
-    'sbg:y': 856
   - id: gzip_gene_out_out
     outputSource:
       - gzip_gene_out/output
     type: File
-    'sbg:x': 804.8026123046875
-    'sbg:y': 749
   - id: gzip_gene_uni_out
     outputSource:
       - gzip_gene_uni/output
     type: File
-    'sbg:x': 804.8026123046875
-    'sbg:y': 642
   - id: gzip_junction_annotation_bed_out
     outputSource:
       - qc_rseqc/gzip_junction_annotation_bed_out
     type: File
-    'sbg:x': 480.5213623046875
-    'sbg:y': 749
   - id: gzip_junction_annotation_xls_out
     outputSource:
       - qc_rseqc/gzip_junction_annotation_xls_out
     type: File
-    'sbg:x': 480.5213623046875
-    'sbg:y': 642
   - id: gzip_transcripts_ent_out
     outputSource:
       - gzip_transcripts_ent/output
     type: File
-    'sbg:x': 804.8026123046875
-    'sbg:y': 535
   - id: gzip_transcripts_out_out
     outputSource:
       - gzip_transcripts_out/output
     type: File
-    'sbg:x': 804.8026123046875
-    'sbg:y': 428
   - id: junction_annotation_pdf_out
     outputSource:
       - qc_rseqc/junction_annotation_pdf_out
     type: 'File[]'
-    'sbg:x': 480.5213623046875
-    'sbg:y': 321
   - id: junction_saturation_out
     outputSource:
       - qc_rseqc/junction_saturation_out
     type: File
-    'sbg:x': 480.5213623046875
-    'sbg:y': 214
   - id: read_distribution_out
     outputSource:
       - qc_rseqc/read_distribution_out
     type: File
-    'sbg:x': 480.5213623046875
-    'sbg:y': 107
   - id: read_quality_out
     outputSource:
       - qc_rseqc/read_quality_out
     type: 'File[]'
-    'sbg:x': 480.5213623046875
-    'sbg:y': 0
-  - id: out_tdf
-    outputSource:
-      - igvtools_totdf/out_tdf
-    type: File
-    'sbg:x': 467.007568359375
-    'sbg:y': 1443.916015625
 steps:
+  - id: bam_to_tdf
+    in:
+      - id: g
+        source: genome_name
+      - id: i
+        source: sorted_bam
+      - id: o
+        valueFrom: '${ return inputs.i.nameroot + ".tdf";}'
+    out:
+      - id: out_tdf
+    run: ../../tools/IGV/igvtools-count.cwl
+    label: igvtools-count
+    doc: Convert BAM to TDF
   - id: gzip_gene_ent
     in:
       - id: file
@@ -124,8 +101,6 @@ steps:
     label: gzip
     doc: |
       Gzip TPMCalculator gene.ent file
-    'sbg:x': 480.5213623046875
-    'sbg:y': 1070
   - id: gzip_gene_out
     in:
       - id: file
@@ -136,8 +111,6 @@ steps:
     label: gzip
     doc: |
       Gzip TPMCalculator gene.out file
-    'sbg:x': 480.5213623046875
-    'sbg:y': 963
   - id: gzip_gene_uni
     in:
       - id: file
@@ -148,8 +121,6 @@ steps:
     label: gzip
     doc: |
       Gzip TPMCalculator gene.uni file
-    'sbg:x': 480.5213623046875
-    'sbg:y': 856
   - id: gzip_transcripts_ent
     in:
       - id: file
@@ -160,8 +131,6 @@ steps:
     label: gzip
     doc: |
       Gzip TPMCalculator transcripts.ent file
-    'sbg:x': 480.5213623046875
-    'sbg:y': 535
   - id: gzip_transcripts_out
     in:
       - id: file
@@ -172,14 +141,10 @@ steps:
     label: gzip
     doc: |
       Gzip TPMCalculator transcripts.out file
-    'sbg:x': 480.5213623046875
-    'sbg:y': 428
   - id: qc_rseqc
     in:
       - id: i
-        source:
-          - bam_sort
-          - sorted_bam
+        source: sorted_bam
       - id: q
         source: q
       - id: r
@@ -197,20 +162,16 @@ steps:
     label: RSeQC workflow or single-end samples
     doc: |
       Execute QC on the BAM files
-    'sbg:x': 99.24943542480469
-    'sbg:y': 664.1659545898438
   - id: quantification
     in:
       - id: b
-        source:
-          - bam_sort
-          - sorted_bam
+        source: sorted_bam
       - id: g
         source: gtf
-      - id: p
-        default: true
       - id: q
         source: q
+      - id: p
+        source: p
     out:
       - id: gene_ent
       - id: gene_out
@@ -221,23 +182,8 @@ steps:
     label: TPMCalculator
     doc: |
       Calculate TPM values for genes and transcripts
-    'sbg:x': 88.19035339355469
-    'sbg:y': 399.0660400390625
-  - id: igvtools_totdf
-    in:
-      - id: g
-        source: genome_name
-      - id: i
-        source: sorted_bam
-    out:
-      - id: out_tdf
-    run: ../../tools/IGV/igvtools-totdf.cwl
-    label: igvtools-toTDF
-    'sbg:x': 89
-    'sbg:y': 932.5864868164062
 requirements:
   - class: SubworkflowFeatureRequirement
-  - class: MultipleInputFeatureRequirement
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
 $schemas:

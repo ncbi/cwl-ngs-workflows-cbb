@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/STAR:2.7.1a--0
+ dockerPull: quay.io/biocontainers/star:2.7.1a--0

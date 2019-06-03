@@ -95,7 +95,7 @@ requirements:
             print(paste("Genes with reads:", nrow(data.set)))
             print(paste("Samples to analyze:", ncol(data.counts)))
 
-            y <- DGEList(counts=data.counts, group=factors.set$condition, genes=data.set[,c("Gene_Chr_Start")])
+            y <- DGEList(counts=data.counts, group=factors.set$condition, genes=data.set[,c(opt$gene_column)])
             y <- calcNormFactors(y)
             y<-estimateCommonDisp(y)
             y<-estimateTagwiseDisp(y)

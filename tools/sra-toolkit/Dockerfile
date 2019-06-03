@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 LABEL base.image="ubuntu:18.04"
 LABEL version="1"
 LABEL software="SRA-toolkit"
-LABEL software.version="0.0.1"
+LABEL software.version="current"
 LABEL description="This image provides SRA-Toolkit"
 LABEL tags="R"
 LABEL website="https://www.ncbi.nlm.nih.gov/sra/docs/toolkitsoft/"
@@ -26,7 +26,7 @@ RUN adduser --disabled-password --gecos '' ubuntu
 USER ubuntu
 RUN chmod a+rwx /home/ubuntu/
 
-ENV VERSION=2.9.6
+ENV VERSION=current
 ENV FILE=sratoolkit.${VERSION}-ubuntu64.tar.gz
 ENV URL=https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/${VERSION}/
 ENV DST=/home/ubuntu

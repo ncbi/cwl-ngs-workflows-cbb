@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/phantompeakqualtools:1.2--0
+ dockerPull: quay.io/biocontainers/phantompeakqualtools:1.2--1

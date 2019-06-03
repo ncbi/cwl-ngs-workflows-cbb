@@ -164,11 +164,10 @@ steps:
       Samtools stats for extracting BAM statistics
     'sbg:x': 432.9093017578125
     'sbg:y': 153.5
-hints:
+requirements:
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
   - class: SubworkflowFeatureRequirement
-requirements: []
 $schemas:
   - 'http://schema.org/docs/schema_org_rdfa.html'
 's:author':
