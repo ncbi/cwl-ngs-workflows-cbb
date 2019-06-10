@@ -6,6 +6,10 @@ label: STAR-index
 doc: Spliced Transcripts Alignment to a Reference
 
 requirements:
+  - class: ShellCommandRequirement
+  - class: InlineJavascriptRequirement
+
+hints:
   - $import: star.yml
 
 inputs:

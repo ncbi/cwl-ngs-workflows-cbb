@@ -31,7 +31,6 @@ RUN apt-get update && \
 RUN Rscript --vanilla -e "install.packages('ggplot2', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "install.packages('dplyr', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "install.packages('calibrate', repo='https://cran.r-project.org')" && \
-    Rscript --vanilla -e "install.packages('samr', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "install.packages('optparse', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "install.packages('BiocManager', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "install.packages('robustbase', repo='https://cran.r-project.org')" && \
@@ -40,6 +39,8 @@ RUN Rscript --vanilla -e "install.packages('ggplot2', repo='https://cran.r-proje
 RUN Rscript --vanilla -e "BiocManager::install('impute', version = '3.9')" && \
     Rscript --vanilla -e "BiocManager::install('apeglm', version = '3.9')" && \
     Rscript --vanilla -e "BiocManager::install('biomaRt', version = '3.9')" && \
+    Rscript --vanilla -e "BiocManager::install('codetools', version = '3.9')" && \
+    Rscript --vanilla -e "install.packages('samr', repo='https://cran.r-project.org')" && \
     Rscript --vanilla -e "BiocManager::install('ChIPQC', version = '3.9')"
 
 RUN adduser --disabled-password --gecos '' ubuntu

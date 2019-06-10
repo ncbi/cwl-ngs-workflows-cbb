@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Bioconductor-3.8_Deseq2
+label:Deseq2
 doc: Quality metrics for ChIPseq data.
 
 requirements:
@@ -80,7 +80,7 @@ requirements:
 
 
 hints:
-  - $import: R-3.5_ubuntu-18.04.yml
+  - $import: R_ubuntu-18.04.yml
 
 inputs:
   factor:

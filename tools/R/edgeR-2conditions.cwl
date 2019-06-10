@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Bioconductor-3.8_EdgeR
+label: EdgeR
 doc: Differential expression analysis of RNA-seq expression profiles with biological replication
 
 requirements:
@@ -166,7 +166,7 @@ requirements:
 
 
 hints:
-  - $import: R-3.5_ubuntu-18.04.yml
+  - $import: R_ubuntu-18.04.yml
 
 inputs:
   factor:

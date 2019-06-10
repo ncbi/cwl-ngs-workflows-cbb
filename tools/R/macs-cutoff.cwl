@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Bioconductor-3.8_MACS2-cutoff
+label: MACS2_cutoff
 doc: Inflection point calculated from MACS2 peaks file
 
 requirements:
@@ -40,7 +40,7 @@ requirements:
           write.table(10^-inflpoint, out_inflection, quote = F, row.names = F, col.names = F)
 
 hints:
-  - $import: R-3.5_ubuntu-18.04.yml
+  - $import: R_ubuntu-18.04.yml
 
 inputs:
   macs_out_dir:

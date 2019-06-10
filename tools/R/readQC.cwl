@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_readQC
+label: readQC
 doc: NGS read Quality Control analysis
 
 requirements:
@@ -88,7 +88,7 @@ requirements:
           ## GC content analysis end ##
 
 hints:
-  - $import: R-3.5_ubuntu-18.04.yml
+  - $import: R_ubuntu-18.04.yml
 
 inputs:
   tags_directory:

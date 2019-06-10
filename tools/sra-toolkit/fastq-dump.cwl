@@ -30,6 +30,16 @@ inputs:
     inputBinding:
       position: 0
       prefix: '--split-files'
+  - id: X
+    type: int?
+    inputBinding:
+      position: 0
+      prefix: '-X'
+  - id: aligned
+    type: boolean?
+    inputBinding:
+      position: 0
+      prefix: '--aligned'
 outputs:
   - id: output
     type: 'File[]'

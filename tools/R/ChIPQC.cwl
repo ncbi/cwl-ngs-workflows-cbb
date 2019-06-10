@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Bioconductor-3.8_ChIPQC
+label: ChIPQC
 doc: Quality metrics for ChIPseq data.
 
 requirements:
@@ -29,7 +29,7 @@ requirements:
           ChIPQCreport(sample, reportFolder=ChipQC_folder, reportName="ChIPQCreport")
 
 hints:
-  - $import: R-3.5_ubuntu-18.04.yml
+  - $import: R_ubuntu-18.04.yml
 
 inputs:
   input:

@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: R-3.5_Correlation_Json
+label: PCA_Correlation_Json
 doc: Creates a JSON with the correlation data
 
 requirements:
@@ -148,7 +148,7 @@ requirements:
 
 
 hints:
-  - $import: R-3.5_ubuntu-18.04.yml
+  - $import: R_ubuntu-18.04.yml
 
 inputs:
   matrix:
