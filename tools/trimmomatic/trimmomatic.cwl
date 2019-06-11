@@ -53,7 +53,7 @@ inputs:
       position: 11
       valueFrom: |
         ${
-            return 'ILLUMINACLIP:/usr/local/share/trimmomatic/adapters/' + self;
+            return 'ILLUMINACLIP:' + self;
          }
     doc: Cut adapter and other illumina-specific sequences from the read.
   - id: leading
