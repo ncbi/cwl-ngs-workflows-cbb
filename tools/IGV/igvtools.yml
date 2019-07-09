@@ -1,4 +1,2 @@
-  class: DockerRequirement
-  dockerImageId: igvtools_ubuntu-18.04
-  dockerFile:
-    $include: Dockerfile
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/igvtools:2.5.3--0
