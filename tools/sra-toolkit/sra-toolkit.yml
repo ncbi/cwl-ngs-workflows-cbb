@@ -1,4 +1,2 @@
-  class: DockerRequirement
-  dockerImageId: sra-toolkit
-  dockerFile:
-    $include: Dockerfile
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/sra-tools:2.9.6--hf484d3e_0
