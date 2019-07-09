@@ -1,4 +1,2 @@
-  class: DockerRequirement
-  dockerImageId: tpmcalculator
-  dockerFile:
-    $include: https://raw.githubusercontent.com/ncbi/TPMCalculator/master/Dockerfile
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/tpmcalculator:0.0.3--hdbb99b9_0
