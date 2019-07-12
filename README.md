@@ -12,6 +12,36 @@ Defined in folder *tools*
 ## Workflows
 Defined in *workflows*
 
+## Bioconda environment
+
+We created some requirement files for installing in **conda** environment. 
+
+Please, see https://bioconda.github.io/ for Bioconda instalation.
+
+### Creating a *~/.condarc* file
+
+Create a *.condarc* in your home directory and add:
+
+    channels:
+        - conda-forge
+        - bioconda
+        - defaults
+    ssl_verify: true
+
+### Creating a conda environment
+
+    conda create -n rnaseq
+    
+### Installing the *Bioconda packages*
+
+    conda install -n rnaseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-rnaseq.txt
+
+### Activating the *rnaseq* env
+
+    source activate rnaseq
+    
+The, all the required programs and tools will be available in the user **$PATH**
+
 # Public Domain notice
 
 National Center for Biotechnology Information.
