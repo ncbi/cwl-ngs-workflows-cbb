@@ -32,7 +32,7 @@ Create a *.condarc* in your home directory and add:
 
     conda create -n rnaseq
     
-### Installing the *Bioconda* packages
+### Installing the *Bioconda* packages for the RNASeq workflows
 
     conda install -n rnaseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-rnaseq.txt
 
