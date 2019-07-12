@@ -1,3 +1,4 @@
+pybigwig=0.3*
 rseqc=3.0*
 bioconductor-deseq2=1.22*
 bioconductor-edger=3.26*
@@ -9,6 +10,5 @@ samtools=1.9*
 tpmcalculator=0.0*
 igvtools=2.5*
 sra-tools=2.9*
-pybigwig=0.3*
 r-gplots=3.0*
 r-optparse=1.6*
