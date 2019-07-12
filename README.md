@@ -28,19 +28,22 @@ Create a *.condarc* in your home directory and add:
         - defaults
     ssl_verify: true
 
-### Creating a conda environment
+### Creating a *conda* environment
 
     conda create -n rnaseq
     
-### Installing the *Bioconda packages*
+### Installing the *Bioconda* packages
 
     conda install -n rnaseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-rnaseq.txt
+
+Check the https://github.com/ncbi/cwl-ngs-workflows-cbb/tree/master/requirements folder 
+for more environments files. 
 
 ### Activating the *rnaseq* env
 
     source activate rnaseq
     
-The, all the required programs and tools will be available in the user **$PATH**
+Then, all the required programs and tools will be available in the user **$PATH**
 
 # Public Domain notice
 
