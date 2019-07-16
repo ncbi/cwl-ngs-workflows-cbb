@@ -27,21 +27,42 @@ Create a *.condarc* in your home directory and add:
         - bioconda
         - defaults
     ssl_verify: true
+    
+### Bioconda environment for RNA-Seq
 
-### Creating a *conda* environment
+#### Creating a *conda* environment
 
     conda create -n rnaseq
     
-### Installing the *Bioconda* packages for the RNASeq workflows
+#### Installing the *Bioconda* packages
 
     conda install -n rnaseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-rnaseq.txt
 
 Check the https://github.com/ncbi/cwl-ngs-workflows-cbb/tree/master/requirements folder 
 for more environments files. 
 
-### Activating the *rnaseq* env
+#### Activating the *rnaseq* env
 
     source activate rnaseq
+    
+Then, all the required programs and tools will be available in the user **$PATH**
+
+### Bioconda environment for ChIP-Seq
+
+#### Creating a *conda* environment
+
+    conda create -n chipseq
+    
+#### Installing the *Bioconda* packages
+
+    conda install -n chipseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-chipseq.txt
+
+Check the https://github.com/ncbi/cwl-ngs-workflows-cbb/tree/master/requirements folder 
+for more environments files. 
+
+#### Activating the *chipseq* env
+
+    source activate chipseq
     
 Then, all the required programs and tools will be available in the user **$PATH**
 

@@ -1,11 +1,13 @@
 pybigwig=0.3*
 rseqc=3.0*
-bioconductor-apeglm=1.4*
+bioconductor-diffbind=2.10*
 fastqc=0.11*
 trimmomatic=0.39*
-star=2.7*
+bwa=0.7*
+bedtools=2.28*
+phantompeakqualtools=1.2*
+homer=4.9*
 samtools=1.9*
-tpmcalculator=0.0*
 igvtools=2.5*
 sra-tools=2.9*
 r-gplots=3.0*
