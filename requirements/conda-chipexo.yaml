@@ -1,0 +1,40 @@
+name: chipexo
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bcftools=1.9
+  - bedtools=2.28.0
+  - bwa=0.7.17
+  - biopython=1.74
+  - cwl_runner=1.0
+  - cwltool=1.0.20190228155703
+  - fastqc=0.11.8
+  - igvtools=2.5.3
+  - jupyter=1.0.0
+  - mace=1.2
+  - matplotlib=2.2.4
+  - networkx=2.2
+  - nodejs=11.14.0
+  - pandas=0.24.2
+  - phantompeakqualtools=1.2
+  - r-base=3.5.1
+  - r-colorspace=1.4_1
+  - r-getopt=1.20.3
+  - r-ggplot2=3.2.0
+  - r-gplots=3.0.1.1
+  - r-optparse=1.6.2
+  - r-rcolorbrewer=1.1_2
+  - r-rcurl=1.95_4.12
+  - r-reshape2=1.4.3
+  - r-stringi=1.4.3
+  - r-stringr=1.4.0
+  - r-survival=2.44_1.1
+  - rseqc=2.6.4
+  - samtools=1.9
+  - scipy=1.2.1
+  - seaborn=0.9.0
+  - sra-tools=2.9.6
+  - trimmomatic=0.39
+  - xmltodict=0.12.0
