@@ -10,33 +10,23 @@ $namespaces:
 inputs:
   - id: chrom_size
     type: File
-    'sbg:x': -148.80972290039062
-    'sbg:y': -372.3643493652344
   - id: sorted_bam
     type: 'File[]'
     secondaryFiles:
       - .bai
-    'sbg:x': -140.60728454589844
-    'sbg:y': -685.7642822265625
   - id: output_basename
     type: string
-    'sbg:x': -141.80972290039062
-    'sbg:y': -524.6517944335938
-  - id: genome_gff
+  - id: genome_gtf
     type: File
-    'sbg:x': -152.2672119140625
-    'sbg:y': -212.48947143554688
   - id: tss_size
     type: int
-    'sbg:x': -159.09716796875
-    'sbg:y': -60.566802978515625
 outputs:
   - id: annotated_bed
     outputSource:
       - annotate_bed_gff/output
     type: File
-    'sbg:x': 1191.6761474609375
-    'sbg:y': -397.757080078125
+
+
 steps:
   - id: preprocessor
     in:
@@ -52,8 +42,8 @@ steps:
       - id: out_reverse
     run: ../../tools/MACE/preprocessor.cwl
     label: MACE-preprocessor
-    'sbg:x': 142.43724060058594
-    'sbg:y': -563.45751953125
+    'sbg:x': 142
+    'sbg:y': 233
   - id: mace
     in:
       - id: f
@@ -71,8 +61,6 @@ steps:
       - id: border_pair_out
     run: ../../tools/MACE/mace.cwl
     label: MACE
-    'sbg:x': 376.4493713378906
-    'sbg:y': -431.7165832519531
   - id: bamscale_cov
     in:
       - id: bam
@@ -80,7 +68,7 @@ steps:
           - sorted_bam
       - id: bed
         source: mace/border_pair_out
-      - id: n
+      - id: 'n'
         valueFrom: '${ return inputs.bed.nameroot;}'
     out:
       - id: fpkm_out
@@ -89,12 +77,10 @@ steps:
       - id: tpm_out
     run: ../../tools/bamscale/bamscale-cov.cwl
     label: BAMscale-cov
-    'sbg:x': 666.271240234375
-    'sbg:y': -523.6154174804688
   - id: annotate_bed_gff
     in:
-      - id: gff
-        source: genome_gff
+      - id: gtf
+        source: genome_gtf
       - id: bed
         source: mace/border_pair_out
       - id: tpm
@@ -103,10 +89,8 @@ steps:
         source: tss_size
     out:
       - id: output
-    run: ../../tools/python/annotate_bed_gff.cwl
+    run: ../../tools/python/annotate_bed_gtf.cwl
     label: annotate_bed
-    'sbg:x': 971.4008178710938
-    'sbg:y': -360.4898681640625
 requirements:
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement

@@ -14,7 +14,7 @@ inputs:
     genome: File
     bed: File
     nmotifs: int
-    memedb: string
+    memedb: File
 
 outputs:
     meme_out:
