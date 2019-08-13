@@ -33,14 +33,10 @@ inputs:
       position: 4
       prefix: -order
   db:
-    type: string
+    type: File
     inputBinding:
       position: 5
       prefix: -db
-      valueFrom: |
-        ${
-            return '/home/ubuntu/share/meme-5.0.4/db/motif_databases/' + self;
-         }
   meme-mod:
     type: string
     inputBinding:

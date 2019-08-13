@@ -29,15 +29,27 @@ outputs:
   macs_cutoff_inflection:
     outputSource: macs_cutoff/out_inflection
     type: File
-  macs_callpeak_q_value_outdir:
-    outputSource: macs_callpeak_q_value/outdir
-    type: Directory
+  macs_callpeak_q_value_narrowPeak:
+    outputSource: macs_callpeak_q_value/narrowPeak
+    type: File
+  macs_callpeak_q_value_xls:
+    outputSource: macs_callpeak_q_value/xls
+    type: File
+  macs_callpeak_q_value_bed:
+    outputSource: macs_callpeak_q_value/bed
+    type: File
   homer_annotate_peaks_output:
     outputSource: homer_annotate_peaks/output
     type: File
   homer_annotate_peaks_annStats:
     outputSource: homer_annotate_peaks/annStats_out
     type: File?
+  lambda_tdf_out:
+    outputSource: lambda_bdg_to_tdf/out_tdf
+    type: File
+  pileup_tdf_out:
+    outputSource: pileup_bdg_to_tdf/out_tdf
+    type: File
 
 steps:
   gzip_cat:
@@ -80,17 +92,15 @@ steps:
       outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
-    out: [outdir]
+    out: [cutoff_analysis]
   macs_cutoff:
     run: ../../tools/R/macs-cutoff.cwl
     in:
-      macs_out_dir: macs_callpeak/outdir
-      peak_cutoff_file:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.txt');}
+      peak_cutoff_file: macs_callpeak/cutoff_analysis
       out_pdf_name:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.pdf');}
+        valueFrom: ${ return inputs.peak_cutoff_file.nameroot + ".pdf";}
       out_inflection_name:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis_inflection.txt');}
+        valueFrom: ${ return inputs.peak_cutoff_file.nameroot + "_inflection.txt";}
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
     run: ../../tools/MACS/macs2-callpeak.cwl
@@ -109,22 +119,38 @@ steps:
       outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
-    out: [outdir]
+    out: [lambda, pileup, narrowPeak, xls, bed]
   homer_annotate_peaks:
     run: ../../tools/homer/homer-annotatePeaks.cwl
     in:
-      macs_out_dir: macs_callpeak_q_value/outdir
       genome: homer_genome
       gtf: genome_gtf
-      input:
-        valueFrom: ${ return inputs.macs_out_dir.basename + '.narrowPeak';}
+      input: macs_callpeak_q_value/narrowPeak
       o:
-        valueFrom: ${ return inputs.macs_out_dir.basename + '_annotation.txt';}
+        valueFrom: ${ return inputs.input.nameroot + "_annotation.txt";}
       annStats:
-        valueFrom: ${ return inputs.macs_out_dir.basename + '_annStats.txt';}
+        valueFrom: ${ return inputs.input.nameroot + "_annStats.txt";}
       d: homer_tags/tags_directory
       fpkm: {default: True}
     out: [output,annStats_out]
+  lambda_bdg_to_tdf:
+    run: ../../tools/IGV/igvtools-totdf.cwl
+    in:
+      i: macs_callpeak_q_value/lambda
+      g: homer_genome
+      o:
+        valueFrom: ${ return inputs.i.nameroot + ".tdf";}
+      z: {default: 5}
+    out: [out_tdf]
+  pileup_bdg_to_tdf:
+    run: ../../tools/IGV/igvtools-totdf.cwl
+    in:
+      i: macs_callpeak_q_value/pileup
+      g: homer_genome
+      o:
+        valueFrom: ${ return inputs.i.nameroot + ".tdf";}
+      z: {default: 5}
+    out: [out_tdf]
 
 $namespaces:
   s: http://schema.org/

@@ -1,0 +1,7 @@
+type: record
+name: fastq
+label: Fastq record type
+fields:
+  - name: reads
+    type: File[]
+    doc: Fastq file for read 1

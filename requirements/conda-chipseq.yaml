@@ -20,6 +20,7 @@ dependencies:
   - fastqc=0.11.8
   - homer=4.9.1
   - jupyter=1.0.0
+  - jupyterngsplugin
   - igvtools=2.5.3
   - macs2=2.1.2
   - matplotlib=2.2.4

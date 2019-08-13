@@ -90,7 +90,7 @@ inputs:
         they will all be read and pooled together. IMPORTANT: the first sample will
         be used as the outputs basename.'
   n:
-    type: string?
+    type: string
     inputBinding:
       position: 2
       prefix: --name
@@ -156,10 +156,31 @@ inputs:
       MACS2 will save all output files into speficied folder for this option
 
 outputs:
-  outdir:
-    type: Directory
+  lambda:
+    type: File
     outputBinding:
-      glob: $(inputs.outdir_name)
+      glob: $(inputs.outdir_name)/$(inputs.n)_control_lambda.bdg
+  pileup:
+    type: File
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_treat_pileup.bdg
+  cutoff_analysis:
+    type: File?
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_cutoff_analysis.txt
+  narrowPeak:
+    type: File
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_peaks.narrowPeak
+  xls:
+    type: File
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_peaks.xls
+  bed:
+    type: File
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_summits.bed
+
 
 baseCommand: ["macs2","callpeak"]
 

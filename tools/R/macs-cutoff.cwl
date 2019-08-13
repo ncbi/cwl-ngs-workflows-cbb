@@ -43,16 +43,10 @@ hints:
   - $import: R_ubuntu-18.04.yml
 
 inputs:
-  macs_out_dir:
-    type: Directory
   peak_cutoff_file:
-    type: string
+    type: File
     inputBinding:
       position: 1
-      valueFrom: |
-        ${
-          return inputs.macs_out_dir.path + "/" + self;
-        }
   out_pdf_name:
     type: string
     inputBinding:

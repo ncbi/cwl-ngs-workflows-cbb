@@ -12,13 +12,10 @@ hints:
   - $import: homer.yml
 
 inputs:
-  macs_out_dir:
-    type: Directory
   input:
-    type: string
+    type: File
     inputBinding:
       position: 1
-      valueFrom: ${ return inputs.macs_out_dir.path + "/" + self;}
     doc: |
       Peak/BED file
   o:
