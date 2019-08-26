@@ -28,3 +28,5 @@ dependencies:
   - samtools=1.9
   - sra-tools=2.9.6
   - trimmomatic=0.39
+  - ucsc-gtftogenepred=377
+  - ucsc-genepredtobed=377
