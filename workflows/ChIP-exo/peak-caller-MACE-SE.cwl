@@ -42,8 +42,6 @@ steps:
       - id: out_reverse
     run: ../../tools/MACE/preprocessor.cwl
     label: MACE-preprocessor
-    'sbg:x': 142
-    'sbg:y': 233
   - id: mace
     in:
       - id: f
