@@ -44,7 +44,7 @@ requirements:
             bed <- c()
             bam <- c()
             for(i in samples$SampleID){
-                f <- paste(opt$bedDir,"/", i,"_sorted_peaks","/", i,"_sorted_peaks.narrowPeak", sep="")
+                f <- paste(opt$bedDir,"/", i,"_sorted_peaks.narrowPeak", sep="")
                 bed <- c(bed,f)
                 f <- paste(opt$bamDir,"/", i,"_sorted.bam", sep="")
                 bam <- c(bam,f)
