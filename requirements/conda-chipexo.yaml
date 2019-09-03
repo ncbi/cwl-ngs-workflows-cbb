@@ -10,7 +10,7 @@ dependencies:
   - bwa=0.7.17
   - fastqc=0.11.8
   - mace=1.2
-  - meme=5.0.2
+  - meme=5.0.5
   - phantompeakqualtools=1.2
   - r-base=3.5.1
   - r-colorspace=1.4_1

@@ -128,7 +128,7 @@ steps:
     out:
       - id: annStats_out
       - id: output
-    run: ../../tools/homer/homer-annotatePeaks_file.cwl
+    run: ../../tools/homer/homer-annotatePeaks.cwl
     label: HOMER-annotatePeaks
     'sbg:x': 225.79856872558594
     'sbg:y': 100.88489532470703
