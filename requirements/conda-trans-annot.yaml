@@ -1,0 +1,8 @@
+name: transannot
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - blast=2.9.0
+  - transdecoder=5.5.0
