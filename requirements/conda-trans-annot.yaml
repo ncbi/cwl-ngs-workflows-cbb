@@ -6,3 +6,4 @@ channels:
 dependencies:
   - blast=2.9.0
   - transdecoder=5.5.0
+  - hmmer=3.2.1
