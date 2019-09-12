@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: BlastN
-doc: NCBI BlastN Nucleotide-Nucleotide BLAST
+label: BlastX
+doc: NCBI BlastX Translated Query-Protein Subject BLAST
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -37,6 +37,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -strand
+  query_gencode:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -query_gencode
   out:
     type: string
     inputBinding:
@@ -57,31 +62,26 @@ inputs:
     inputBinding:
       position: 1
       prefix: -gapopen
-  gapextend:
+  max_intron_length:
     type: int?
     inputBinding:
       position: 1
-      prefix: -gapextend
-  penalty:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -penalty
-  reward:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -reward
-  use_index:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -use_index
-  index_name:
+      prefix: -max_intron_length
+  matrix:
     type: string?
     inputBinding:
       position: 1
-      prefix: -index_name
+      prefix: -matrix
+  threshold:
+    type: float?
+    inputBinding:
+      position: 1
+      prefix: -threshold
+  comp_based_stats:
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: -comp_based_stats
   subject:
     type: File?
     inputBinding:
@@ -132,26 +132,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -sorthsps
-  dust:
+  seg:
     type: string?
     inputBinding:
       position: 1
-      prefix: -dust
-  filtering_db:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -filtering_db
-  window_masker_taxid:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -window_masker_taxid
-  window_masker_db:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -window_masker_db
+      prefix: -seg
   soft_masking:
     type: boolean?
     inputBinding:
@@ -202,6 +187,16 @@ inputs:
     inputBinding:
       position: 1
       prefix: -negative_taxidlist
+  ipglist:
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: -ipglist
+  negative_ipglist:
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: -negative_ipglist
   entrez_query:
     type: string?
     inputBinding:
@@ -217,11 +212,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -db_hard_mask
-  perc_identity:
-    type: float?
-    inputBinding:
-      position: 1
-      prefix: -perc_identity
   qcov_hsp_perc:
     type: float?
     inputBinding:
@@ -257,16 +247,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -max_target_seqs
-  template_type:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -template_type
-  template_length:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -template_length
   dbsize:
     type: int?
     inputBinding:
@@ -277,6 +257,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -searchsp
+  sum_stats:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -sum_stats
   import_search_strategy:
     type: File?
     inputBinding:
@@ -302,16 +287,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -xdrop_gap_final
-  no_greedy:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -no_greedy
-  min_raw_gapped_score:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -min_raw_gapped_score
   ungapped:
     type: boolean?
     inputBinding:
@@ -322,11 +297,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -window_size
-  off_diagonal_range:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -off_diagonal_range
   parse_deflines:
     type: boolean?
     inputBinding:
@@ -342,6 +312,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -remote
+  use_sw_tback:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -use_sw_tback
 
 outputs:
   output:
@@ -353,7 +328,7 @@ outputs:
     outputBinding:
       glob: $(inputs.export_search_strategy)
 
-baseCommand: ["blastn"]
+baseCommand: ["blastx"]
 
 s:author:
   - class: s:Person
