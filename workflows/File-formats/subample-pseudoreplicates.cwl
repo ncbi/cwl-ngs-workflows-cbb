@@ -56,7 +56,7 @@ steps:
           n: nreads
           outFileName:
             valueFrom: ${ return inputs.file.nameroot + ".filt.nodup.sample.tagAlign";}
-          random-source: create_tagalign/output
+          random-source: gzip_cat/output
           file: filter_chrM/output
         out: [output]
     gzip:
