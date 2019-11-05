@@ -18,7 +18,7 @@ inputs:
   - id: crop
     type: int?
     inputBinding:
-      position: 20
+      position: 19
       prefix: 'CROP:'
       separate: false
     doc: >
@@ -39,7 +39,7 @@ inputs:
   - id: headcrop
     type: int?
     inputBinding:
-      position: 20
+      position: 18
       prefix: 'HEADCROP:'
       separate: false
     doc: |
@@ -89,7 +89,7 @@ inputs:
   - id: minlen
     type: int?
     inputBinding:
-      position: 20
+      position: 22
       prefix: 'MINLEN:'
       separate: false
     doc: |

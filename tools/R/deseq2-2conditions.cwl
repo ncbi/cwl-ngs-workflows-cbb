@@ -22,7 +22,8 @@ requirements:
                 make_option("--condition2", type = "character", default = NULL, help = "Condition to extract from factor. It uses column condition"),
                 make_option("--fc", type = "double", default = 2.0, help = "Fold change cutoff"),
                 make_option("--fdr", type = "double", default = 0.05, help = "FDR cutoff"),
-                make_option("--min_reads", type = "integer", default = 10, help = "Minimum number of reads in half of the samples")
+                make_option("--min_reads", type = "integer", default = 10, help = "Minimum number of reads in half of the samples"),
+                make_option("--pairwise", type = "character", default = NULL, help = "Column to use for pairwise comparison")
             )
 
             opt_parser = OptionParser(option_list = option_list)
@@ -77,6 +78,11 @@ requirements:
             factors.set <- factors[factors$condition %in% conditions,]
             factors.set[] <- lapply( factors.set, factor)
             factors.set$condition <- factor(factors.set$condition, levels=conditions)
+            if (!is.null(opt$pairwise)){
+               factors.set[,opt$pairwise] <- factor(factors.set[,opt$pairwise])
+               print(paste("Using pairwise condition: ", opt$pairwise))
+               print(factors.set[,opt$pairwise])
+            }
 
             min_number_samples <- min(table(factors.set$condition))
             print(paste("Minimum number of samples in a condition:", min_number_samples))
@@ -96,14 +102,20 @@ requirements:
             print(paste("Samples to analyze:", ncol(data.counts)))
 
             # Running Deseq2
-            dds <- DESeqDataSetFromMatrix(countData = data.counts,
-                                          colData = factors.set,
-                                          design = ~ condition)
+            if (is.null(opt$pairwise)){
+                dds <- DESeqDataSetFromMatrix(countData = data.counts,
+                                              colData = factors.set,
+                                              design = ~ condition)
+            }else{
+                dds <- DESeqDataSetFromMatrix(countData = data.counts,
+                                              colData = factors.set,
+                                              design = as.formula(paste("~",opt$pairwise,"+condition")))
+            }
 
             dds <- DESeq(dds)
 
             resultsNames(dds)
-            condition <- resultsNames(dds)[2]
+            condition <- tail(resultsNames(dds), n=1)
             print(paste('Processing Deseq2 condition:', condition))
             res <- lfcShrink(dds, coef=condition, type="apeglm")
 
@@ -226,6 +238,11 @@ inputs:
     inputBinding:
       position: 4
       prefix: --min_reads
+  pairwise:
+    type: string?
+    inputBinding:
+      position: 5
+      prefix: --pairwise
 
 outputs:
    output:
