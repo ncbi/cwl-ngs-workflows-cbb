@@ -17,12 +17,14 @@ requirements:
                 make_option("--factor", type = "character", default = NULL, help = "Factor file"),
                 make_option("--matrix", type = "character", default = NULL, help = "Matrix file"),
                 make_option("--gene_column", type = "character", default = NULL, help = "Gene id column header in matrix file"),
+                make_option("--gene_length_column", type = "character", default = NULL, help = "Gene length column"),
                 make_option("--sample_column", type = "character", default = NULL, help = "Sample id column header in factor file"),
                 make_option("--condition1", type = "character", default = NULL, help = "Condition to extract from factor. It uses column condition"),
                 make_option("--condition2", type = "character", default = NULL, help = "Condition to extract from factor. It uses column condition"),
                 make_option("--fc", type = "double", default = 2.0, help = "Fold change cutoff"),
                 make_option("--fdr", type = "double", default = 0.05, help = "FDR cutoff"),
-                make_option("--min_reads", type = "integer", default = 10, help = "Minimum number of reads in half of the samples")
+                make_option("--min_reads", type = "integer", default = 10, help = "Minimum number of reads in half of the samples"),
+                make_option("--pairwise", type = "character", default = NULL, help = "Column to use for pairwise comparison")
             )
 
             opt_parser = OptionParser(option_list = option_list)
@@ -40,6 +42,10 @@ requirements:
             if (is.null(opt$gene_column)) {
                 print_help(opt_parser)
                 stop("Gene id column is not set. Option --gene_column", call. = FALSE)
+            }
+            if (is.null(opt$gene_length_column)) {
+                print_help(opt_parser)
+                stop("Gene legth column is not set. Option --gene_length_column", call. = FALSE)
             }
             if (is.null(opt$sample_column)) {
                 print_help(opt_parser)
@@ -77,13 +83,18 @@ requirements:
             factors.set <- factors[factors$condition %in% conditions,]
             factors.set[] <- lapply( factors.set, factor)
             factors.set$condition <- factor(factors.set$condition, levels=conditions)
+            if (!is.null(opt$pairwise)){
+               factors.set[,opt$pairwise] <- factor(factors.set[,opt$pairwise])
+               print(paste("Using pairwise condition: ", opt$pairwise))
+               print(factors.set[,opt$pairwise])
+            }
 
             min_number_samples <- min(table(factors.set$condition))
             print(paste("Minimum number of samples in a condition:", min_number_samples))
 
             # Filtering low count genes
-            data.set <- data[c(opt$gene_column, rownames(factors.set))]
-            data.counts <- data.set[,!(names(data.set) %in% c(opt$gene_column))]
+            data.set <- data[c(opt$gene_column, opt$gene_length_column, rownames(factors.set))]
+            data.counts <- data.set[,!(names(data.set) %in% c(opt$gene_column, opt$gene_length_column))]
             rownames(data.counts) <- data.set[, opt$gene_column]
             data.counts[is.na(data.counts)] <- 0
 
@@ -95,12 +106,18 @@ requirements:
             print(paste("Genes with reads:", nrow(data.set)))
             print(paste("Samples to analyze:", ncol(data.counts)))
 
-            y <- DGEList(counts=data.counts, group=factors.set$condition, genes=data.set[,c(opt$gene_column)])
-            y <- calcNormFactors(y)
-            y<-estimateCommonDisp(y)
-            y<-estimateTagwiseDisp(y)
-            et<-exactTest(y, pair=conditions)
-            res<-as.data.frame(topTags(et, n=nrow(data.counts)))
+            if (is.null(opt$pairwise)){
+               design <- model.matrix(~ factors.set$condition)
+            }else{
+               design <- model.matrix(~ factors.set[,opt$pairwise] + factors.set$condition)
+            }
+
+            y <- DGEList(counts=data.counts, group=factors.set$condition, genes=data.set[,c(opt$gene_column, opt$gene_length_column)])
+            y <- calcNormFactors(y, method="TMM")
+            y <- estimateDisp(y,design)
+            fit <- glmQLFit(y, design)
+            qlf <- glmQLFTest(fit)
+            res<-as.data.frame(topTags(qlf, n=nrow(data.counts)))
             res <- na.omit(res)
             file_name = paste('condition_',opt$condition1, '_vs_',opt$condition2,'_edgeR.csv',sep='')
             write.table(res, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
@@ -184,6 +201,11 @@ inputs:
     inputBinding:
       position: 3
       prefix: --gene_column
+  gene_length_column:
+    type: string
+    inputBinding:
+      position: 3
+      prefix: --gene_length_column
   sample_column:
     type: string
     inputBinding:
@@ -214,6 +236,12 @@ inputs:
     inputBinding:
       position: 4
       prefix: --min_reads
+  pairwise:
+    type: string?
+    inputBinding:
+      position: 5
+      prefix: --pairwise
+
 
 outputs:
    output:
