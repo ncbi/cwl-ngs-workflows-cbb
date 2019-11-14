@@ -20,6 +20,8 @@ inputs:
     type: File
   - id: tss_size
     type: int
+  - id: norm_method
+    type: string
 outputs:
   - id: annotated_bed
     outputSource:
@@ -37,6 +39,8 @@ steps:
         source: output_basename
       - id: r
         source: chrom_size
+      - id: m
+        source: norm_method
     out:
       - id: out_forward
       - id: out_reverse
