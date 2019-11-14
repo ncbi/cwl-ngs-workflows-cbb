@@ -37,7 +37,7 @@ inputs:
     secondaryFiles:
       - .bai
   - id: m
-    type: int?
+    type: string?
     inputBinding:
       position: 8
       prefix: '-m'

@@ -27,7 +27,7 @@ dependencies:
   - r-survival=2.44_1.1
   - rseqc=2.6.4
   - samtools=1.9
-  - sra-tools=2.9.6
+  - sra-tools=2.10.0
   - trimmomatic=0.39
   - ucsc-gtftogenepred=377
   - ucsc-genepredtobed=377
