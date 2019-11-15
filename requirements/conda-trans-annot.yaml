@@ -7,3 +7,8 @@ dependencies:
   - blast=2.9.0
   - transdecoder=5.5.0
   - hmmer=3.2.1
+  - perl-bio-eutilities=1.75
+  - perl-parallel-forkmanager=2.02
+  - wise2=2.4.1
+  - clustalo=1.2.4
+  - sra-tools=2.10.0
