@@ -29,7 +29,7 @@ dependencies:
   - readline=8.0
   - rseqc=3.0.0
   - samtools=1.9
-  - sra-tools=2.9.6
+  - sra-tools=2.10.0
   - star=2.7.1a
   - tpmcalculator=0.0.3
   - trimmomatic=0.39

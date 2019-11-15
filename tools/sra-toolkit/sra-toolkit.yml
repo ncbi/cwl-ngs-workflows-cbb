@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/sra-tools:2.9.6--hf484d3e_0
+ dockerPull: quay.io/biocontainers/sra-tools:2.10.0--pl526he1b5a44_0
