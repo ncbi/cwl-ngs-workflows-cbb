@@ -7,6 +7,9 @@ doc: Samtools is a suite of programs for interacting with high-throughput sequen
 
 requirements:
   InlineJavascriptRequirement: {}
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.in_bam)
 
 hints:
   - $import: samtools.yml
@@ -16,10 +19,6 @@ inputs:
     type: File
     inputBinding:
       position: 1
-  out_bai:
-    type: string
-    inputBinding:
-      position: 2
 
 outputs:
   out_sam:
