@@ -48,7 +48,7 @@ steps:
       - id: query
         source: fasta
       - id: max_target_seqs
-        default: 10000
+        default: 1000
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_blastn.tsv";}'
     out:
@@ -67,7 +67,7 @@ steps:
       - id: query
         source: transdecoder_longorfs_extract_result/output
       - id: max_target_seqs
-        default: 10000
+        default: 1000
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_blastp.tsv";}'
     out:
@@ -86,7 +86,7 @@ steps:
       - id: query
         source: fasta
       - id: max_target_seqs
-        default: 10000
+        default: 1000
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_rpstblastn.tsv";}'
     out:
@@ -105,7 +105,7 @@ steps:
       - id: query
         source: transdecoder_longorfs_extract_result/output
       - id: max_target_seqs
-        default: 10000
+        default: 1000
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_rpsblast.tsv";}'
     out:
