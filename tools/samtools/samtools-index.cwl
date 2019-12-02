@@ -19,6 +19,8 @@ inputs:
     type: File
     inputBinding:
       position: 1
+  out_bai:
+    type: string
 
 outputs:
   out_sam:
