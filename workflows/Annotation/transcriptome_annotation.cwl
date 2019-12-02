@@ -24,10 +24,6 @@ outputs:
     outputSource:
       - blastn/output
     type: File
-  - id: blastx_output
-    outputSource:
-      - blastx/output
-    type: File
   - id: rpst_blast_output
     outputSource:
       - rpstblastn/output
@@ -79,25 +75,6 @@ steps:
       - id: output
     run: ../../tools/blast/blastp.cwl
     label: BlastP
-  - id: blastx
-    in:
-      - id: db
-        source: blast_nr_db
-      - id: evalue
-        source: evalue
-      - id: num_threads
-        source: threads
-      - id: query
-        source: fasta
-      - id: max_target_seqs
-        default: 10000
-      - id: out
-        valueFrom: '${ return inputs.query.nameroot + "_blastx.tsv";}'
-    out:
-      - id: export_search_strategy_output
-      - id: output
-    run: ../../tools/blast/blastx.cwl
-    label: BlastX
   - id: rpstblastn
     in:
       - id: db
