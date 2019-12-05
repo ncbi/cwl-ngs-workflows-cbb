@@ -13,7 +13,7 @@ hints:
 
 inputs:
   f:
-    type: f?
+    type: boolean?
     inputBinding:
       position: 1
       prefix: -f
