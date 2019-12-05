@@ -12,11 +12,14 @@ hints:
   - $import: blast.yml
 
 inputs:
+  dbdir:
+    type: Directory
   db:
     type: string
     inputBinding:
       position: 1
       prefix: -db
+      valueFrom: ${ inputs.dbdir.path + "/" + self; less }
   query:
     type: File
     inputBinding:

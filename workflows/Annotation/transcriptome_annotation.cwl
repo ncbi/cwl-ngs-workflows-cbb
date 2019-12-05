@@ -3,6 +3,8 @@ cwlVersion: v1.0
 id: transcriptome_annotation
 label: transcriptome_annotation
 inputs:
+  - id: blast_db_dir
+    type: Directory
   - id: fasta
     type: File
   - id: evalue
@@ -39,6 +41,8 @@ outputs:
 steps:
   - id: blastn
     in:
+      - id: dbdir
+        source: blast_db_dir
       - id: db
         source: blast_nt_db
       - id: evalue
@@ -58,6 +62,8 @@ steps:
     label: BlastN
   - id: blastp
     in:
+      - id: dbdir
+        source: blast_db_dir
       - id: db
         source: blast_nr_db
       - id: evalue
@@ -77,6 +83,8 @@ steps:
     label: BlastP
   - id: rpstblastn
     in:
+      - id: dbdir
+        source: blast_db_dir
       - id: db
         source: blast_cdd_db
       - id: evalue
@@ -96,6 +104,8 @@ steps:
     label: RPST-BlastN
   - id: rpsblast
     in:
+      - id: dbdir
+        source: blast_db_dir
       - id: db
         source: blast_cdd_db
       - id: evalue
