@@ -19,7 +19,7 @@ inputs:
     inputBinding:
       position: 1
       prefix: -db
-      valueFrom: ${ inputs.dbdir.path + "/" + self; }
+      valueFrom: ${ inputs.dbdir.path + "/" + self;}
   query:
     type: File
     inputBinding:
