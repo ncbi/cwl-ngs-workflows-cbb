@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: BlastX
-doc: NCBI BlastX Translated Query-Protein Subject BLAST
+label: RPS-Blast
+doc: NCBI RPS-Blast Translated Query-Protein Subject BLAST
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -12,11 +12,6 @@ hints:
   - $import: blast.yml
 
 inputs:
-  task:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -task
   dbdir:
     type: Directory
   db:
@@ -35,16 +30,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -query_loc
-  strand:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -strand
-  query_gencode:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -query_gencode
   out:
     type: string
     inputBinding:
@@ -55,49 +40,14 @@ inputs:
     inputBinding:
       position: 1
       prefix: -evalue
-  word_size:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -word_size
-  gapopen:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -gapopen
-  max_intron_length:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -max_intron_length
-  matrix:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -matrix
-  threshold:
-    type: float?
-    inputBinding:
-      position: 1
-      prefix: -threshold
   comp_based_stats:
     type: string?
     inputBinding:
       position: 1
       prefix: -comp_based_stats
-  subject:
-    type: File?
-    inputBinding:
-      position: 1
-      prefix: -subject
-  subject_loc:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -subject_loc
   outfmt:
     type: string?
-    default: "6 qseqid sgi saccver evalue bitscore score staxid"
+    default: "6 qseqid sgi saccver evalue bitscore score"
     inputBinding:
       position: 1
       prefix: -outfmt
@@ -131,11 +81,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -sorthits
-  sorthsps:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: -sorthsps
   seg:
     type: string?
     inputBinding:
@@ -151,71 +96,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -lcase_masking
-  gilist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -gilist
-  seqidlist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -seqidlist
-  negative_gilist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -negative_gilist
-  negative_seqidlist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -negative_seqidlist
-  taxids:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -taxids
-  negative_taxids:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -negative_taxids
-  taxidlist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -taxidlist
-  negative_taxidlist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -negative_taxidlist
-  ipglist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -ipglist
-  negative_ipglist:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -negative_ipglist
   entrez_query:
     type: string?
     inputBinding:
       position: 1
       prefix: -entrez_query
-  db_soft_mask:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -db_soft_mask
-  db_hard_mask:
-    type: string?
-    inputBinding:
-      position: 1
-      prefix: -db_hard_mask
   qcov_hsp_perc:
     type: float?
     inputBinding:
@@ -291,11 +176,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: -xdrop_gap_final
-  ungapped:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -ungapped
   window_size:
     type: int?
     inputBinding:
@@ -332,5 +212,4 @@ outputs:
     outputBinding:
       glob: $(inputs.export_search_strategy)
 
-baseCommand: ["blastx"]
-
+baseCommand: ["rpsblast"]

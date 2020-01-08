@@ -17,11 +17,14 @@ inputs:
     inputBinding:
       position: 1
       prefix: -task
+  dbdir:
+    type: Directory
   db:
     type: string
     inputBinding:
       position: 1
       prefix: -db
+      valueFrom: ${ return inputs.dbdir.path + "/" + self;}
   query:
     type: File
     inputBinding:
@@ -79,6 +82,7 @@ inputs:
       prefix: -subject_loc
   outfmt:
     type: string?
+    default: "6 qseqid sgi saccver evalue bitscore score staxid"
     inputBinding:
       position: 1
       prefix: -outfmt
@@ -304,18 +308,3 @@ outputs:
       glob: $(inputs.export_search_strategy)
 
 baseCommand: ["blastp"]
-
-s:author:
-  - class: s:Person
-    s:identifier: https://orcid.org/0000-0002-4108-5982
-    s:email: mailto:r78v10a07@gmail.com
-    s:name: Roberto Vera Alvarez
-
-s:codeRepository: https://www.ncbi.nlm.nih.gov/books/NBK279690/
-s:license: https://spdx.org/licenses/OPL-1.0
-
-$namespaces:
-  s: http://schema.org/
-
-$schemas:
-  - http://schema.org/docs/schema_org_rdfa.html
