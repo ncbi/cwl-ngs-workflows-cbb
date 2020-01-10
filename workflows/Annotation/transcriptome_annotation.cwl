@@ -74,6 +74,8 @@ steps:
         source: transdecoder_longorfs_extract_result/output
       - id: max_target_seqs
         default: 1000
+      - id: task
+        default: blastp-fast
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_blastp.tsv";}'
     out:
