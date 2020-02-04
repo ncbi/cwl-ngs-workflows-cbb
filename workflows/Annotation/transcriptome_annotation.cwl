@@ -7,6 +7,7 @@ inputs:
     type: Directory
   - id: fasta
     type: File
+    label: query
   - id: evalue
     type: float?
   - id: blast_nt_db
@@ -22,39 +23,44 @@ outputs:
     outputSource:
       - transdecoder_longorfs_extract_result/output
     type: File
+    label: Transdecoder-output
   - id: blastn_output
     outputSource:
       - blastn/output
     type: File
+    label: BlastN-output
   - id: rpst_blast_output
     outputSource:
       - rpstblastn/output
     type: File
+    label: RPST-BlastN-output
   - id: blastp_output
     outputSource:
       - blastp/output
     type: File
+    label: BlastP-output
   - id: rps_blast_output
     outputSource:
       - rpsblast/output
     type: File
+    label: RPS-Blast-output
 steps:
   - id: blastn
     in:
-      - id: dbdir
-        source: blast_db_dir
       - id: db
         source: blast_nt_db
+      - id: dbdir
+        source: blast_db_dir
       - id: evalue
         source: evalue
-      - id: num_threads
-        source: threads
-      - id: query
-        source: fasta
       - id: max_target_seqs
         default: 1000
+      - id: num_threads
+        source: threads
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_blastn.tsv";}'
+      - id: query
+        source: fasta
     out:
       - id: export_search_strategy_output
       - id: output
@@ -62,22 +68,22 @@ steps:
     label: BlastN
   - id: blastp
     in:
-      - id: dbdir
-        source: blast_db_dir
       - id: db
         source: blast_nr_db
+      - id: dbdir
+        source: blast_db_dir
       - id: evalue
         source: evalue
-      - id: num_threads
-        source: threads
-      - id: query
-        source: transdecoder_longorfs_extract_result/output
       - id: max_target_seqs
         default: 1000
-      - id: task
-        default: blastp-fast
+      - id: num_threads
+        source: threads
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_blastp.tsv";}'
+      - id: query
+        source: transdecoder_longorfs_extract_result/output
+      - id: task
+        default: blastp-fast
     out:
       - id: export_search_strategy_output
       - id: output
@@ -85,20 +91,20 @@ steps:
     label: BlastP
   - id: rpstblastn
     in:
-      - id: dbdir
-        source: blast_db_dir
       - id: db
         source: blast_cdd_db
+      - id: dbdir
+        source: blast_db_dir
       - id: evalue
         source: evalue
-      - id: num_threads
-        source: threads
-      - id: query
-        source: fasta
       - id: max_target_seqs
         default: 1000
+      - id: num_threads
+        source: threads
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_rpstblastn.tsv";}'
+      - id: query
+        source: fasta
     out:
       - id: export_search_strategy_output
       - id: output
@@ -106,20 +112,20 @@ steps:
     label: RPST-BlastN
   - id: rpsblast
     in:
-      - id: dbdir
-        source: blast_db_dir
       - id: db
         source: blast_cdd_db
+      - id: dbdir
+        source: blast_db_dir
       - id: evalue
         source: evalue
-      - id: num_threads
-        source: threads
-      - id: query
-        source: transdecoder_longorfs_extract_result/output
       - id: max_target_seqs
         default: 1000
+      - id: num_threads
+        source: threads
       - id: out
         valueFrom: '${ return inputs.query.nameroot + "_rpsblast.tsv";}'
+      - id: query
+        source: transdecoder_longorfs_extract_result/output
     out:
       - id: export_search_strategy_output
       - id: output
@@ -132,7 +138,7 @@ steps:
     out:
       - id: output
     run: ../../tools/transdecoder/transdecoder_longorfs.cwl
-    label: TransDecoder.LongOrfs
+    label: TransDecoder
   - id: transdecoder_longorfs_extract_result
     in:
       - id: d
@@ -144,7 +150,8 @@ steps:
     out:
       - id: output
     run: ../../tools/transdecoder/transdecoder_longorfs_extract_result.cwl
-    label: TransDecoder.LongOrfs_extract_result
-requirements:
+    label: TransDecoder-Filter
+requirements: 
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
+  

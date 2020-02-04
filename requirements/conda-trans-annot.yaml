@@ -12,3 +12,4 @@ dependencies:
   - wise2=2.4.1
   - clustalo=1.2.4
   - sra-tools=2.10.0
+  - google-cloud-storage=1.23.0
