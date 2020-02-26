@@ -82,8 +82,6 @@ steps:
         valueFrom: '${ return inputs.query.nameroot + "_blastp.tsv";}'
       - id: query
         source: transdecoder_longorfs_extract_result/output
-      - id: task
-        default: blastp-fast
     out:
       - id: export_search_strategy_output
       - id: output
