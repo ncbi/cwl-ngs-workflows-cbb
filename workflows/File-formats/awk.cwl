@@ -11,21 +11,21 @@ inputs:
     inputBinding:
       position: 1
       prefix: -F
-    description: Awk separator
+    doc: Awk separator
 
   text:
     type: string
     inputBinding:
       position: 2
-    description: Awk text
+    doc: Awk text
   file:
     type: File
     inputBinding:
       position: 3
-    description: Input file
+    doc: Input file
   outFileName:
     type: string
-    description: Out put file name
+    doc: Out put file name
 
 outputs:
   output:
