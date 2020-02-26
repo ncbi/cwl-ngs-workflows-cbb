@@ -36,10 +36,7 @@ steps:
     gzip:
        run: ../../tools/basic/gzip.cwl
        in:
-          c: { default: True}
           file: awk/output
-          outFileName:
-            valueFrom: ${ return inputs.file.basename + ".gz";}
        out: [output]
 
 

@@ -55,11 +55,8 @@ steps:
   gzip_cat:
     run: ../../tools/basic/gzip.cwl
     in:
-      c: { default: True}
       d: { default: True}
       file: tagAlign_gz
-      outFileName:
-        valueFrom: ${ return inputs.file.nameroot;}
     out: [output]
   homer_tags:
     run: ../../tools/homer/homer-makeTagDirectory.cwl

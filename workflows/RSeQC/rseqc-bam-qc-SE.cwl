@@ -76,10 +76,7 @@ steps:
   gzip_junction_annotation_bed:
     run: ../../tools/basic/gzip.cwl
     in:
-      c: { default: True}
       file: junction_annotation/bed
-      outFileName:
-        valueFrom: ${ return inputs.file.basename + ".gz";}
     out: [output]
     doc: |
       Gzip Bed file
