@@ -31,11 +31,8 @@ steps:
     gzip_cat:
         run: ../../tools/basic/gzip.cwl
         in:
-          c: { default: True}
           d: { default: True}
           file: infile
-          outFileName:
-            valueFrom: ${ return inputs.file.nameroot;}
         out: [output]
     gem:
         run: ../../tools/GEM/gem.cwl
