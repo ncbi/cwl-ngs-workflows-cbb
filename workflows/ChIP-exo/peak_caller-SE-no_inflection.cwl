@@ -21,9 +21,15 @@ outputs:
   readQC_plots:
     outputSource: readQC/plots
     type: File[]
-  macs_callpeak_outdir:
-    outputSource: macs_callpeak/outdir
-    type: Directory
+  macs_callpeak_q_value_narrowPeak:
+    outputSource: macs_callpeak_q_value/narrowPeak
+    type: File
+  macs_callpeak_q_value_xls:
+    outputSource: macs_callpeak_q_value/xls
+    type: File
+  macs_callpeak_q_value_bed:
+    outputSource: macs_callpeak_q_value/bed
+    type: File
   homer_annotate_peaks_output:
     outputSource: homer_annotate_peaks/output
     type: File
@@ -71,7 +77,7 @@ steps:
       outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
-    out: [outdir]
+    out: [narrowPeak, xls, bed]
   homer_annotate_peaks:
     run: ../../tools/homer/homer-annotatePeaks.cwl
     in:

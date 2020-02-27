@@ -27,9 +27,15 @@ outputs:
   macs_cutoff_inflection:
     outputSource: macs_cutoff/out_inflection
     type: File
-  macs_callpeak_q_value_outdir:
-    outputSource: macs_callpeak_q_value/outdir
-    type: Directory
+  macs_callpeak_q_value_narrowPeak:
+    outputSource: macs_callpeak_q_value/narrowPeak
+    type: File
+  macs_callpeak_q_value_xls:
+    outputSource: macs_callpeak_q_value/xls
+    type: File
+  macs_callpeak_q_value_bed:
+    outputSource: macs_callpeak_q_value/bed
+    type: File
   homer_annotate_peaks_output:
     outputSource: homer_annotate_peaks/output
     type: File
@@ -78,17 +84,14 @@ steps:
       outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
-    out: [outdir]
+    out: [cutoff_analysis, cutoff_analysis_pdf, lambda, pileup, narrowPeak, xls, bed]
   macs_cutoff:
     run: ../../tools/R/macs-cutoff.cwl
     in:
       macs_out_dir: macs_callpeak/outdir
-      peak_cutoff_file:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.txt');}
-      out_pdf_name:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.pdf');}
-      out_inflection_name:
-        valueFrom: ${ return inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis_inflection.txt');}
+      peak_cutoff_file: macs_callpeak/cutoff_analysis
+      out_pdf_name: macs_callpeak/cutoff_analysis_pdf
+      out_inflection_name: macs_callpeak/cutoff_analysis_inflection
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
     run: ../../tools/MACS/macs2-callpeak.cwl
@@ -107,7 +110,7 @@ steps:
       outdir_name:
         valueFrom: ${ return inputs.t.nameroot + "_peaks";}
       t: gzip_cat/output
-    out: [outdir]
+    out: [cutoff_analysis, cutoff_analysis_pdf, lambda, pileup, narrowPeak, xls, bed]
   homer_annotate_peaks:
     run: ../../tools/homer/homer-annotatePeaks.cwl
     in:

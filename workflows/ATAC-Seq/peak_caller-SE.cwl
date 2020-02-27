@@ -6,93 +6,68 @@ doc: >-
 label: ATAC-Seq peak caller workflow for single-end samples
 $namespaces:
   s: 'http://schema.org/'
-  sbg: 'https://www.sevenbridges.com/'
 inputs:
   - id: genome_fasta
     type: File
-    'sbg:x': 0
-    'sbg:y': 563
   - id: genome_gtf
     type: File
-    'sbg:x': 196.71875
-    'sbg:y': 423.5
   - id: homer_genome
     type: string
-    'sbg:x': 0
-    'sbg:y': 456
   - id: input_bam
     type: File
     secondaryFiles:
       - .bai
-    'sbg:x': 0
-    'sbg:y': 349
   - id: input_bed
     type: File
-    'sbg:x': 0
-    'sbg:y': 242
   - id: macs_callpeaks_g
     type: string
-    'sbg:x': 0
-    'sbg:y': 135
   - id: macs_callpeaks_q
     type: float
-    'sbg:x': 0
-    'sbg:y': 28
 outputs:
   - id: ChIPQC_report
     outputSource:
       - ChIPQC/report
     type: Directory
-    'sbg:x': 416.8702697753906
-    'sbg:y': 591
   - id: homer_annotate_peaks_annStats
     outputSource:
       - homer_annotate_peaks/annStats_out
     type: File?
-    'sbg:x': 756.2921142578125
-    'sbg:y': 577
   - id: homer_annotate_peaks_output
     outputSource:
       - homer_annotate_peaks/output
     type: File
-    'sbg:x': 847.1170043945312
-    'sbg:y': 478.15093994140625
-  - id: macs_callpeak_q_value_outdir
+  - id: macs_callpeak_q_value_narrowPeak
     outputSource:
-      - macs_callpeak_q_value/outdir
-    type: Directory
-    'sbg:x': 1001.9722900390625
-    'sbg:y': 321.1172790527344
+      - macs_callpeak_q_value/narrowPeak
+    type: File
+  - id: macs_callpeak_q_value_xls
+    outputSource:
+      - macs_callpeak_q_value/xls
+    type: File
+  - id: macs_callpeak_q_value_bed
+    outputSource:
+      - macs_callpeak_q_value/bed
+    type: File
   - id: macs_cutoff_inflection
     outputSource:
       - macs_cutoff/out_inflection
     type: File
-    'sbg:x': 756.2921142578125
-    'sbg:y': 228
   - id: macs_cutoff_pdf
     outputSource:
       - macs_cutoff/out_pdf
     type: File
-    'sbg:x': 756.2921142578125
-    'sbg:y': 121
   - id: phantompeakqualtools_output_out
     outputSource:
       - phantompeakqualtools/output_out
     type: File
-    'sbg:x': 416.8702697753906
-    'sbg:y': 214
   - id: phantompeakqualtools_output_savp
     outputSource:
       - phantompeakqualtools/output_savp
     type: File
-    'sbg:x': 416.8702697753906
-    'sbg:y': 107
   - id: readQC_plots
     outputSource:
       - readQC/plots
     type: 'File[]'
-    'sbg:x': 756.2921142578125
-    'sbg:y': 14
 steps:
   - id: ChIPQC
     in:
@@ -102,8 +77,6 @@ steps:
       - id: report
     run: ../../tools/R/ChIPQC.cwl
     label: ChIPQC
-    'sbg:x': 196.71875
-    'sbg:y': 530.5
   - id: homer_annotate_peaks
     in:
       - id: annStats
@@ -127,8 +100,6 @@ steps:
       - id: output
     run: ../../tools/homer/homer-annotatePeaks.cwl
     label: HOMER-annotatePeaks
-    'sbg:x': 416.8702697753906
-    'sbg:y': 463
   - id: homer_tags
     in:
       - id: checkGC
@@ -143,8 +114,6 @@ steps:
       - id: tags_directory
     run: ../../tools/homer/homer-makeTagDirectory.cwl
     label: HOMER-makeTagDirectory
-    'sbg:x': 196.71875
-    'sbg:y': 309.5
   - id: macs_callpeak
     in:
       - id: B
@@ -168,11 +137,9 @@ steps:
       - id: t
         source: input_bam
     out:
-      - id: outdir
+      - id: cutoff_analysis
     run: ../../tools/MACS/macs2-callpeak.cwl
     label: MACS2-callpeak
-    'sbg:x': 196.71875
-    'sbg:y': 181.5
   - id: macs_callpeak_q_value
     in:
       - id: B
@@ -198,26 +165,22 @@ steps:
       - id: t
         source: input_bam
     out:
-      - id: outdir
+      - id: [lambda, pileup, narrowPeak, xls, bed]
     run: ../../tools/MACS/macs2-callpeak.cwl
     label: MACS2-callpeak
-    'sbg:x': 756.2921142578125
-    'sbg:y': 349
   - id: macs_cutoff
     in:
-      - id: macs_out_dir
-        source: macs_callpeak/outdir
       - id: peak_cutoff_file
-        valueFrom: >-
-          ${ return
-          inputs.macs_out_dir.basename.replace('_peaks','_cutoff_analysis.txt');}
+        source: cutoff_analysis
+      - id: out_pdf_name
+        valueFrom: ${ return inputs.peak_cutoff_file.nameroot + ".pdf";}
+      - id: out_inflection_name
+          valueFrom: ${ return inputs.peak_cutoff_file.nameroot + "_inflection.txt";}
     out:
       - id: out_inflection
       - id: out_pdf
     run: ../../tools/R/macs-cutoff.cwl
     label: MACS2_cutoff
-    'sbg:x': 416.8702697753906
-    'sbg:y': 328
   - id: phantompeakqualtools
     in:
       - id: c
@@ -233,8 +196,6 @@ steps:
       - id: output_savr
     run: ../../tools/phantompeakqualtools/phantompeakqualtools.cwl
     label: Phantompeakqualtools
-    'sbg:x': 196.71875
-    'sbg:y': 39.5
   - id: readQC
     in:
       - id: tags_directory
@@ -243,8 +204,6 @@ steps:
       - id: plots
     run: ../../tools/R/readQC.cwl
     label: readQC
-    'sbg:x': 416.8702697753906
-    'sbg:y': 0
 requirements: []
 $schemas:
   - 'http://schema.org/docs/schema_org_rdfa.html'
