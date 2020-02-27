@@ -168,6 +168,14 @@ outputs:
     type: File?
     outputBinding:
       glob: $(inputs.outdir_name)/$(inputs.n)_cutoff_analysis.txt
+  cutoff_analysis_pdf:
+    type: File?
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_cutoff_analysis.pdf
+  cutoff_analysis_inflection:
+    type: File?
+    outputBinding:
+      glob: $(inputs.outdir_name)/$(inputs.n)_cutoff_analysis_inflection.txt
   narrowPeak:
     type: File
     outputBinding:
