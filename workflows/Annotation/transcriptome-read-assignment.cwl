@@ -9,7 +9,7 @@ inputs:
     type: File
   - id: reads_1
     type: File
-  - id: reads_1
+  - id: reads_2
     type: File
   - id: threads
     type: int
