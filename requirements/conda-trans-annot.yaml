@@ -4,12 +4,17 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - awscli
   - blast=2.9.0
   - transdecoder=5.5.0
-  - hmmer=3.2.1
-  - perl-bio-eutilities=1.75
-  - perl-parallel-forkmanager=2.02
-  - wise2=2.4.1
-  - clustalo=1.2.4
-  - sra-tools=2.10.0
-  - google-cloud-storage=1.23.0
+  - biopython=1.74
+  - cwl_runner=1.0
+  - cwltool=1.0.20190228155703
+  - jupyter=1.0.0
+  - matplotlib=3.1.1
+  - nodejs=12.3.0
+  - pandas=0.25.0
+  - parallel=20200122
+  - samtools
+  - sra-tools
+  - star
