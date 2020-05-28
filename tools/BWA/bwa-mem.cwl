@@ -12,6 +12,30 @@ inputs:
     inputBinding:
       position: 1
       prefix: '-M'
+  - id: A
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '-A'
+      separate: false
+  - id: B
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '-B'
+      separate: false
+  - id: E
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '-E'
+      separate: false
+  - id: L
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '-L'
+      separate: false
   - id: T
     type: int?
     inputBinding:
