@@ -37,10 +37,12 @@ requirements:
                       end = df[df[0] == record.id][3].max()
                       if end <= vector_bp_cutoff:
                           record.seq = record.seq[end + 1:]
-                          good = True
+                          if len(record.seq) >= 100:
+                              good = True
                       elif l - vector_bp_cutoff <= start:
                           record.seq = record.seq[0:start - 1]
-                          good = True
+                          if len(record.seq) >= 100:
+                              good = True
                   if good:
                       good = False
                       if count == total_per_file:
