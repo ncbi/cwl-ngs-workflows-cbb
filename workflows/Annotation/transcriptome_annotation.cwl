@@ -10,8 +10,6 @@ inputs:
     label: query
   - id: evalue
     type: float?
-  - id: blast_nt_db
-    type: string
   - id: threads
     type: int?
   - id: blast_nr_db
@@ -24,11 +22,6 @@ outputs:
       - transdecoder_longorfs_extract_result/output
     type: File
     label: Transdecoder-output
-  - id: blastn_output
-    outputSource:
-      - blastn/output
-    type: File
-    label: BlastN-output
   - id: rpst_blast_output
     outputSource:
       - rpstblastn/output
@@ -45,27 +38,6 @@ outputs:
     type: File
     label: RPS-Blast-output
 steps:
-  - id: blastn
-    in:
-      - id: db
-        source: blast_nt_db
-      - id: dbdir
-        source: blast_db_dir
-      - id: evalue
-        source: evalue
-      - id: max_target_seqs
-        default: 1000
-      - id: num_threads
-        source: threads
-      - id: out
-        valueFrom: '${ return inputs.query.nameroot + "_blastn.tsv";}'
-      - id: query
-        source: fasta
-    out:
-      - id: export_search_strategy_output
-      - id: output
-    run: ../../tools/blast/blastn.cwl
-    label: BlastN
   - id: blastp
     in:
       - id: db
