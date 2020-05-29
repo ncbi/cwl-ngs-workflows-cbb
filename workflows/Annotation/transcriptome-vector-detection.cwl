@@ -12,7 +12,7 @@ doc: "This workflow detect and remove vector from a transcriptome fasta file"
 inputs:
   trans_fsa_gz: File
   vector_fsa: File
-  count: int
+  total_per_file: int
   threads: int
   evalue: float?
   vector_bp_cutoff: int
@@ -65,6 +65,7 @@ steps:
     in:
       fasta: uncompress_trans/output
       blast: blastn/output
-      count: count
+      total_per_file: total_per_file
       vector_bp_cutoff: vector_bp_cutoff
+      threads: threads
     out: [output]
