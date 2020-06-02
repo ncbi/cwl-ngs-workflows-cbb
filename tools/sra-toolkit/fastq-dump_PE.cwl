@@ -56,7 +56,7 @@ hints:
 requirements:
   - class: InlineJavascriptRequirement
 $schemas:
-  - 'http://schema.org/docs/schema_org_rdfa.html'
+  - 'https://schema.org/version/latest/schema.rdf'
 's:author':
   - class: 's:Person'
     's:email': 'mailto:r78v10a07@gmail.com'
