@@ -157,7 +157,7 @@ inputs:
       position: 1
       prefix: -window_masker_db
   soft_masking:
-    type: boolean?
+    type: string?
     inputBinding:
       position: 1
       prefix: -soft_masking
@@ -277,7 +277,7 @@ inputs:
       position: 1
       prefix: -dbsize
   searchsp:
-    type: int?
+    type: long?
     inputBinding:
       position: 1
       prefix: -searchsp
