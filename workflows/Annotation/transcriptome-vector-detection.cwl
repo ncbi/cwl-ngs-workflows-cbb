@@ -16,6 +16,7 @@ inputs:
   threads: int
   evalue: float?
   vector_bp_cutoff: int
+  min_length: int
 
 outputs:
   vector_removal_split_out:
@@ -68,4 +69,5 @@ steps:
       total_per_file: total_per_file
       vector_bp_cutoff: vector_bp_cutoff
       threads: threads
+      min_length: min_length
     out: [output]
