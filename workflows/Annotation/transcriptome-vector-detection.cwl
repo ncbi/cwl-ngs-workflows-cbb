@@ -14,7 +14,6 @@ inputs:
   vector_fsa: File
   total_per_file: int
   threads: int
-  evalue: float?
   vector_bp_cutoff: int
   min_length: int
 
@@ -58,7 +57,15 @@ steps:
       out:
         valueFrom: ${ return inputs.query.nameroot + ".tsv";}
       outfmt: { default: "6 qseqid saccver qstart qend length evalue bitscore score"}
-      evalue: evalue
+      evalue: { default: 1e-4 }
+      task: { default: "blastn" }
+      reward: { default: 1 }
+      penalty: { default: -5 }
+      gapopen: { default: 3 }
+      gapextend: { default: 3 }
+      dust: { default: "yes" }
+      soft_masking: { default: "true" }
+      searchsp: { default: 1750000000000 }
     out: [output]
   vector_removal_split:
     run: ../../tools/python/vector-removal-split.cwl
