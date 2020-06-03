@@ -23,6 +23,7 @@ requirements:
           total_per_file = int(sys.argv[3])
           vector_bp_cutoff = int(sys.argv[4])
           threads = int(sys.argv[5])
+          min_length = int(sys.argv[6])
           max_per_thread = 20000
           total_transcripts = 0
 
@@ -71,17 +72,17 @@ requirements:
                               break
                           if count >= s:
                               l = len(r.seq)
-                              if l >= 100:
+                              if l >= min_length:
                                   try:
                                       a = blast_df.loc[r.id]
                                       if a[2] <= vector_bp_cutoff:
                                           r.seq = r.seq[a[2] + 1:]
-                                          if len(r.seq) >= 100:
+                                          if len(r.seq) >= min_length:
                                               total += 1
                                               SeqIO.write(r, output_handle, "fasta")
                                       elif l - vector_bp_cutoff <= a[1]:
                                           r.seq = r.seq[0:a[1] - 1]
-                                          if len(r.seq) >= 100:
+                                          if len(r.seq) >= min_length:
                                               total += 1
                                               SeqIO.write(r, output_handle, "fasta")
                                   except:
@@ -142,6 +143,10 @@ inputs:
     type: int
     inputBinding:
       position: 5
+  min_length:
+    type: int
+    inputBinding:
+      position: 6
 
 outputs:
   output:
@@ -150,3 +155,15 @@ outputs:
       glob: '*.fsa.gz'
 
 baseCommand: ["python","transcriptome-vector-detection.py"]
+
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
+$namespaces:
+  s: http://schema.org/
+
+$schemas:
+  - https://schema.org/version/latest/schema.rdf
