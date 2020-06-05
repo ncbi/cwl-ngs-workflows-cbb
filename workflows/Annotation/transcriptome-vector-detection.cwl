@@ -16,6 +16,7 @@ inputs:
   threads: int
   vector_bp_cutoff: int
   min_length: int
+  evalue: float
 
 outputs:
   vector_removal_split_out:
@@ -57,7 +58,7 @@ steps:
       out:
         valueFrom: ${ return inputs.query.nameroot + ".tsv";}
       outfmt: { default: "6 qseqid saccver qstart qend length evalue bitscore score"}
-      evalue: { default: 1e-4 }
+      evalue: evalue
       task: { default: "blastn" }
       reward: { default: 1 }
       penalty: { default: -5 }
