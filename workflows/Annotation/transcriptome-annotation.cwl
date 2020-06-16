@@ -56,6 +56,7 @@ steps:
       db: blast_nt_db
       num_threads: threads
       task: { default: "blastn" }
+      max_target_seqs: { default: 50 }
       out:
         valueFrom: '${ return inputs.query.nameroot + "_blastn.tsv";}'
       outfmt: { default: "6 qseqid sgi saccver length pident evalue bitscore score staxid ssciname"}
@@ -83,7 +84,7 @@ steps:
     label: TransDecoder-Filter
     in:
       d: transdecoder_longorfs/output
-      filename:longest_orfs.pep
+      filename: { default: "longest_orfs.pep"}
       o:
         valueFrom: '${ return inputs.d.nameroot + "_transdecoder.fa";}'
     out: [output]
