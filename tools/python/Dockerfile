@@ -1,33 +1,23 @@
 # Base Image
-FROM ubuntu:18.04
+FROM quay.io/biocontainers/python:3.7
 
 # Metadata
-LABEL base.image="ubuntu:18.04"
+LABEL base.image="quay.io/biocontainers/python:3.7"
 LABEL version="1"
 LABEL software="Python3"
-LABEL software.version="3.6"
-LABEL description="This image provides python"
-LABEL tags="R"
+LABEL software.version="3.7"
+LABEL description="This image provides python with some dependencies"
+LABEL tags="Python"
 
 # Maintainer
 MAINTAINER Roberto Vera Alvarez <r78v10a07@gmail.com>
 
 USER root
-
-RUN apt-get update && \
-    apt-get install -y apt-utils tzdata software-properties-common
-
-RUN apt-get update && \
-    apt-get install -y python3 python3-pandas && \
-                       apt-get clean && \
-                       apt-get purge && \
-                       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN adduser --disabled-password --gecos '' ubuntu
-USER ubuntu
-RUN chmod a+rwx /home/ubuntu/
-
-WORKDIR /data/
+# Adding Python packages
+RUN pip install biopython==1.76
+RUN pip install matplotlib==3.2.1
+RUN pip install networkx==2.4
+RUN pip install numpy==1.18.5
+RUN pip install pandas==1.0.4
 
 CMD ["python"]
-
