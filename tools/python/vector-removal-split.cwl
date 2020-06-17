@@ -1,8 +1,8 @@
 class: CommandLineTool
 cwlVersion: v1.0
 
-label: annotate_bed
-doc: This tools annotate bed files from GFF
+label: transcriptome_vector_detection
+doc: This tools detect vectors from a Blast TSV file
 
 requirements:
   InlineJavascriptRequirement: {}

@@ -12,6 +12,7 @@ dependencies:
   - cwltool=1.0.20190228155703
   - jupyter=1.0.0
   - matplotlib=3.1.1
+  - networkx=2.4
   - nodejs=12.3.0
   - pandas=0.25.0
   - parallel=20200122
