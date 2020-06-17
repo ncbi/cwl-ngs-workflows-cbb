@@ -20,9 +20,10 @@ requirements:
           fasta = sys.argv[1]
 
           count = 0
-          with(open(fasta)) as handle:
+          with gzip.open(fasta, 'rt') as handle:
               for record in SeqIO.parse(handle, "fasta"):
                   count += 1
+                  print('{} {}'.format(record.id, count), end='\r')
           print('{} sequences to process'.format(count))
 
 hints:
