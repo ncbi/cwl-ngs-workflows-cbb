@@ -9,7 +9,7 @@ dependencies:
   - transdecoder=5.5.0
   - biopython=1.76
   - cwl_runner=1.0
-  - cwltool=1.0.20180225105849
+  - cwltool=3.0.20200530110633
   - matplotlib=3.2.1
   - networkx=2.4
   - numpy=1.18.5
