@@ -38,6 +38,19 @@ requirements:
                   result.update(successors(o, O))
               return result
 
+          def findNode(O, id):
+              nodes = [y for x,y in O.nodes(data=True) if y['id']==id]
+              if nodes:
+                  a = ""
+                  for i in nx.shortest_path(O, source="1", target=id)[2:]:
+                      ns = [y for x,y in O.nodes(data=True) if y['id']==i]
+                      if ns:
+                          if a:
+                              a += "; "
+                          a += ns[0]['name']
+                  return nodes[0], a
+              return None, None
+
           tax = pickle.load(open(tax_pickle, "rb"))
           tax_ids = [int(i) for i in successors(tax_id, tax)]
           print('{} taxonomies IDs in the list'.format(len(tax_ids)))
@@ -56,7 +69,12 @@ requirements:
                   df = df[df[5] == df[5].min()]
                   if not all(elem in tax_ids for elem in df[8].unique()):
                       df = df.reset_index()
-                      return (t, True, df[9].iloc[0], df[5].iloc[0], df[2].iloc[0])
+                      node = findNode(tax, str(df[8].iloc[0]))
+                      if node[0]:
+                          node = node[0]['name']
+                      else:
+                          node = str(df[8].iloc[0])
+                      return (t, True, node, df[5].iloc[0], df[2].iloc[0])
               return (t, False)
 
           p = Pool(processes=threads)
@@ -65,15 +83,19 @@ requirements:
 
           prefix = os.path.basename(fasta).replace('.fsa', '')
           print('Printing results with prefix ' + prefix)
-
-          with open('{}-contamination.tsv'.format(prefix), 'w') as f_cont:
-              f_cont.write('transcript\tsubject\tevalue\ttaxa\n')
-              with gzip.open('{}-clean.fsa.gz'.format(prefix), 'wt') as f_fsa:
+          clean = 0
+          contamination = 0
+          with open('{}_contamination.tsv'.format(prefix), 'w') as f_cont:
+              f_cont.write('transcript\tsubject\tevalue\ttax_id\n')
+              with open('{}_clean.fsa'.format(prefix), 'w') as f_fsa:
                   for r in results:
                       if r[1]:
+                          contamination += 1
                           f_cont.write('{}\t{}\t{}\t{}\n'.format(r[0], r[4], r[3], r[2]))
                       else:
+                          clean += 1
                           SeqIO.write(records[r[0]], f_fsa, "fasta")
+          print('Input Transcripts: {}\nClean Transcripts: {}\nContaminated transcripts: {}'.format(len(records),clean, contamination))
 
 hints:
   - $import: python.yml
@@ -104,11 +126,11 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*-clean.fsa.gz'
+      glob: '*_clean.fsa'
   contamination:
     type: File
     outputBinding:
-      glob: '*-contamination.tsv'
+      glob: '*_contamination.tsv'
 
 baseCommand: ["python","transcriptome-contamination-detection.py"]
 

@@ -20,6 +20,9 @@ inputs:
 
 
 outputs:
+  blastn_output:
+    outputSource: blastn/output
+    type: File
   contamination_fsa:
     outputSource: contamination_removal/fsa
     type: File
@@ -55,11 +58,10 @@ steps:
       dbdir: blast_db_dir
       db: blast_nt_db
       num_threads: threads
-      task: { default: "blastn" }
       max_target_seqs: { default: 50 }
       out:
         valueFrom: '${ return inputs.query.nameroot + "_blastn.tsv";}'
-      outfmt: { default: "6 qseqid sgi saccver length pident evalue bitscore score staxid ssciname"}
+      outfmt: { default: "6 qseqid sgi saccver length pident evalue bitscore score staxid"}
       evalue: evalue
       query: uncompress_trans/output
     out: [output]
@@ -86,7 +88,7 @@ steps:
       d: transdecoder_longorfs/output
       filename: { default: "longest_orfs.pep"}
       o:
-        valueFrom: '${ return inputs.d.nameroot + "_transdecoder.fa";}'
+        valueFrom: '${ return inputs.d.nameroot.replace(".fsa","_transdecoder.fsa");}'
     out: [output]
   blastp:
     run: ../../tools/blast/blastp.cwl
