@@ -14,10 +14,8 @@ inputs:
   threads: int
   blast_nr_db: string
   blast_nt_db: string
-  blast_cdd_db: string
   tax_pickle: File
   tax_id: int
-
 
 outputs:
   blastn_output:
@@ -32,16 +30,9 @@ outputs:
   transdecoder_protein:
     outputSource: transdecoder_longorfs_extract_result/output
     type: File
-  rpst_blast_output:
-    outputSource: rpstblastn/output
-    type: File
   blastp_output:
     outputSource: blastp/output
     type: File
-  rps_blast_output:
-    outputSource: rpsblast/output
-    type: File
-
 
 steps:
   uncompress_trans:
@@ -103,30 +94,4 @@ steps:
         valueFrom: '${ return inputs.query.nameroot + "_blastp.tsv";}'
       query: transdecoder_longorfs_extract_result/output
       task: { default: "blastp-fast"}
-    out: [export_search_strategy_output, output]
-  rpstblastn:
-    run: ../../tools/blast/rpstblastn.cwl
-    label: RPST-BlastN
-    in:
-      db: blast_cdd_db
-      dbdir: blast_db_dir
-      evalue: evalue
-      max_target_seqs: { default: 1000}
-      num_threads: threads
-      out:
-        valueFrom: '${ return inputs.query.nameroot + "_rpstblastn.tsv";}'
-      query: contamination_removal/fsa
-    out: [export_search_strategy_output, output]
-  rpsblast:
-    run: ../../tools/blast/rpsblast.cwl
-    label: RPS-Blast
-    in:
-      db: blast_cdd_db
-      dbdir: blast_db_dir
-      evalue: evalue
-      max_target_seqs: {default: 1000}
-      num_threads: threads
-      out:
-        valueFrom: '${ return inputs.query.nameroot + "_rpsblast.tsv";}'
-      query: transdecoder_longorfs_extract_result/output
     out: [export_search_strategy_output, output]
