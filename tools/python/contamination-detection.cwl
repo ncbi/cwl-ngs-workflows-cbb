@@ -74,7 +74,7 @@ requirements:
                           node = node[0]['name']
                       else:
                           node = str(df[8].iloc[0])
-                      return (t, True, node, df[5].iloc[0], df[2].iloc[0])
+                      return (t, True, node, df[5].iloc[0], df[2].iloc[0], df[8].iloc[0])
               return (t, False)
 
           p = Pool(processes=threads)
@@ -86,12 +86,12 @@ requirements:
           clean = 0
           contamination = 0
           with open('{}_contamination.tsv'.format(prefix), 'w') as f_cont:
-              f_cont.write('transcript\tsubject\tevalue\ttax_id\n')
+              f_cont.write('transcript\tsubject\tevalue\ttax_id\ttaxa\n')
               with open('{}_clean.fsa'.format(prefix), 'w') as f_fsa:
                   for r in results:
                       if r[1]:
                           contamination += 1
-                          f_cont.write('{}\t{}\t{}\t{}\n'.format(r[0], r[4], r[3], r[2]))
+                          f_cont.write('{}\t{}\t{}\t{}\t{}\n'.format(r[0], r[4], r[3], r[5], r[2]))
                       else:
                           clean += 1
                           SeqIO.write(records[r[0]], f_fsa, "fasta")
