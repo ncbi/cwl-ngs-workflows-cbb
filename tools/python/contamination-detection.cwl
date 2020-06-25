@@ -55,10 +55,19 @@ requirements:
           tax_ids = [int(i) for i in successors(tax_id, tax)]
           print('{} taxonomies IDs in the list'.format(len(tax_ids)))
 
+          filename, ext = os.path.splitext(os.path.basename(fasta))
+          if ext == '.gz':
+              handle = gzip.open(fasta, 'rt')
+              prefix  =  os.path.splitext(filename)[0]
+          else:
+              handle = open(fasta, 'r')
+              prefix = filename
+
           records = {}
-          with open(fasta, "r") as handle:
-              for record in SeqIO.parse(handle, "fasta"):
-                  records[record.id] = record
+          for record in SeqIO.parse(handle, "fasta"):
+              records[record.id] = record
+
+          handle.close()
 
           blast_df = pandas.read_csv(blast_tsv, sep='\t', header=None)
           print('{} results loaded from Blast'.format(len(blast_df)))
@@ -81,13 +90,12 @@ requirements:
           results = p.map(transcript_contamination, [t for t in records])
           p.close()
 
-          prefix = os.path.basename(fasta).replace('.fsa', '')
           print('Printing results with prefix ' + prefix)
           clean = 0
           contamination = 0
-          with open('{}_contamination.tsv'.format(prefix), 'w') as f_cont:
+          with open('{}_cont.tsv'.format(prefix), 'w') as f_cont:
               f_cont.write('transcript\tsubject\tevalue\ttax_id\ttaxa\n')
-              with open('{}_clean.fsa'.format(prefix), 'w') as f_fsa:
+              with open('{}_nocont.fsa'.format(prefix), 'w') as f_fsa:
                   for r in results:
                       if r[1]:
                           contamination += 1
@@ -126,11 +134,11 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*_clean.fsa'
+      glob: '*_nocont.fsa'
   contamination:
     type: File
     outputBinding:
-      glob: '*_contamination.tsv'
+      glob: '*_cont.tsv'
 
 baseCommand: ["python","transcriptome-contamination-detection.py"]
 
