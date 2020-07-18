@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: bedtools.yml
+  - $import: bedtools-docker.yml
+  - $import: bedtools-bioconda.yml
 
 inputs:
   stdout_name:
