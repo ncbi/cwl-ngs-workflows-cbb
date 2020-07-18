@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'mace'
+    version:
+      - '1.2'
+    specs:
+      - https://anaconda.org/bioconda/mace

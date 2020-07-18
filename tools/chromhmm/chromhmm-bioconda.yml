@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'chromhmm'
+    version:
+      - '1.21'
+    specs:
+      - https://anaconda.org/bioconda/chromhmm

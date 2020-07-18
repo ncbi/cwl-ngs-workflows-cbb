@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'blast'
+    version:
+      - '2.9.0'
+    specs:
+      - https://anaconda.org/bioconda/blast

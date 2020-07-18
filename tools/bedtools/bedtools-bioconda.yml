@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'bedtools'
+    version:
+      - '2.29.2'
+    specs:
+      - https://anaconda.org/bioconda/bedtools

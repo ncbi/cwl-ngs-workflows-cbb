@@ -2,46 +2,47 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: multiBamSummary
-doc: computes the read coverages for genomic regions for typically two or more BAM files
+label: igvtools-count
+doc: The igvtools utility provides a set of tools for pre-processing data files
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: deeptools-docker.yml
-  - $import: deeptools-bioconda.yml
+  - $import: igvtools-docker.yml
 
 inputs:
-  in_stdout:
-    type: string
-  t:
+  z:
     type: int?
     inputBinding:
       position: 1
-      prefix: -t
-  prefix:
+      prefix: -z
+  i:
+    type: File
+    inputBinding:
+      position: 2
+  o:
+    type: string
+    inputBinding:
+      position: 3
+  g:
     type: string
     inputBinding:
       position: 4
-      valueFrom: |
-        ${
-          return inputs.index.path + "/" + self;
-        }
-  index:
-    type: Directory
-  input:
-    type: File
+  includeDuplicates:
+    type: boolean?
     inputBinding:
-      position: 5
+      position: 1
+      prefix: --includeDuplicates
+
 
 outputs:
-  out_stdout:
-    type: stdout
+  out_tdf:
+    type: File
+    outputBinding:
+      glob: $(inputs.o)
 
-stdout: $(inputs.in_stdout)
-
-baseCommand: ["bwa", "mem"]
+baseCommand: ["igvtools", "count"]
 
 s:author:
   - class: s:Person
@@ -49,7 +50,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: https://github.com/lh3/bwa
+s:codeRepository: https://software.broadinstitute.org/software/igv/igvtools
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

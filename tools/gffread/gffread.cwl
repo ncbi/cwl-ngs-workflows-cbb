@@ -2,36 +2,41 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: bedtools-merge
-doc: The bedtools utilities are a swiss-army knife of tools for a wide-range of genomics analysis tasks
+label: GFFread
+doc: gffread can be used to validate, filter, convert and perform various other operations on GFF files
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: bedtools-docker.yml
-  - $import: bedtools-bioconda.yml
+  - $import: gffread-docker.yml
+  - $import: gffread-bioconda.yml
 
 inputs:
-  stdout_name:
-    type: string
-    doc: Stdout from program
-  i:
+  input:
     type: File
     inputBinding:
       position: 1
-      prefix: -i
-    doc: Input BED format
+  T:
+    type: boolean?
+    inputBinding:
+      position: 2
+      prefix: -T
+  o:
+    type: string
+    inputBinding:
+      position: 3
+      prefix: -o
+
+
 
 outputs:
   output:
     type: File
     outputBinding:
-      glob: $(inputs.stdout_name)
+      glob: $(inputs.o)
 
-stdout: $(inputs.stdout_name)
-
-baseCommand: [bedtools, merge]
+baseCommand: ["gffread"]
 
 s:author:
   - class: s:Person
@@ -39,7 +44,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: https://bedtools.readthedocs.io/en/latest/
+s:codeRepository: http://ccb.jhu.edu/software/stringtie/gff.shtml
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

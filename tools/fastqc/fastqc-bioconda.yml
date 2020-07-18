@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'fastqc'
+    version:
+      - '0.11.9'
+    specs:
+      - https://anaconda.org/bioconda/fastqc

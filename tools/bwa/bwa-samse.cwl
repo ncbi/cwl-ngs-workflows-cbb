@@ -2,48 +2,48 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: hmmpress
-doc: prepare an HMM database for faster hmmscan searches
+label: bwa-samse
+doc: bwa is a software package for mapping DNA sequences against a large reference genome
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: hmmer-docker.yml
-  - $import: hmmer-bioconda.yml
+  - $import: bwa-docker.yml
+  - $import: bwa-bioconda.yml
 
 inputs:
   f:
-    type: boolean?
+    type: string
     inputBinding:
       position: 1
       prefix: -f
-    doc: |
-      overwrite any previous pressed files
-  hmmfile:
-    type: File
+  prefix:
+    type: string
     inputBinding:
       position: 2
+      valueFrom: |
+        ${
+          return inputs.index.path + "/" + self;
+        }
+  index:
+    type: Directory
+  sai:
+    type: File
+    inputBinding:
+      position: 3
+  fastq:
+    type: File
+    inputBinding:
+      position: 4
 
 outputs:
-  h3f:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.hmmfile.basename).h3f
-  h3i:
-    type: File
-    outputBinding:
-      glob: $(inputs.hmmfile.basename).h3i
-  h3m:
-    type: File
-    outputBinding:
-      glob: $(inputs.hmmfile.basename).h3m
-  h3p:
-    type: File
-    outputBinding:
-      glob: $(inputs.hmmfile.basename).h3p
+      glob: $(inputs.output_filename)
 
-baseCommand: ["hmmpress"]
+baseCommand: ["bwa", "samse"]
 
 s:author:
   - class: s:Person
@@ -51,7 +51,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: http://hmmer.org/
+s:codeRepository: https://github.com/lh3/bwa
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:
@@ -59,4 +59,3 @@ $namespaces:
 
 $schemas:
   - https://schema.org/version/latest/schema.rdf
-

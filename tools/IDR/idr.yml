@@ -1,4 +1,0 @@
-  class: DockerRequirement
-  dockerImageId: idr_ubuntu-18.04
-  dockerFile:
-    $include: Dockerfile

@@ -1,2 +1,0 @@
- class: DockerRequirement
- dockerPull: quay.io/biocontainers/deeptools:3.2.0--py_0

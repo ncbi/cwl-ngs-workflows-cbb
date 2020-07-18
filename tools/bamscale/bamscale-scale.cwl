@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: bamscale.yml
+  - $import: bamscale-docker.yml
+  - $import: bamscale-bioconda.yml
 
 inputs:
   l:

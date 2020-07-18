@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'bwa'
+    version:
+      - '0.7.17'
+    specs:
+      - https://anaconda.org/bioconda/bwa

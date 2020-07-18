@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'clustalo'
+    version:
+      - '1.2.4'
+    specs:
+      - https://anaconda.org/bioconda/clustalo

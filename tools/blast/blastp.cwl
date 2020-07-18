@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: blast.yml
+  - $import: blast-docker.yml
+  - $import: blast-bioconda.yml
 
 inputs:
   task:

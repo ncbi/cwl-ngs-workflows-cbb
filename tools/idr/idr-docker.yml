@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/idr:2.0.4.2--py37hc1659b7_2

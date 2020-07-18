@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: clustalo.yml
+  - $import: clustalo-docker.yml
 
 inputs:
   in:

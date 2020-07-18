@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'hmmer'
+    version:
+      - '3.3'
+    specs:
+      - https://anaconda.org/bioconda/hmmer
