@@ -30,8 +30,9 @@ outputs:
 doc: BASH echo command
 label: FastQC
 hints:
-  - class: DockerRequirement
-    dockerPull: 'quay.io/biocontainers/fastqc:0.11.7--4'
+  - $import: fastqc-docker.yml
+  - $import: fastqc-bioconda.yml
+
 requirements:
   - class: InlineJavascriptRequirement
 $schemas:
