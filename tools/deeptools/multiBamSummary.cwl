@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: deeptools.yml
+  - $import: deeptools-docker.yml
 
 inputs:
   in_stdout:
