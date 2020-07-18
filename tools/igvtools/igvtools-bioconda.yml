@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'igvtools'
+    version:
+      - '2.5.3'
+    specs:
+      - https://anaconda.org/bioconda/igvtools

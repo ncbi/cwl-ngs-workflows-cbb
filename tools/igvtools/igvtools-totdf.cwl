@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: igvtools.yml
+  - $import: igvtools-docker.yml
 
 inputs:
   z:
