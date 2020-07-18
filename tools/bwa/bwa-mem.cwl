@@ -103,7 +103,7 @@ stdout: |
 doc: >-
   BWA is a software package for mapping DNA sequences against a large reference
   genome
-label: BWA-mem
+label: bwa-mem
 hints:
   - $import: bwa-docker.yml
   - $import: bwa-bioconda.yml

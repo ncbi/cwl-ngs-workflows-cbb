@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: BWA-Aln
-doc: BWA is a software package for mapping DNA sequences against a large reference genome
+label: bwa-Aln
+doc: bwa is a software package for mapping DNA sequences against a large reference genome
 
 requirements:
   InlineJavascriptRequirement: {}
