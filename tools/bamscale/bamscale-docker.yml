@@ -1,0 +1,2 @@
+  class: DockerRequirement
+  dockerPull: quay.io/biocontainers/bamscale:0.0.5--h18f8b1d_1

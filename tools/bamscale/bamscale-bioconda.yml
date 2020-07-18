@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'bamscale'
+    version:
+      - '0.0.5'
+    specs:
+      - https://anaconda.org/bioconda/bamscale

@@ -174,7 +174,8 @@ requirements:
     coresMin: 1
   - class: InlineJavascriptRequirement
 hints:
-  - $import: bamscale.yml
+  - $import: bamscale-docker.yml
+  - $import: bamscale-bioconda.yml
 $schemas:
   - 'https://schema.org/version/latest/schema.rdf'
 's:author':
