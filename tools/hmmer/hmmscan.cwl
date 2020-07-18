@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: hmmer.yml
+  - $import: hmmer-docker.yml
+  - $import: hmmer-bioconda.yml
 
 inputs:
   o:
