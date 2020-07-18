@@ -2,32 +2,46 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: ChromHMM-LearnModel
+label: ChromHMM-BinarizeBed
 doc: Chromatin state discovery and characterization
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: ChromHMM.yml
+  - $import: chromhmm-docker.yml
+  - $import: chromhmm-bioconda.yml
 
 inputs:
+  paired:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -paired
+    doc: |
+      If this option is present then reads in the BAM file are treated as pairs
+  chromsize:
+    type: File
+    inputBinding:
+      position: 2
+    doc: |
+      ChromHMM genome size
   input:
     type: Directory
     inputBinding:
-      position: 1
+      position: 3
     doc: |
       Input directory
+  cellmarkfiletable:
+    type: File
+    inputBinding:
+      position: 4
+    doc: |
+      cellmarkfiletable file
   output_dir:
     type: string
     inputBinding:
-      position: 2
-  numstates:
-    type: int
-    inputBinding:
-      position: 3
-  assembly:
-    type: string
+      position: 5
 
 outputs:
   output:
@@ -35,7 +49,7 @@ outputs:
     outputBinding:
       glob: $(inputs.output_dir)
 
-baseCommand: ["java", "-mx16000M", "/usr/local/share/chromhmm-1.15-0/ChromHMM.jar"]
+baseCommand: [ChromHMM.sh, BinarizeBed]
 
 s:author:
   - class: s:Person
