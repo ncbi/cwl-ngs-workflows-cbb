@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'idr'
+    version:
+      - '2.0.4.2'
+    specs:
+      - https://anaconda.org/bioconda/idr

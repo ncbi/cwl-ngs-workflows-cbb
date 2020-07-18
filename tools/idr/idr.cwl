@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: idr.yml
+  - $import: idr-docker.yml
+  - $import: idr-bioconda.yml
 
 inputs:
     samples:
