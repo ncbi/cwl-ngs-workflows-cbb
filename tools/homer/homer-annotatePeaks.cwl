@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: homer.yml
+  - $import: homer-docker.yml
+  - $import: homer-bioconda.yml
 
 inputs:
   input:

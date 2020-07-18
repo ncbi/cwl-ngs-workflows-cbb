@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'homer'
+    version:
+      - '4.11'
+    specs:
+      - https://anaconda.org/bioconda/homer
