@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: gffread.yml
+  - $import: gffread-docker.yml
+  - $import: gffread-bioconda.yml
 
 inputs:
   input:
