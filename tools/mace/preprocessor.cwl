@@ -100,7 +100,8 @@ requirements:
     coresMin: 1
   - class: InlineJavascriptRequirement
 hints:
-  - $import: mace.yml
+  - $import: mace-docker.yml
+  - $import: mace-bioconda.yml
 $schemas:
   - 'https://schema.org/version/latest/schema.rdf'
 's:author':

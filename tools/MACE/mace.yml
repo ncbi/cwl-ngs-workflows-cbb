@@ -1,4 +1,0 @@
- class: DockerRequirement
- dockerImageId: mace:1.2
- dockerFile:
-   $include: Dockerfile
