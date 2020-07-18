@@ -10,6 +10,7 @@ requirements:
 
 hints:
   - $import: deeptools-docker.yml
+  - $import: deeptools-bioconda.yml
 
 inputs:
   in_stdout:
