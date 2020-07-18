@@ -46,6 +46,21 @@ inputs:
     inputBinding:
       position: 1
       prefix: '-a'
+  - id: S
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: '-S'
+  - id: P
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: '-P'
+  - id: five
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: '-5'
   - id: index
     type: Directory
   - id: reads
@@ -90,8 +105,8 @@ doc: >-
   genome
 label: BWA-mem
 hints:
-  - class: DockerRequirement
-    dockerPull: 'quay.io/biocontainers/bwa:0.7.17--h84994c4_4'
+  - $import: bwa-docker.yml
+  - $import: bwa-bioconda.yml
     
 requirements:
   - class: InlineJavascriptRequirement

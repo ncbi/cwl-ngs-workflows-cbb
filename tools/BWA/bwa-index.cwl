@@ -10,7 +10,8 @@ requirements:
     listing: [ $(inputs.sequences) ]
 
 hints:
-  - $import: bwa.yml
+  - $import: bwa-docker.yml
+  - $import: bwa-bioconda.yml
 
 inputs:
   a:

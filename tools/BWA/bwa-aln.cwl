@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: bwa.yml
+  - $import: bwa-docker.yml
+  - $import: bwa-bioconda.yml
 
 inputs:
   e:
