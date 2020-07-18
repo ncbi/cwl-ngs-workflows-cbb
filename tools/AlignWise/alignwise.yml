@@ -1,2 +1,0 @@
-  class: DockerRequirement
-  dockerPull: quay.io/biocontainers/perl-bioperl:1.7.2--pl526_10

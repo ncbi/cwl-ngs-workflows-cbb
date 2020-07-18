@@ -11,9 +11,6 @@ requirements:
     listing:
       - $(inputs.fasta)
 
-hints:
-  - $import: alignwise.yml
-
 inputs:
   method:
     type: string?
