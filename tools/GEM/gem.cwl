@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: gem.yml
+  - $import: gem-docker.yml
 
 inputs:
     t:
