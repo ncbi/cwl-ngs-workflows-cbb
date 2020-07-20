@@ -31,7 +31,7 @@ steps:
           bed: bed
         out: [output]
     memechip:
-        run: ../../tools/MEME/meme-chip.cwl
+        run: ../../tools/meme/meme-chip.cwl
         in:
           i: fastafrombed/output
           oc:

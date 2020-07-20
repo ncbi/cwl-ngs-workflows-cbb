@@ -1,8 +1,8 @@
 class: Workflow
 cwlVersion: v1.0
 id: bwa_alignment
-doc: This workflow aligns the fastq files using BWA
-label: BWA alignment workflow
+doc: This workflow aligns the fastq files using bwa
+label: bwa alignment workflow
 $namespaces:
   s: 'http://schema.org/'
   sbg: 'https://www.sevenbridges.com/'
@@ -44,8 +44,8 @@ steps:
         source: threads
     out:
       - id: out_stdout
-    run: ../../tools/BWA/bwa-mem.cwl
-    label: BWA-mem
+    run: ../../tools/bwa/bwa-mem.cwl
+    label: bwa-mem
   - id: samtools_view
     in:
       - id: input

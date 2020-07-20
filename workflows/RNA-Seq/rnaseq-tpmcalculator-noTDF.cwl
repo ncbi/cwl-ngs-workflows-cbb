@@ -139,7 +139,7 @@ steps:
       - id: junction_saturation_out
       - id: read_distribution_out
       - id: read_quality_out
-    run: ../RSeQC/rseqc-bam-qc-SE.cwl
+    run: ../rseqc/rseqc-bam-qc-SE.cwl
     label: RSeQC workflow or single-end samples
     doc: |
       Execute QC on the BAM files
@@ -159,7 +159,7 @@ steps:
       - id: gene_uni
       - id: transcripts_ent
       - id: transcripts_out
-    run: ../../tools/TPMCalculator/tpmcalculator.cwl
+    run: ../../tools/tpmcalculator/tpmcalculator.cwl
     label: TPMCalculator
     doc: |
       Calculate TPM values for genes and transcripts

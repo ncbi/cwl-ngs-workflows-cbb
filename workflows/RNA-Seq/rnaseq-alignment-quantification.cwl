@@ -148,7 +148,7 @@ steps:
     out:
       - id: output_1
       - id: output_2
-    run: ../../tools/sra-toolkit/fastq-dump_PE.cwl
+    run: ../../tools/sra-tools/fastq-dump_PE.cwl
     label: fastq-dump-PE
 requirements:
   - class: SubworkflowFeatureRequirement

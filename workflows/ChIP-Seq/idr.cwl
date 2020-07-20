@@ -87,7 +87,7 @@ steps:
     out:
       - id: idr_peaks
       - id: plots
-    run: ../../tools/IDR/idr.cwl
+    run: ../../tools/idr/idr.cwl
     label: idr
     'sbg:x': -242.8848876953125
     'sbg:y': -18.064748764038086

@@ -47,7 +47,7 @@ steps:
         source: aligned
     out:
       - id: output
-    run: ../../tools/sra-toolkit/fastq-dump.cwl
+    run: ../../tools/sra-tools/fastq-dump.cwl
     label: fastq-dump-SE
   - id: fastqc
     in:

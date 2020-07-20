@@ -42,7 +42,7 @@ outputs:
 
 steps:
   bam_stat:
-    run: ../../tools/RSeQC/rseqc-bam_stat.cwl
+    run: ../../tools/rseqc/rseqc-bam_stat.cwl
     in:
       i: i
       q: q
@@ -52,7 +52,7 @@ steps:
     doc: |
       BAM stats
   infer_experiment:
-    run: ../../tools/RSeQC/rseqc-infer_experiment.cwl
+    run: ../../tools/rseqc/rseqc-infer_experiment.cwl
     in:
       i: i
       q: q
@@ -63,7 +63,7 @@ steps:
     doc: |
       Infering Experiment
   junction_annotation:
-    run: ../../tools/RSeQC/rseqc-junction_annotation.cwl
+    run: ../../tools/rseqc/rseqc-junction_annotation.cwl
     in:
       i: i
       q: q
@@ -91,7 +91,7 @@ steps:
     doc: |
       Gzip XLS file
   junction_saturation:
-    run: ../../tools/RSeQC/rseqc-junction_saturation.cwl
+    run: ../../tools/rseqc/rseqc-junction_saturation.cwl
     in:
       i: i
       q: q
@@ -102,7 +102,7 @@ steps:
     doc: |
       Junction saturation
   read_distribution:
-    run: ../../tools/RSeQC/rseqc-read_distribution.cwl
+    run: ../../tools/rseqc/rseqc-read_distribution.cwl
     in:
       i: i
       r: r
@@ -112,7 +112,7 @@ steps:
     doc: |
       Read distribution
   read_quality:
-    run: ../../tools/RSeQC/rseqc-read_quality.cwl
+    run: ../../tools/rseqc/rseqc-read_quality.cwl
     in:
       i: i
       q: q

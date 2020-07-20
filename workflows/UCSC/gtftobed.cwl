@@ -22,7 +22,7 @@ outputs:
 
 steps:
   gtftogenepred:
-    run: ../../tools/UCSC/ucsc-gtftogenepred.cwl
+    run: ../../tools/ucsc/ucsc-gtftogenepred.cwl
     in:
       gtf: gtf
       genePred:
@@ -31,7 +31,7 @@ steps:
     doc: |
       Convert GTF to genePred
   genepredtobed:
-    run: ../../tools/UCSC/ucsc-genepredtobed.cwl
+    run: ../../tools/ucsc/ucsc-genepredtobed.cwl
     in:
       genePred: gtftogenepred/output
       bed:

@@ -74,7 +74,7 @@ steps:
       tags_directory: homer_tags/tags_directory
     out: [plots]
   macs_callpeak:
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
@@ -100,7 +100,7 @@ steps:
         valueFrom: ${ return inputs.peak_cutoff_file.nameroot + "_inflection.txt";}
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
@@ -131,7 +131,7 @@ steps:
       fpkm: {default: True}
     out: [output,annStats_out]
   lambda_bdg_to_tdf:
-    run: ../../tools/IGV/igvtools-totdf.cwl
+    run: ../../tools/igvtools/igvtools-totdf.cwl
     in:
       i: macs_callpeak_q_value/lambda
       g: homer_genome
@@ -140,7 +140,7 @@ steps:
       z: {default: 5}
     out: [out_tdf]
   pileup_bdg_to_tdf:
-    run: ../../tools/IGV/igvtools-totdf.cwl
+    run: ../../tools/igvtools/igvtools-totdf.cwl
     in:
       i: macs_callpeak_q_value/pileup
       g: homer_genome

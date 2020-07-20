@@ -35,7 +35,7 @@ steps:
           file: infile
         out: [output]
     gem:
-        run: ../../tools/GEM/gem.cwl
+        run: ../../tools/gem/gem.cwl
         in:
           t: threads
           s: mapsize

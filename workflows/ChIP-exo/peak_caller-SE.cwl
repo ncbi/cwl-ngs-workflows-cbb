@@ -69,7 +69,7 @@ steps:
       tags_directory: homer_tags/tags_directory
     out: [plots]
   macs_callpeak:
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
@@ -94,7 +94,7 @@ steps:
       out_inflection_name: macs_callpeak/cutoff_analysis_inflection
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}

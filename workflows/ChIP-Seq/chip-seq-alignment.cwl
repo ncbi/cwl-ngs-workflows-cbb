@@ -85,7 +85,7 @@ steps:
       - id: bam_flagstat_out
       - id: bam_stats_out
     run: ../Alignments/bwa-alignment.cwl
-    label: BWA alignment workflow for single-end samples
+    label: bwa alignment workflow for single-end samples
   - id: bam_index
     in:
       - id: in_bam
