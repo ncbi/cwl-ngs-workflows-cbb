@@ -2,18 +2,19 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: ucsc-gtftogenepred
-doc: UCSC gtftogenepred utility
+label: ucsc-genepredtobed
+doc: UCSC genepredtobed utility
 
 hints:
-  - $import: ucsc-gtftogenepred.yml
+  - $import: ucsc-genepredtobed-docker.yml
+  - $import: ucsc-genepredtobed-bioconda.yml
 
 inputs:
-  gtf:
+  genePred:
     type: File
     inputBinding:
       position: 1
-  genePred:
+  bed:
     type: string
     inputBinding:
       position: 2
@@ -22,9 +23,9 @@ outputs:
   output:
     type: File
     outputBinding:
-      glob: $(inputs.genePred)
+      glob: $(inputs.bed)
 
-baseCommand: ["gtfToGenePred"]
+baseCommand: ["genePredToBed"]
 
 s:author:
   - class: s:Person
