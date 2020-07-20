@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'star'
+    version:
+      - '2.7.5a'
+    specs:
+      - https://anaconda.org/bioconda/star

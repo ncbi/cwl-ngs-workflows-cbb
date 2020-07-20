@@ -10,7 +10,8 @@ requirements:
   - class: InlineJavascriptRequirement
 
 hints:
-  - $import: star.yml
+  - $import: star-docker.yml
+  - $import: star-bioconda.yml
 
 inputs:
   runMode:

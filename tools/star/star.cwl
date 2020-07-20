@@ -1,8 +1,17 @@
 class: CommandLineTool
 cwlVersion: v1.0
 
-baseCommand:
-  - STAR
+doc: Spliced Transcripts Alignment to a Reference
+label: STAR
+
+requirements:
+  - class: ShellCommandRequirement
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: star-docker.yml
+  - $import: star-bioconda.yml
+
 inputs:
   - id: alignEndsType
     type: string?
@@ -265,10 +274,6 @@ outputs:
           var p=inputs.outFileNamePrefix?inputs.outFileNamePrefix:"";
           return p+"Aligned.toTranscriptome.out.bam";
         }
-doc: Spliced Transcripts Alignment to a Reference
-label: STAR
-requirements:
-  - class: ShellCommandRequirement
-  - class: InlineJavascriptRequirement
-hints:
-  - $import: star.yml
+
+baseCommand:
+  - STAR
