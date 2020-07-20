@@ -2,53 +2,40 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: MEME-fasta-shuffle-letters
+label: MEME-fasta-center
 doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
-  i:
-    type: File
+  dna:
+    type: boolean?
     inputBinding:
       position: 1
-  o:
-    type: string
+      prefix: -dna
+  len:
+    type: int?
     inputBinding:
       position: 2
-  kmer:
-    type: int?
-    inputBinding:
-      position: 3
-      prefix: -kmer
-  tag:
-    type: boolean?
-    inputBinding:
-      position: 4
-      prefix: -tag
-  dinuc:
-    type: boolean?
-    inputBinding:
-      position: 5
-      prefix: -dinuc
-  seed:
-    type: int?
-    inputBinding:
-      position: 3
-      prefix: -seed
-
+      prefix: -len
+  i:
+    type: File
+  o:
+    type: string
 
 outputs:
   output:
-    type: File
-    outputBinding:
-      glob: $(inputs.o)
+    type: stdout
 
-baseCommand: ["fasta-shuffle-letters"]
+stdin: $(inputs.i.path)
+stdout: $(inputs.o)
+
+baseCommand: ["fasta-center"]
 
 s:author:
   - class: s:Person

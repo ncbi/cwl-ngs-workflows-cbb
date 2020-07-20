@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
   i:

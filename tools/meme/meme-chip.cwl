@@ -2,14 +2,15 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: MEME-meme-chip
-doc: MEME Suite
+label: meme-meme-chip
+doc: meme Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
   oc:

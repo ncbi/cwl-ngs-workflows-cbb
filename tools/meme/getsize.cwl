@@ -2,28 +2,21 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: MEME-fasta-center
+label: MEME-getzise
 doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
-  dna:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -dna
-  len:
-    type: int?
-    inputBinding:
-      position: 2
-      prefix: -len
   i:
     type: File
+    inputBinding:
+      position: 1
   o:
     type: string
 
@@ -31,10 +24,9 @@ outputs:
   output:
     type: stdout
 
-stdin: $(inputs.i.path)
 stdout: $(inputs.o)
 
-baseCommand: ["fasta-center"]
+baseCommand: ["getsize"]
 
 s:author:
   - class: s:Person

@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'meme'
+    version:
+      - '5.1.1'
+    specs:
+      - https://anaconda.org/bioconda/meme

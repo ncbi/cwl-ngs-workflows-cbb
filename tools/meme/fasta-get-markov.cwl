@@ -2,30 +2,53 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: MEME-getzise
+label: MEME-fasta-get-markov
 doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
+  nostatus:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: -nostatus
+  nosummary:
+    type: boolean?
+    inputBinding:
+      position: 2
+      prefix: -nosummary
+  dna:
+    type: boolean?
+    inputBinding:
+      position: 3
+      prefix: -dna
+  m:
+    type: int?
+    inputBinding:
+      position: 4
+      prefix: -m
   i:
     type: File
     inputBinding:
-      position: 1
+      position: 5
   o:
     type: string
+    inputBinding:
+      position: 6
 
 outputs:
   output:
-    type: stdout
+    type: File
+    outputBinding:
+      glob: $(inputs.o)
 
-stdout: $(inputs.o)
-
-baseCommand: ["getsize"]
+baseCommand: ["fasta-get-markov"]
 
 s:author:
   - class: s:Person

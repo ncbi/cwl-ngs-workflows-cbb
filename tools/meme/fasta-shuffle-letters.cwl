@@ -2,44 +2,46 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: MEME-fasta-get-markov
+label: MEME-fasta-shuffle-letters
 doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
-  nostatus:
-    type: boolean?
-    inputBinding:
-      position: 1
-      prefix: -nostatus
-  nosummary:
-    type: boolean?
-    inputBinding:
-      position: 2
-      prefix: -nosummary
-  dna:
-    type: boolean?
-    inputBinding:
-      position: 3
-      prefix: -dna
-  m:
-    type: int?
-    inputBinding:
-      position: 4
-      prefix: -m
   i:
     type: File
     inputBinding:
-      position: 5
+      position: 1
   o:
     type: string
     inputBinding:
-      position: 6
+      position: 2
+  kmer:
+    type: int?
+    inputBinding:
+      position: 3
+      prefix: -kmer
+  tag:
+    type: boolean?
+    inputBinding:
+      position: 4
+      prefix: -tag
+  dinuc:
+    type: boolean?
+    inputBinding:
+      position: 5
+      prefix: -dinuc
+  seed:
+    type: int?
+    inputBinding:
+      position: 3
+      prefix: -seed
+
 
 outputs:
   output:
@@ -47,7 +49,7 @@ outputs:
     outputBinding:
       glob: $(inputs.o)
 
-baseCommand: ["fasta-get-markov"]
+baseCommand: ["fasta-shuffle-letters"]
 
 s:author:
   - class: s:Person
