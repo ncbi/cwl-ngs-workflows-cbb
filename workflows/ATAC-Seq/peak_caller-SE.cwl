@@ -138,7 +138,7 @@ steps:
         source: input_bam
     out:
       - id: cutoff_analysis
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     label: MACS2-callpeak
   - id: macs_callpeak_q_value
     in:
@@ -166,7 +166,7 @@ steps:
         source: input_bam
     out:
       - id: [lambda, pileup, narrowPeak, xls, bed]
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     label: MACS2-callpeak
   - id: macs_cutoff
     in:
@@ -175,7 +175,7 @@ steps:
       - id: out_pdf_name
         valueFrom: ${ return inputs.peak_cutoff_file.nameroot + ".pdf";}
       - id: out_inflection_name
-          valueFrom: ${ return inputs.peak_cutoff_file.nameroot + "_inflection.txt";}
+        valueFrom: ${ return inputs.peak_cutoff_file.nameroot + "_inflection.txt";}
     out:
       - id: out_inflection
       - id: out_pdf

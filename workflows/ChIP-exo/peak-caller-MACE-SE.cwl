@@ -44,7 +44,7 @@ steps:
     out:
       - id: out_forward
       - id: out_reverse
-    run: ../../tools/MACE/preprocessor.cwl
+    run: ../../tools/mace/preprocessor.cwl
     label: MACE-preprocessor
   - id: mace
     in:
@@ -61,7 +61,7 @@ steps:
       - id: border_out
       - id: border_pair_elite_out
       - id: border_pair_out
-    run: ../../tools/MACE/mace.cwl
+    run: ../../tools/mace/mace.cwl
     label: MACE
   - id: bamscale_cov
     in:

@@ -112,7 +112,7 @@ steps:
       - id: mappingstats
       - id: readspergene
       - id: transcriptomesam
-    run: ../../tools/STAR/star.cwl
+    run: ../../tools/star/star.cwl
     label: STAR
     doc: |
       Align the reads using STAR and tuned parameters

@@ -31,7 +31,7 @@ outputs:
 
 steps:
   alignment:
-    run: ../../tools/STAR/star.cwl
+    run: ../../tools/star/star.cwl
     in:
       threads: threads
       readFilesCommand: { default: zcat}

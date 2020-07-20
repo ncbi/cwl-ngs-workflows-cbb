@@ -63,7 +63,7 @@ steps:
       tags_directory: homer_tags/tags_directory
     out: [plots]
   macs_callpeak:
-    run: ../../tools/MACS/macs2-callpeak.cwl
+    run: ../../tools/macs/macs2-callpeak.cwl
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
