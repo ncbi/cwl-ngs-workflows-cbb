@@ -1,2 +1,0 @@
- class: DockerRequirement
- dockerPull: quay.io/biocontainers/trim-galore:0.6.3--0
