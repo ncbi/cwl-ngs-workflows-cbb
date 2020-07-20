@@ -10,6 +10,7 @@ requirements:
 
 hints:
   - $import: picard-docker.yml
+  - $import: picard-bioconda.yml
 
 inputs:
     input:
