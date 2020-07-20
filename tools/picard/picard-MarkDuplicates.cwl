@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: picard.yml
+  - $import: picard-docker.yml
 
 inputs:
     input:
