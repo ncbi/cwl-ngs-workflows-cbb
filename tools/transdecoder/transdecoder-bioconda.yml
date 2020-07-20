@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'transdecoder'
+    version:
+      - '5.5.0'
+    specs:
+      - https://anaconda.org/bioconda/transdecoder
