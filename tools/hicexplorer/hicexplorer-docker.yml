@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/hicexplorer:3.5--py_0

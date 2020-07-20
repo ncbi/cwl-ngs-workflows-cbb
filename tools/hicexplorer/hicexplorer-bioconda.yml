@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'hicexplorer'
+    version:
+      - '3.5'
+    specs:
+      - https://anaconda.org/bioconda/hicexplorer
