@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: rseqc.yml
+  - $import: rseqc-docker.yml
+  - $import: rseqc-bioconda.yml
 
 inputs:
   i:

@@ -2,18 +2,17 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: RSeQC-infer_experiment
+label: RSeQC-junction_annotation
 doc: RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: rseqc.yml
+  - $import: rseqc-docker.yml
+  - $import: rseqc-bioconda.yml
 
 inputs:
-  o:
-    type: string
   i:
     type: File
     inputBinding:
@@ -24,25 +23,37 @@ inputs:
     inputBinding:
       position: 2
       prefix: -r
-  s:
+  m:
     type: int?
     inputBinding:
       position: 3
-      prefix: -s
+      prefix: -m
   q:
     type: int?
     inputBinding:
       position: 4
       prefix: -q
-
+  o:
+    type: string
+    inputBinding:
+      position: 5
+      prefix: -o
 
 outputs:
-  output:
-    type: stdout
+  bed:
+    type: File
+    outputBinding:
+      glob: $(inputs.o).junction.bed
+  xls:
+    type: File
+    outputBinding:
+      glob: $(inputs.o).junction.xls
+  pdf:
+    type: File[]
+    outputBinding:
+      glob: $(inputs.o)*.pdf
 
-stdout: $(inputs.o)
-
-baseCommand: [infer_experiment.py]
+baseCommand: [junction_annotation.py]
 
 s:author:
   - class: s:Person

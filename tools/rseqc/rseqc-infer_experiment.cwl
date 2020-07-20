@@ -2,82 +2,48 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: RSeQC-FPKM_count
+label: RSeQC-infer_experiment
 doc: RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: rseqc.yml
+  - $import: rseqc-docker.yml
+  - $import: rseqc-bioconda.yml
 
 inputs:
-  out_stdout:
+  o:
     type: string
-  out_stderr:
-    type: string
-  inputdir:
-    type: Directory
-  bam:
-    type: string
+  i:
+    type: File
     inputBinding:
       position: 1
       prefix: -i
-      valueFrom: |
-        ${
-          return inputs.inputdir.path + "/" + self;
-        }
-  refgene:
+  r:
     type: File
     inputBinding:
       position: 2
       prefix: -r
-  outprefix:
-    type: string
+  s:
+    type: int?
     inputBinding:
       position: 3
-      prefix: -o
-  strand:
-    type: string?
-    inputBinding:
-      position: 3
-      prefix: -d
-  mapq:
+      prefix: -s
+  q:
     type: int?
     inputBinding:
       position: 4
       prefix: -q
-  skip-multi-hits:
-    type: boolean?
-    inputBinding:
-      position: 5
-      prefix: -u
-  only-exonic:
-    type: boolean?
-    inputBinding:
-      position: 6
-      prefix: -e
-  single-read:
-    type: int?
-    inputBinding:
-      position: 7
-      prefix: -s
+
 
 outputs:
-  out_stdout:
-    type: stdout
-  out_stderr:
-    type: stderr
   output:
-    type: File[]
-    outputBinding:
-      glob: $(inputs.outprefix)*
+    type: stdout
 
+stdout: $(inputs.o)
 
-stdout: $(inputs.out_stdout)
-stderr: $(inputs.out_stderr)
-
-baseCommand: [FPKM_count.py]
+baseCommand: [infer_experiment.py]
 
 s:author:
   - class: s:Person

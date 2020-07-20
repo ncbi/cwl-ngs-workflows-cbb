@@ -2,18 +2,25 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: RSeQC-junction_saturation
+label: RSeQC-geneBody_coverage
 doc: RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data
+
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: rseqc.yml
+  - $import: rseqc-docker.yml
+  - $import: rseqc-bioconda.yml
 
 inputs:
-  i:
-    type: File
+  input-file:
+    type: File[]?
+    inputBinding:
+      position: 1
+      prefix: -i
+  input-dir:
+    type: Directory?
     inputBinding:
       position: 1
       prefix: -i
@@ -22,49 +29,34 @@ inputs:
     inputBinding:
       position: 2
       prefix: -r
-  o:
-    type: string
-    inputBinding:
-      position: 3
-      prefix: -o
   l:
     type: int?
     inputBinding:
       position: 3
       prefix: -l
-  q:
-    type: int?
+  f:
+    type: string?
     inputBinding:
       position: 4
-      prefix: -q
-  u:
-    type: int?
+      prefix: -f
+  o:
+    type: string
     inputBinding:
       position: 5
-      prefix: -u
-  s:
-    type: int?
-    inputBinding:
-      position: 6
-      prefix: -s
-  m:
-    type: int?
-    inputBinding:
-      position: 7
-      prefix: -m
-  v:
-    type: int?
-    inputBinding:
-      position: 8
-      prefix: -v
+      prefix: -o
+
 
 outputs:
+  out_stdout:
+    type: stdout
+  out_stderr:
+    type: stderr
   output:
-    type: File
+    type: File[]
     outputBinding:
-      glob: $(inputs.o).junctionSaturation_plot.pdf
+      glob: $(inputs.o)*
 
-baseCommand: [junction_saturation.py]
+baseCommand: [geneBody_coverage.py]
 
 s:author:
   - class: s:Person

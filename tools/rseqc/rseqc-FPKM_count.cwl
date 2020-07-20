@@ -2,57 +2,83 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: RSeQC-junction_annotation
+label: RSeQC-FPKM_count
 doc: RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: rseqc.yml
+  - $import: rseqc-docker.yml
+  - $import: rseqc-bioconda.yml
 
 inputs:
-  i:
-    type: File
+  out_stdout:
+    type: string
+  out_stderr:
+    type: string
+  inputdir:
+    type: Directory
+  bam:
+    type: string
     inputBinding:
       position: 1
       prefix: -i
-  r:
+      valueFrom: |
+        ${
+          return inputs.inputdir.path + "/" + self;
+        }
+  refgene:
     type: File
     inputBinding:
       position: 2
       prefix: -r
-  m:
-    type: int?
+  outprefix:
+    type: string
     inputBinding:
       position: 3
-      prefix: -m
-  q:
+      prefix: -o
+  strand:
+    type: string?
+    inputBinding:
+      position: 3
+      prefix: -d
+  mapq:
     type: int?
     inputBinding:
       position: 4
       prefix: -q
-  o:
-    type: string
+  skip-multi-hits:
+    type: boolean?
     inputBinding:
       position: 5
-      prefix: -o
+      prefix: -u
+  only-exonic:
+    type: boolean?
+    inputBinding:
+      position: 6
+      prefix: -e
+  single-read:
+    type: int?
+    inputBinding:
+      position: 7
+      prefix: -s
 
 outputs:
-  bed:
-    type: File
-    outputBinding:
-      glob: $(inputs.o).junction.bed
-  xls:
-    type: File
-    outputBinding:
-      glob: $(inputs.o).junction.xls
-  pdf:
+  out_stdout:
+    type: stdout
+  out_stderr:
+    type: stderr
+  output:
     type: File[]
     outputBinding:
-      glob: $(inputs.o)*.pdf
+      glob: $(inputs.outprefix)*
 
-baseCommand: [junction_annotation.py]
+
+stdout: $(inputs.out_stdout)
+stderr: $(inputs.out_stderr)
+
+baseCommand: [FPKM_count.py]
 
 s:author:
   - class: s:Person

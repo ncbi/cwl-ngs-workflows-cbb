@@ -2,14 +2,15 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: RSeQC-read_distribution
+label: RSeQC-bam_stat
 doc: RSeQC package provides a number of useful modules that can comprehensively evaluate high throughput sequence data especially RNA-seq data
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: rseqc.yml
+  - $import: rseqc-docker.yml
+  - $import: rseqc-bioconda.yml
 
 inputs:
   o:
@@ -19,11 +20,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -i
-  r:
-    type: File
+  q:
+    type: int?
     inputBinding:
       position: 2
-      prefix: -r
+      prefix: -q
 
 outputs:
   output:
@@ -31,7 +32,7 @@ outputs:
 
 stdout: $(inputs.o)
 
-baseCommand: [read_distribution.py]
+baseCommand: [bam_stat.py]
 
 s:author:
   - class: s:Person
