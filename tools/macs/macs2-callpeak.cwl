@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: macs2.yml
+  - $import: macs2-docker.yml
+  - $import: macs2-bioconda.yml
 
 inputs:
   call-summits:
