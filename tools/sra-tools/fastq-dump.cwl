@@ -2,8 +2,16 @@ class: CommandLineTool
 cwlVersion: v1.0
 
 id: fastq_dump
-baseCommand:
-  - fastq-dump
+label: fastq-dump
+doc: Fastq-dump from SRA database
+
+requirements:
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: sra-tools-docker.yml
+  - $import: sra-tools-bioconda.yml
+
 inputs:
   - id: fasta
     type: boolean?
@@ -43,9 +51,6 @@ outputs:
     type: 'File[]'
     outputBinding:
       glob: $(inputs.accession)*
-doc: Fastq-dump from SRA database
-label: fastq-dump
-hints:
-  - $import: sra-toolkit.yml
-requirements:
-  - class: InlineJavascriptRequirement
+
+baseCommand:
+  - fastq-dump

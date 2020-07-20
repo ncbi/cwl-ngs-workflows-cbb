@@ -1,11 +1,17 @@
 class: CommandLineTool
 cwlVersion: v1.0
-$namespaces:
-  s: 'http://schema.org/'
-  sbg: 'https://www.sevenbridges.com/'
+
 id: fastq_dump-PE
-baseCommand:
-  - fastq-dump
+label: fastq-dump-PE
+doc: Fastq-dump from SRA database paired-end data
+
+hints:
+  - $import: sra-tools-docker.yml
+  - $import: sra-tools-bioconda.yml
+
+requirements:
+  - class: InlineJavascriptRequirement
+
 inputs:
   - id: fasta
     type: boolean?
@@ -40,6 +46,7 @@ inputs:
     inputBinding:
       position: 0
       prefix: '--aligned'
+
 outputs:
   - id: output_1
     type: 'File'
@@ -49,12 +56,10 @@ outputs:
     type: 'File'
     outputBinding:
       glob: $(inputs.accession)_2*
-doc: Fastq-dump from SRA database paired-end data
-label: fastq-dump-PE
-hints:
-  - $import: sra-toolkit.yml
-requirements:
-  - class: InlineJavascriptRequirement
+
+baseCommand:
+  - fastq-dump
+
 $schemas:
   - 'https://schema.org/version/latest/schema.rdf'
 's:author':
