@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: tpmcalculator.yml
+  - $import: tpmcalculator-docker.yml
 
 inputs:
   g:

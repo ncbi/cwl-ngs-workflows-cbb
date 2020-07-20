@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/tpmcalculator:0.0.3--h7376a40_1

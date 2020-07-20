@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'tpmcalculator'
+    version:
+      - '0.0.3'
+    specs:
+      - https://anaconda.org/bioconda/tpmcalculator
