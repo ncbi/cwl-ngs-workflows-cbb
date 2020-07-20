@@ -10,7 +10,8 @@ requirements:
   ShellCommandRequirement: {}
 
 hints:
-  - $import: samtools.yml
+  - $import: samtools-docker.yml
+  - $import: samtools-bioconda.yml
 
 inputs:
   out_bam:

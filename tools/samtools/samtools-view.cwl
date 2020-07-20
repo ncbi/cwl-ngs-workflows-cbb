@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: samtools.yml
+  - $import: samtools-docker.yml
+  - $import: samtools-bioconda.yml
 
 inputs:
   isbam:

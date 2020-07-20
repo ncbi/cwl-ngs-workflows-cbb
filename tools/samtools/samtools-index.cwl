@@ -12,7 +12,8 @@ requirements:
       - $(inputs.in_bam)
 
 hints:
-  - $import: samtools.yml
+  - $import: samtools-docker.yml
+  - $import: samtools-bioconda.yml
 
 inputs:
   in_bam:

@@ -1,9 +1,18 @@
 class: CommandLineTool
 cwlVersion: v1.0
 
-baseCommand:
-  - samtools
-  - stats
+label: Samtools-stats
+doc: >-
+  Samtools is a suite of programs for interacting with high-throughput
+  sequencing data
+
+requirements:
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: samtools-docker.yml
+  - $import: samtools-bioconda.yml
+
 inputs:
   - id: in_bam
     type: File
@@ -16,13 +25,9 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.stdout)
-doc: >-
-  Samtools is a suite of programs for interacting with high-throughput
-  sequencing data
-label: Samtools-stats
-hints:
-  - class: DockerRequirement
-    dockerPull: 'quay.io/biocontainers/samtools:1.9--h8ee4bcc_1'
+
 stdout: $(inputs.stdout)
-requirements:
-  - class: InlineJavascriptRequirement
+
+baseCommand:
+  - samtools
+  - stats
