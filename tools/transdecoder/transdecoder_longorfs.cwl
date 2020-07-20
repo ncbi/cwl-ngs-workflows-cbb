@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: transdecoder.yml
+  - $import: transdecoder-docker.yml
+  - $import: transdecoder-bioconda.yml
 
 inputs:
   t:

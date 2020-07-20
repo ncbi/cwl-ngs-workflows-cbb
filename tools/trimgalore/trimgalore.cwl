@@ -10,7 +10,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: trimgalore.yml
+  - $import: trimgalore-docker.yml
+  - $import: trimgalore-bioconda.yml
 
 inputs:
   q:

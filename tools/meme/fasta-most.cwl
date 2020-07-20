@@ -2,37 +2,35 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-merge
-doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
+label: MEME-fasta-most
+doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
-  ShellCommandRequirement: {}
 
 hints:
-  - $import: samtools-docker.yml
-  - $import: samtools-bioconda.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
-  out_bam:
+  i:
+    type: File
+  o:
     type: string
+  min:
+    type: int
     inputBinding:
       position: 1
-  in_bam:
-    type: File[]
-    inputBinding:
-      position: 2
-      separate: true
-      itemSeparator: " "
-      shellQuote: false
+      prefix: -min
 
 outputs:
-  out_sam:
-    type: File
-    outputBinding:
-      glob: $(inputs.out_bam)
+  output:
+    type: stdout
 
-baseCommand: [samtools, merge]
+stdin: $(inputs.i.path)
+stdout: $(inputs.o)
+
+baseCommand: ["fasta-most"]
 
 s:author:
   - class: s:Person
@@ -40,7 +38,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: http://www.htslib.org/
+s:codeRepository: http://meme-suite.org
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

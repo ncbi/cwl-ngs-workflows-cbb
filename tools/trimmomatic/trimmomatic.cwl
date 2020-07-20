@@ -4,8 +4,115 @@ $namespaces:
   edam: 'http://edamontology.org/'
   s: 'http://schema.org/'
   sbg: 'https://www.sevenbridges.com/'
-baseCommand:
-  - trimmomatic
+
+label: Trimmomatic
+doc: >
+  Trimmomatic is a fast, multithreaded command line tool that can be used to
+  trim and crop
+
+  Illumina (FASTQ) data as well as to remove adapters
+
+requirements:
+  - class: SchemaDefRequirement
+    types:
+      - name: end_mode
+        symbols:
+          - SE
+          - PE
+        type: enum
+      - fields:
+          - name: windowSize
+            type: int
+          - name: requiredQuality
+            type: int
+        name: slidingWindow
+        type: record
+      - name: phred
+        symbols:
+          - '64'
+          - '33'
+        type: enum
+      - fields:
+          - doc: >
+              FASTA file containing adapters, PCR sequences, etc. It is used to
+              search
+
+              for and remove these sequences in the input FASTQ file(s)
+            name: adapters
+            type: File
+          - doc: >
+              specifies the maximum mismatch count which will still allow a full
+              match
+
+              to be performed
+            name: seedMismatches
+            type: int
+          - doc: >
+              specifies how accurate the match between the two 'adapter ligated'
+              reads
+
+              must be for PE palindrome read alignment.
+            name: palindromeClipThreshold
+            type: int
+          - doc: >
+              specifies how accurate the match between any adapter etc. sequence
+              must
+
+              be against a read
+            name: simpleClipThreshold
+            type: int
+          - doc: >
+              In addition to the alignment score, palindrome mode can verify
+              that a
+
+              minimum length of adapter has been detected. If unspecified, this
+
+              defaults to 8 bases, for historical reasons. However, since
+              palindrome
+
+              mode has a very low false positive rate, this can be safely
+              reduced, even
+
+              down to 1, to allow shorter adapter fragments to be removed.
+            name: minAdapterLength
+            type: int?
+          - doc: >
+              After read-though has been detected by palindrome mode, and the
+              adapter
+
+              sequence removed, the reverse read contains the same sequence
+              information
+
+              as the forward read, albeit in reverse complement. For this
+              reason, the
+
+              default behaviour is to entirely drop the reverse read. By
+              specifying
+
+              "true" for this parameter, the reverse read will also be retained,
+              which
+
+              may be useful e.g. if the downstream tools cannot handle a
+              combination of
+
+              paired and unpaired reads.
+            name: keepBothReads
+            type: boolean?
+        name: illuminaClipping
+        type: record
+      - fields:
+          - name: targetLength
+            type: int
+          - name: strictness
+            type: int
+        name: maxinfo
+        type: record
+  - class: InlineJavascriptRequirement
+
+hints:
+  - $import: trimmomatic-docker.yml
+  - $import: trimmomatic-bioconda.yml
+
 inputs:
   - id: avgqual
     type: int?
@@ -192,111 +299,10 @@ outputs:
     type: File[]?
     outputBinding:
       glob: $(inputs.reads2_out)
-doc: >
-  Trimmomatic is a fast, multithreaded command line tool that can be used to
-  trim and crop
 
-  Illumina (FASTQ) data as well as to remove adapters
-label: Trimmomatic
-requirements:
-  - class: SchemaDefRequirement
-    types:
-      - name: end_mode
-        symbols:
-          - SE
-          - PE
-        type: enum
-      - fields:
-          - name: windowSize
-            type: int
-          - name: requiredQuality
-            type: int
-        name: slidingWindow
-        type: record
-      - name: phred
-        symbols:
-          - '64'
-          - '33'
-        type: enum
-      - fields:
-          - doc: >
-              FASTA file containing adapters, PCR sequences, etc. It is used to
-              search
+baseCommand:
+  - trimmomatic
 
-              for and remove these sequences in the input FASTQ file(s)
-            name: adapters
-            type: File
-          - doc: >
-              specifies the maximum mismatch count which will still allow a full
-              match
-
-              to be performed
-            name: seedMismatches
-            type: int
-          - doc: >
-              specifies how accurate the match between the two 'adapter ligated'
-              reads
-
-              must be for PE palindrome read alignment.
-            name: palindromeClipThreshold
-            type: int
-          - doc: >
-              specifies how accurate the match between any adapter etc. sequence
-              must
-
-              be against a read
-            name: simpleClipThreshold
-            type: int
-          - doc: >
-              In addition to the alignment score, palindrome mode can verify
-              that a
-
-              minimum length of adapter has been detected. If unspecified, this
-
-              defaults to 8 bases, for historical reasons. However, since
-              palindrome
-
-              mode has a very low false positive rate, this can be safely
-              reduced, even
-
-              down to 1, to allow shorter adapter fragments to be removed.
-            name: minAdapterLength
-            type: int?
-          - doc: >
-              After read-though has been detected by palindrome mode, and the
-              adapter
-
-              sequence removed, the reverse read contains the same sequence
-              information
-
-              as the forward read, albeit in reverse complement. For this
-              reason, the
-
-              default behaviour is to entirely drop the reverse read. By
-              specifying
-
-              "true" for this parameter, the reverse read will also be retained,
-              which
-
-              may be useful e.g. if the downstream tools cannot handle a
-              combination of
-
-              paired and unpaired reads.  
-            name: keepBothReads
-            type: boolean?
-        name: illuminaClipping
-        type: record
-      - fields:
-          - name: targetLength
-            type: int
-          - name: strictness
-            type: int
-        name: maxinfo
-        type: record
-  - class: InlineJavascriptRequirement
-hints:
-  - class: DockerRequirement
-    dockerPull: 'quay.io/biocontainers/trimmomatic:0.38--1'
 $schemas:
   - 'http://edamontology.org/EDAM_1.16.owl'
   - 'https://schema.org/version/latest/schema.rdf'

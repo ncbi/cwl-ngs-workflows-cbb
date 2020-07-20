@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'trim-galore'
+    version:
+      - '0.6.5'
+    specs:
+      - https://anaconda.org/bioconda/trim-galore

@@ -12,7 +12,8 @@ requirements:
       - $(inputs.input)
 
 hints:
-  - $import: samtools.yml
+  - $import: samtools-docker.yml
+  - $import: samtools-bioconda.yml
 
 inputs:
   o:

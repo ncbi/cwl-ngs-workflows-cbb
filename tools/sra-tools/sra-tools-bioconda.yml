@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'sra-tools'
+    version:
+      - '2.10.8'
+    specs:
+      - https://anaconda.org/bioconda/sra-tools

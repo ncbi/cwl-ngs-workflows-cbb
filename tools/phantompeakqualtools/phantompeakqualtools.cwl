@@ -9,7 +9,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: phantompeakqualtools.yml
+  - $import: phantompeakqualtools-docker.yml
+  - $import: phantompeakqualtools-bioconda.yml
 
 inputs:
   p:

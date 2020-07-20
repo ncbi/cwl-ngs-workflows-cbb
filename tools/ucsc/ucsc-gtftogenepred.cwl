@@ -2,37 +2,30 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-merge
-doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
-
-requirements:
-  InlineJavascriptRequirement: {}
-  ShellCommandRequirement: {}
+label: ucsc-gtftogenepred
+doc: UCSC gtftogenepred utility
 
 hints:
-  - $import: samtools-docker.yml
-  - $import: samtools-bioconda.yml
+  - $import: ucsc-gtftogenepred-docker.yml
+  - $import: ucsc-gtftogenepred-bioconda.yml
 
 inputs:
-  out_bam:
-    type: string
+  gtf:
+    type: File
     inputBinding:
       position: 1
-  in_bam:
-    type: File[]
+  genePred:
+    type: string
     inputBinding:
       position: 2
-      separate: true
-      itemSeparator: " "
-      shellQuote: false
 
 outputs:
-  out_sam:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.out_bam)
+      glob: $(inputs.genePred)
 
-baseCommand: [samtools, merge]
+baseCommand: ["gtfToGenePred"]
 
 s:author:
   - class: s:Person
@@ -40,7 +33,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: http://www.htslib.org/
+s:codeRepository: http://hgdownload.soe.ucsc.edu/admin/exe/
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

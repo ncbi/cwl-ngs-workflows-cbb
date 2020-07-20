@@ -2,33 +2,31 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-flagstat
-doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
+label: MEME-getzise
+doc: MEME Suite
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: samtools-docker.yml
-  - $import: samtools-bioconda.yml
+  - $import: meme-docker.yml
+  - $import: meme-bioconda.yml
 
 inputs:
-  stdout:
-    type: string
-  in_bam:
+  i:
     type: File
     inputBinding:
       position: 1
+  o:
+    type: string
 
 outputs:
-  out_stdout:
-    type: File
-    outputBinding:
-      glob: $(inputs.stdout)
+  output:
+    type: stdout
 
-stdout: $(inputs.stdout)
+stdout: $(inputs.o)
 
-baseCommand: [samtools, flagstat]
+baseCommand: ["getsize"]
 
 s:author:
   - class: s:Person
@@ -36,7 +34,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: http://www.htslib.org/
+s:codeRepository: http://meme-suite.org
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:

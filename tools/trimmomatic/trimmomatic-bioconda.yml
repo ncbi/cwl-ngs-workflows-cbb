@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'trimmomatic'
+    version:
+      - '0.39'
+    specs:
+      - https://anaconda.org/bioconda/trimmomatic

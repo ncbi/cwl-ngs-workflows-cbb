@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'phantompeakqualtools'
+    version:
+      - '1.2.2'
+    specs:
+      - https://anaconda.org/bioconda/phantompeakqualtools

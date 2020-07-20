@@ -2,7 +2,7 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-sort
+label: Samtools-fixmate
 doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
 
 requirements:
@@ -21,23 +21,32 @@ inputs:
   out_bam:
     type: string
     inputBinding:
-      position: 2
-      prefix: -o
+      position: 3
   in_bam:
     type: File
     inputBinding:
-      position: 3
-  n:
+      position: 2
+  r:
     type: boolean?
     inputBinding:
-      prefix: -n
+      prefix: -r
+      position: 1
+  p:
+    type: boolean?
+    inputBinding:
+      prefix: -p
+      position: 1
+  m:
+    type: boolean?
+    inputBinding:
+      prefix: -m
       position: 1
 
 outputs:
-  out_sam:
+  out:
     type: File
     outputBinding:
       glob: $(inputs.out_bam)
 
-baseCommand: [samtools, sort]
+baseCommand: [samtools, fixmate]
 

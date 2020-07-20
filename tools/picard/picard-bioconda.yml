@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'picard'
+    version:
+      - '2.23.2'
+    specs:
+      - https://anaconda.org/bioconda/picard
