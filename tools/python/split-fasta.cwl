@@ -4,6 +4,19 @@ cwlVersion: v1.0
 label: split_fasta
 doc: Split fasta file in multiple files
 
+hints:
+  DockerRequirement:
+    dockerImageId: cwl-ngs-workflows-cbb-python:3.7
+    dockerFile:
+      $include: Dockerfile
+  SoftwareRequirement:
+    packages:
+      - package: 'biopython'
+        version:
+          - '1.71'
+        specs:
+          - https://anaconda.org/conda-forge/biopython
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -44,9 +57,6 @@ requirements:
               output_handle.write(r.format("fasta"))
           handle.close()
           output_handle.close()
-
-hints:
-  - $import: python.yml
 
 inputs:
   fasta:

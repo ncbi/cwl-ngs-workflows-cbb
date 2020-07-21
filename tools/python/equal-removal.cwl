@@ -4,6 +4,19 @@ cwlVersion: v1.0
 label: equal_removal
 doc: This tools remove equal sequences
 
+hints:
+  DockerRequirement:
+    dockerImageId: cwl-ngs-workflows-cbb-python:3.7
+    dockerFile:
+      $include: Dockerfile
+  SoftwareRequirement:
+    packages:
+      - package: 'biopython'
+        version:
+          - '1.71'
+        specs:
+          - https://anaconda.org/conda-forge/biopython
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -33,9 +46,6 @@ requirements:
                   fout.write(record[0].format("fasta"))
                   if len(record) > 1:
                       fouttsv.write('{}\t{}\n'.format(record[0].id, ','.join(map(lambda r: r.id, record[1:]))))
-
-hints:
-  - $import: python.yml
 
 inputs:
   fasta:

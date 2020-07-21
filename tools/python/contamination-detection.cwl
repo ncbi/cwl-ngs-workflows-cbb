@@ -4,6 +4,30 @@ cwlVersion: v1.0
 label: contamination_detection
 doc: This tools remove contamination using a Blast TSV file
 
+hints:
+  DockerRequirement:
+    dockerImageId: cwl-ngs-workflows-cbb-python:3.7
+    dockerFile:
+      $include: Dockerfile
+  SoftwareRequirement:
+    packages:
+      - package: 'pandas'
+        version:
+          - '1.0.5'
+        specs:
+          - https://anaconda.org/conda-forge/pandas
+      - package: 'biopython'
+        version:
+          - '1.71'
+        specs:
+          - https://anaconda.org/conda-forge/biopython
+      - package: 'networkx'
+        version:
+          - '2.4'
+        specs:
+          - https://anaconda.org/conda-forge/networkx
+
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -15,7 +39,6 @@ requirements:
           import pandas
           import gzip
           import pickle
-          import numpy as np
           import networkx as nx
           from Bio import SeqIO
           from multiprocessing import Pool
@@ -104,9 +127,6 @@ requirements:
                           clean += 1
                           SeqIO.write(records[r[0]], f_fsa, "fasta")
           print('Input Transcripts: {}\nClean Transcripts: {}\nContaminated transcripts: {}'.format(len(records),clean, contamination))
-
-hints:
-  - $import: python.yml
 
 inputs:
   fasta:
