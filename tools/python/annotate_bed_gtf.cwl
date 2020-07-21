@@ -4,6 +4,20 @@ cwlVersion: v1.0
 label: annotate_bed
 doc: This tools annotate bed files from GFF
 
+hints:
+  DockerRequirement:
+    dockerImageId: cwl-ngs-workflows-cbb-python:3.7
+    dockerFile:
+      $include: Dockerfile
+  SoftwareRequirement:
+    packages:
+      - package: 'pandas'
+        version:
+          - '1.0.5'
+        specs:
+          - https://anaconda.org/conda-forge/pandas
+
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -13,7 +27,6 @@ requirements:
           import os
           import sys
           import pandas
-          import argparse
           import numpy as np
 
           tss_size = int(sys.argv[4]) + 1
@@ -104,9 +117,6 @@ requirements:
               data.append(r)
           annotated_df = pandas.DataFrame(data)
           annotated_df.to_csv(out, index=None, sep='\t')
-
-hints:
-  - $import: python.yml
 
 inputs:
   - id: gtf

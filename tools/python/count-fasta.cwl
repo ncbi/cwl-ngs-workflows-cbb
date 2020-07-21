@@ -4,6 +4,20 @@ cwlVersion: v1.0
 label: count_fasta
 doc: Count number of sequences in a fasta file
 
+hints:
+  DockerRequirement:
+    dockerImageId: cwl-ngs-workflows-cbb-python:3.7
+    dockerFile:
+      $include: Dockerfile
+  SoftwareRequirement:
+    packages:
+      - package: 'biopython'
+        version:
+          - '1.71'
+        specs:
+          - https://anaconda.org/conda-forge/biopython
+
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -12,22 +26,24 @@ requirements:
         entry: |
           import os
           import sys
-          import pandas
           import gzip
-          import numpy as np
           from Bio import SeqIO
 
           fasta = sys.argv[1]
+          filename, ext = os.path.splitext(os.path.basename(fasta))
+          if ext == '.gz':
+              handle = gzip.open(fasta, 'rt')
+              prefix  =  os.path.splitext(filename)[0]
+          else:
+              handle = open(fasta, 'r')
+              prefix = filename
 
           count = 0
-          with gzip.open(fasta, 'rt') as handle:
-              for record in SeqIO.parse(handle, "fasta"):
-                  count += 1
-                  print('{} {}'.format(record.id, count), end='\r')
+          for record in SeqIO.parse(handle, "fasta"):
+              count += 1
+              print('{} {}'.format(record.id, count), end='\r')
           print('{} sequences to process'.format(count))
-
-hints:
-  - $import: python.yml
+          handle.close()
 
 inputs:
   fasta:

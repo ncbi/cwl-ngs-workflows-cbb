@@ -4,6 +4,24 @@ cwlVersion: v1.0
 label: duplicate_removal
 doc: This tools remove duplicate sequences
 
+hints:
+  DockerRequirement:
+    dockerImageId: cwl-ngs-workflows-cbb-python:3.7
+    dockerFile:
+      $include: Dockerfile
+  SoftwareRequirement:
+    packages:
+      - package: 'pandas'
+        version:
+          - '1.0.5'
+        specs:
+          - https://anaconda.org/conda-forge/pandas
+      - package: 'biopython'
+        version:
+          - '1.71'
+        specs:
+          - https://anaconda.org/conda-forge/biopython
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -65,9 +83,6 @@ requirements:
                   elif not any(elem in d[2] for elem in unique):
                       unique.append(d[1])
                       fout.write(records[d[1]].format("fasta"))
-
-hints:
-  - $import: python.yml
 
 inputs:
   fasta:

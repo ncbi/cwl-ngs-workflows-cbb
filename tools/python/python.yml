@@ -1,4 +1,0 @@
-  class: DockerRequirement
-  dockerImageId: cwl-ngs-workflows-cbb-python:3.7
-  dockerFile:
-    $include: Dockerfile
