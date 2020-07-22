@@ -5,6 +5,17 @@ class: CommandLineTool
 label: readQC
 doc: NGS read Quality Control analysis
 
+hints:
+  DockerRequirement:
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_0
+  SoftwareRequirement:
+    packages:
+      - package: 'bioconductor-diffbind'
+        version:
+          - '2.16.0'
+        specs:
+          - https://anaconda.org/bioconda/bioconductor-diffbind
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -87,9 +98,6 @@ requirements:
           dev.off()
           ## GC content analysis end ##
 
-hints:
-  - $import: R_ubuntu-18.04.yml
-
 inputs:
   tags_directory:
     type: Directory
@@ -110,10 +118,8 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:license: https://spdx.org/licenses/OPL-1.0
-
 $namespaces:
   s: http://schema.org/
 
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf

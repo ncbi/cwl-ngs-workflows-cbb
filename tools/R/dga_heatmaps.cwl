@@ -5,192 +5,146 @@ class: CommandLineTool
 label: R_Heatmaps
 doc: Quality metrics for ChIPseq data.
 
+hints:
+  DockerRequirement:
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_0
+  SoftwareRequirement:
+    packages:
+      - package: 'bioconductor-diffbind'
+        version:
+          - '2.16.0'
+        specs:
+          - https://anaconda.org/bioconda/bioconductor-diffbind
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
       - entryname: script.R
         entry: |
-            library(optparse)
-            require(ggplot2)
-            require(data.table)
-            library(gplots)
-            library(edgeR)
+          args = commandArgs(trailingOnly=TRUE)
+          gene_column = args[4]
+          sample_column = args[5]
+          fc = as.numeric(args[6])
+          fdr = as.numeric(args[7])
+          out_expression = args[8]
+          out_correlation = args[9]
+          out_pca = args[10]
 
-            option_list = list(
-                make_option("--factor", type = "character", default = NULL, help = "Factor file"),
-                make_option("--matrix", type = "character", default = NULL, help = "Matrix file"),
-                make_option("--gene_column", type = "character", default = NULL, help = "Gene id column header in matrix file"),
-                make_option("--sample_column", type = "character", default = NULL, help = "Sample id column header in factor file"),
-                make_option("--dga_data", type = "character", default = NULL, help = "DGA data file to extract genes"),
-                make_option("--fc", type = "double", default = 2.0, help = "Fold change cutoff"),
-                make_option("--fdr", type = "double", default = 0.05, help = "FDR cutoff"),
-                make_option("--out_expression", type = "character", default = NULL, help = "Expression heatmap output file name"),
-                make_option("--out_correlation", type = "character", default = NULL, help = "Correlation heatmap output file name "),
-                make_option("--out_pca", type = "character", default = NULL, help = "PCA plot output file name ")
-            )
+          require(ggplot2)
+          library(gplots)
+          library(edgeR)
 
-            opt_parser = OptionParser(option_list = option_list)
-            opt = parse_args(opt_parser)
+          highlight_color = "red"
 
-            if (is.null(opt$factor)) {
-                print_help(opt_parser)
-                stop("Factor file is not available. Option --factor", call. = FALSE)
-            }
-            if (is.null(opt$matrix)) {
-                print_help(opt_parser)
-                stop("Factor file is not available. Option --matrix", call. = FALSE)
-            }
+          # Loading data
+          factors = read.table(args[1], header = TRUE, sep = "\t")
+          rownames(factors) <- factors[, sample_column]
+          print(paste("Factors loaded:", nrow(factors)))
 
-            if (is.null(opt$gene_column)) {
-                print_help(opt_parser)
-                stop("Gene id column is not set. Option --gene_column", call. = FALSE)
-            }
-            if (is.null(opt$sample_column)) {
-                print_help(opt_parser)
-                stop("Sample column is not set. Option --sample_column", call. = FALSE)
-            }
-            if (is.null(opt$dga_data)) {
-                print_help(opt_parser)
-                stop("DGA data is not set. Option --dga_data", call. = FALSE)
-            }
-            if (is.null(opt$out_expression)) {
-                print_help(opt_parser)
-                stop("Expression heatmap output file name is not set. Option --out_expression", call. = FALSE)
-            }
-            if (is.null(opt$out_correlation)) {
-                print_help(opt_parser)
-                stop("Correlation heatmap output file name is not set. Option --out_correlation", call. = FALSE)
-            }
-            if (is.null(opt$out_pca)) {
-                print_help(opt_parser)
-                stop("PCA plot output file name is not set. Option --out_pca", call. = FALSE)
-            }
+          matrix <- read.table(args[2], header = TRUE, sep = "\t", comment.char = '')
+          print(paste("Columns in the matrix:", ncol(matrix)))
+          print(paste("Genes in the matrix:", nrow(matrix)))
 
-            highlight_color = "red"
+          data = read.csv(args[3])
+          data <- subset(data, FDR <= fdr & abs(logFC) >= fc)
+          print(paste("DGA genes loaded:", nrow(data)))
 
-            # Loading data
-            data <- as.data.frame(fread(opt$dga_data))
-            data <- subset(data, FDR <= opt$fdr & abs(logFC) >= opt$fc)
-            print(paste("DGA genes loaded:", nrow(data)))
+          # Filtering low count genes
+          data.set <- matrix[c(gene_column, rownames(factors))]
+          data.counts <- data.set[,!(names(data.set) %in% c(gene_column))]
+          rownames(data.counts) <- data.set[, gene_column]
+          data.counts[is.na(data.counts)] <- 0
+          data.counts <- data.counts[data$Gene_Id,]
+          data.counts.log <- cpm(data.counts, log=TRUE, prior.count = 1)
 
-            factors <- as.data.frame(fread(opt$factor))
-            rownames(factors) <- factors[, opt$sample_column]
-            print(paste("Factors loaded:", nrow(factors)))
+          print(paste("Genes with reads:", nrow(data.counts)))
+          print(paste("Samples to analyze:", ncol(data.counts)))
 
-            matrix <- as.data.frame(fread(opt$matrix))
-            print(paste("Columns in the matrix:", ncol(matrix)))
-            print(paste("Genes in the matrix:", nrow(matrix)))
+          pal <- colorRampPalette(c("white","blue"))
+          pdf(out_expression)
+          heatmap.2(data.counts.log, col=pal, Rowv=T, Colv=T,
+                    dendrogram = c("both"),
+                    trace="none",
+                    density.info=c("density"),
+                    key.xlab="Expression value",
+                    key.ylab="Density",
+                    main="Gene Expression",
+                    cexCol=.5,
+                    offsetCol=.0,
+                    cexRow=.5,
+                    margins=c(6,12),
+                    breaks=20,
+                    key=T,)
+          dev.off()
 
-            # Filtering low count genes
-            data.set <- matrix[c(opt$gene_column, rownames(factors))]
-            data.counts <- data.set[,!(names(data.set) %in% c(opt$gene_column))]
-            rownames(data.counts) <- data.set[, opt$gene_column]
-            data.counts[is.na(data.counts)] <- 0
-            data.counts <- data.counts[data$Gene_Id,]
-            data.counts.log <- cpm(data.counts, log=TRUE, prior.count = 1)
+          pdf(out_correlation)
+          heatmap.2(cor(data.counts.log), col=pal, Rowv=T, Colv=T,
+                    dendrogram = c("column"),
+                    trace="none",
+                    density.info=c("density"),
+                    key.xlab="Expression value",
+                    key.ylab="Density",
+                    main="Correlation",
+                    cexCol=.5,
+                    offsetCol=.0,
+                    cexRow=.5,
+                    margins=c(6,12),
+                    breaks=20,
+                    key=T,)
+          dev.off()
 
-            print(paste("Genes with reads:", nrow(data.counts)))
-            print(paste("Samples to analyze:", ncol(data.counts)))
-
-            pal <- colorRampPalette(c("white","blue"))
-            pdf(opt$out_expression)
-            heatmap.2(data.counts.log, col=pal, Rowv=T, Colv=T,
-                      dendrogram = c("both"),
-                      trace="none",
-                      density.info=c("density"),
-                      key.xlab="Expression value",
-                      key.ylab="Density",
-                      main="Gene Expression",
-                      cexCol=.5,
-                      offsetCol=.0,
-                      cexRow=.5,
-                      margins=c(6,12),
-                      breaks=20,
-                      key=T,)
-            dev.off()
-
-            pdf(opt$out_correlation)
-            heatmap.2(cor(data.counts.log), col=pal, Rowv=T, Colv=T,
-                      dendrogram = c("column"),
-                      trace="none",
-                      density.info=c("density"),
-                      key.xlab="Expression value",
-                      key.ylab="Density",
-                      main="Correlation",
-                      cexCol=.5,
-                      offsetCol=.0,
-                      cexRow=.5,
-                      margins=c(6,12),
-                      breaks=20,
-                      key=T,)
-            dev.off()
-
-            pca <- prcomp(t(data.counts.log), scale. = TRUE)
-            data.pca <- as.data.frame(pca$x[,c('PC1', 'PC2')])
-            data.pca$condition <- factors$condition
-            ggplot(data.pca, aes(PC1, PC2, color=condition)) +
-                geom_point(size=1) +
-                ggtitle("PCA") +
-                xlab("PC1") +
-                ylab("PC2")
-            ggsave(opt$out_pca)
-
-hints:
-  - $import: R_ubuntu-18.04.yml
+          pca <- prcomp(t(data.counts.log), scale. = TRUE)
+          data.pca <- as.data.frame(pca$x[,c('PC1', 'PC2')])
+          data.pca$condition <- factors$condition
+          ggplot(data.pca, aes(PC1, PC2, color=condition)) +
+              geom_point(size=1) +
+              ggtitle("PCA") +
+              xlab("PC1") +
+              ylab("PC2")
+          ggsave(out_pca)
 
 inputs:
   factor:
     type: File
     inputBinding:
       position: 1
-      prefix: --factor
   matrix:
     type: File
     inputBinding:
       position: 2
-      prefix: --matrix
-  gene_column:
-    type: string
-    inputBinding:
-      position: 3
-      prefix: --gene_column
-  sample_column:
-    type: string
-    inputBinding:
-      position: 4
-      prefix: --sample_column
   dga_data:
     type: File
     inputBinding:
+      position: 3
+  gene_column:
+    type: string
+    inputBinding:
+      position: 4
+  sample_column:
+    type: string
+    inputBinding:
       position: 5
-      prefix: --dga_data
+  fc:
+    type: float
+    inputBinding:
+      position: 6
+  fdr:
+    type: float
+    inputBinding:
+      position: 7
   out_expression:
     type: string
     inputBinding:
-      position: 6
-      prefix: --out_expression
+      position: 8
   out_correlation:
     type: string
     inputBinding:
-      position: 7
-      prefix: --out_correlation
+      position: 9
   out_pca:
     type: string
     inputBinding:
-      position: 8
-      prefix: --out_pca
-  fc:
-    type: float?
-    inputBinding:
-      position: 9
-      prefix: --fc
-  fdr:
-    type: float?
-    inputBinding:
       position: 10
-      prefix: --fdr
-
 
 outputs:
   output_expression:
@@ -206,7 +160,7 @@ outputs:
     outputBinding:
       glob: $(inputs.out_pca)
 
-baseCommand: ["Rscript","script.R"]
+baseCommand: ["Rscript", "--vanilla","script.R"]
 
 s:author:
   - class: s:Person
@@ -214,10 +168,8 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:license: https://spdx.org/licenses/OPL-1.0
-
 $namespaces:
   s: http://schema.org/
 
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
