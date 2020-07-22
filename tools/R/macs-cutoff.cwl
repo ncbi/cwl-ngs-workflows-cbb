@@ -5,6 +5,17 @@ class: CommandLineTool
 label: MACS2_cutoff
 doc: Inflection point calculated from MACS2 peaks file
 
+hints:
+  DockerRequirement:
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_0
+  SoftwareRequirement:
+    packages:
+      - package: 'bioconductor-diffbind'
+        version:
+          - '2.16.0'
+        specs:
+          - https://anaconda.org/bioconda/bioconductor-diffbind
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -38,9 +49,6 @@ requirements:
           plot(p1)
           dev.off()
           write.table(10^-inflpoint, out_inflection, quote = F, row.names = F, col.names = F)
-
-hints:
-  - $import: R_ubuntu-18.04.yml
 
 inputs:
   peak_cutoff_file:

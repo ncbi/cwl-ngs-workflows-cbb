@@ -5,6 +5,17 @@ class: CommandLineTool
 label: ChIPQC
 doc: Quality metrics for ChIPseq data.
 
+hints:
+  DockerRequirement:
+    dockerPull: quay.io/biocontainers/bioconductor-chipqc:1.24.0--r40_0
+  SoftwareRequirement:
+    packages:
+      - package: 'bioconductor-chipqc'
+        version:
+          - '1.24.0'
+        specs:
+          - https://anaconda.org/bioconda/bioconductor-chipqc
+
 requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
@@ -28,9 +39,6 @@ requirements:
           sample = ChIPQCsample(bamfile)
           ChIPQCreport(sample, reportFolder=ChipQC_folder, reportName="ChIPQCreport")
 
-hints:
-  - $import: R_ubuntu-18.04.yml
-
 inputs:
   input:
     type: File
@@ -52,11 +60,8 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: http://bioconductor.org/packages/release/bioc/html/ChIPQC.html
-s:license: https://spdx.org/licenses/OPL-1.0
-
 $namespaces:
   s: http://schema.org/
 
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
