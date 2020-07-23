@@ -6,13 +6,18 @@ label: fastq-dump
 doc: Fastq-dump from SRA database
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.ncbi_config)
 
 hints:
   - $import: sra-tools-docker.yml
   - $import: sra-tools-bioconda.yml
 
 inputs:
+  - id: ncbi_config
+    type: Directory
   - id: fasta
     type: boolean?
     inputBinding:
