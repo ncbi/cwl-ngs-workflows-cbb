@@ -34,7 +34,10 @@ hints:
   - $import: fastqc-bioconda.yml
 
 requirements:
-  - class: InlineJavascriptRequirement
+  InlineJavascriptRequirement: {}
+  ResourceRequirement:
+      coresMin: $(inputs.threads)
+
 $schemas:
   - 'https://schema.org/version/latest/schema.rdf'
 's:author':
