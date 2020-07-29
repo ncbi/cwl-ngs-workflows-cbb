@@ -1,42 +1,42 @@
 class: CommandLineTool
 cwlVersion: v1.0
-$namespaces:
-  s: 'http://schema.org/'
-  sbg: 'https://www.sevenbridges.com/'
-baseCommand:
-  - fastqc
-  - '--outdir'
-  - .
-  - '--extract'
-inputs:
-  - id: fastq
-    type: 'File[]'
-    inputBinding:
-      position: 2
-  - id: threads
-    type: int
-    inputBinding:
-      position: 1
-      prefix: '-t'
-outputs:
-  - id: out_html
-    type: 'File[]'
-    outputBinding:
-      glob: '*.html'
-  - id: out_zip
-    type: 'File[]'
-    outputBinding:
-      glob: '*.zip'
+
 doc: BASH echo command
 label: FastQC
-hints:
-  - $import: fastqc-docker.yml
-  - $import: fastqc-bioconda.yml
 
 requirements:
   InlineJavascriptRequirement: {}
   ResourceRequirement:
       coresMin: $(inputs.threads)
+
+hints:
+  - $import: fastqc-docker.yml
+  - $import: fastqc-bioconda.yml
+
+inputs:
+  fastq:
+    type: File[]
+    inputBinding:
+      position: 2
+  threads:
+    type: int
+    inputBinding:
+      position: 1
+      prefix: '-t'
+outputs:
+  out_html:
+    type: File[]
+    outputBinding:
+      glob: '*.html'
+  out_zip:
+    type: File[]
+    outputBinding:
+      glob: '*.zip'
+
+baseCommand: ["fastqc", "--outdir", ".", "--extract"]
+
+$namespaces:
+  s: 'http://schema.org/'
 
 $schemas:
   - 'https://schema.org/version/latest/schema.rdf'
