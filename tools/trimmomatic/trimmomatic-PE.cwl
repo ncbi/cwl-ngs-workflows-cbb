@@ -13,6 +13,8 @@ doc: >
   Illumina (FASTQ) data as well as to remove adapters
 
 requirements:
+  - class: ResourceRequirement
+    coresMin: $(inputs.threads)
   - class: SchemaDefRequirement
     types:
       - name: end_mode
@@ -108,6 +110,7 @@ requirements:
         name: maxinfo
         type: record
   - class: InlineJavascriptRequirement
+  - class: ShellCommandRequirement
 
 hints:
   - $import: trimmomatic-docker.yml
@@ -212,32 +215,38 @@ inputs:
       separate: false
     doc: |
       "33" or "64" specifies the base quality encoding. Default: 64
-  - id: reads1
-    type: File
+  - id: input_files
+    type: File[]
     inputBinding:
       position: 4
-    doc: FASTQ file of reads (R1 reads in Paired End mode)
-  - id: reads1_out
-    type: string
-    inputBinding:
-      position: 6
-  - id: reads1_out2
+    doc: Array of FASTQ files
+  - id: trimmomatic_options
     type: string?
+    default: ""
     inputBinding:
-      position: 7
-  - id: reads2
-    type: File?
-    inputBinding:
+      shellQuote: false
       position: 5
-    doc: FASTQ file of R2 reads in Paired End mode
-  - id: reads2_out
-    type: string?
-    inputBinding:
-      position: 8
-  - id: reads2_out2
-    type: string?
-    inputBinding:
-      position: 9
+      valueFrom: |
+        ${
+           var listing = "";
+           var nameroot = inputs.input_files[0].nameroot;
+           for (var i = 0; i < inputs.input_files.length; i++) {
+              var nameroot = inputs.input_files[i].nameroot;
+              if (nameroot.endsWith(".fastq")){
+                 nameroot = nameroot.replace(".fastq", "")
+              }
+              if (nameroot.endsWith("_1")){
+                 nameroot = nameroot.slice(0, -2);
+                 listing += nameroot + "_tr_1.fastq.gz "
+                 listing += nameroot + "_U_1.fastq.gz ";
+              }else if (nameroot.endsWith("_2")){
+                 nameroot = nameroot.slice(0, -2);
+                 listing += nameroot + "_tr_2.fastq.gz "
+                 listing += nameroot + "_U_2.fastq.gz ";
+              }
+           }
+           return listing;
+         }
   - id: slidingwindow
     type: slidingWindow?
     inputBinding:
@@ -291,14 +300,14 @@ inputs:
       marked with quality score of 2), but we recommend Sliding Window or
       MaxInfo instead
 outputs:
-  - id: reads1_trimmed
+  - id: trimmed
     type: File[]
     outputBinding:
-      glob: $(inputs.reads1_out)
-  - id: reads2_trimmed
-    type: File[]?
+      glob: "*_tr_*.fastq.gz"
+  - id: error
+    type: File[]
     outputBinding:
-      glob: $(inputs.reads2_out)
+      glob: "*_U_*.fastq.gz"
 
 baseCommand:
   - trimmomatic
