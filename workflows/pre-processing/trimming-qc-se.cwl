@@ -1,21 +1,27 @@
 class: Workflow
 cwlVersion: v1.0
-id: download_quality_control
-doc: >-
-  This workflow download an SRA accession and perform quality control on it
-  using FastQC
-label: SRA download and QC
+
+id: trimming_quality_control
+label: trimming_quality_control
 
 requirements:
+  SubworkflowFeatureRequirement: {}
   InlineJavascriptRequirement: {}
   ScatterFeatureRequirement: {}
 
 inputs:
-  accession: string[]
-  ncbi_config: Directory
+  input_files:
+    type: {"type": "array", "items": "File"}
+  phred: int?
+  minlen: int?
+  leading: int?
+  illuminaClip: string?
+  headcrop: int?
+  crop: int?
+  avgqual: int?
+  maxinfo: int?
   threads: int
-  X: int?
-  split-files: boolean?
+  trailing: int?
 
 outputs:
   fastqc_html:
@@ -25,38 +31,45 @@ outputs:
     outputSource: fastqc/out_zip
     type: {"type": "array", "items": {"type": "array", "items": "File"}}
   fastq:
-    outputSource: fastq_dump/output
+    outputSource: trimming/trimmed
     type: {"type": "array", "items": {"type": "array", "items": "File"}}
 
 steps:
-  fastq_dump:
-    run: ../../tools/sra-tools/fastq-dump.cwl
-    label: fastq-dump-SE
-    scatter: accession
+  trimming:
+    label: Trimmomatic
+    run: ../../tools/trimmomatic/trimmomatic-SE.cwl
+    scatter: input_files
     in:
-      ncbi_config: ncbi_config
-      accession: accession
-      X: X
-      gzip: { default: true }
-      split-files: split-files
-    out: [output]
+      avgqual: avgqual
+      crop: crop
+      end_mode: { default: "SE" }
+      headcrop: headcrop
+      illuminaClip: illuminaClip
+      leading: leading
+      maxinfo: maxinfo
+      minlen: minlen
+      phred: phred
+      input_files: input_files
+      threads: threads
+      trailing: trailing
+    out: [trimmed]
   fastqc:
     run: ../../tools/fastqc/fastqc.cwl
     label: fastqc
     scatter: fastq
     in:
-      fastq: fastq_dump/output
+      fastq: trimming/trimmed
       threads: threads
     out: [out_html, out_zip]
+
+$namespaces:
+  s: http://schema.org/
 
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
-
-$namespaces:
-  s: http://schema.org/
 
 $schemas:
   - https://schema.org/version/latest/schemaorg-current-http.rdf
