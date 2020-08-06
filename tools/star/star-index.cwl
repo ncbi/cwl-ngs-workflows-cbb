@@ -6,8 +6,14 @@ label: STAR-index
 doc: Spliced Transcripts Alignment to a Reference
 
 requirements:
-  - class: ShellCommandRequirement
-  - class: InlineJavascriptRequirement
+  ShellCommandRequirement: {}
+  InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.runThreadN)
+    ramMax: |
+      ${
+          return inputs.limitGenomeGenerateRAM ? inputs.limitGenomeGenerateRAM/1000000 : 32000
+      }
 
 hints:
   - $import: star-docker.yml
@@ -20,6 +26,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: --runMode
+  limitGenomeGenerateRAM:
+    type: float?
+    inputBinding:
+      position: 1
+      prefix: '--limitGenomeGenerateRAM'
   genomeChrBinNbits:
     type: int
     default: 16
