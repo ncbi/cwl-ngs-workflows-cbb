@@ -68,6 +68,16 @@ inputs:
       prefix: -o
     doc: |
       Minimum overlap between a reads and a feature. Default: 8.
+  e:
+    type: boolean?
+    inputBinding:
+      position: 3
+      prefix: -e
+  a:
+    type: boolean?
+    inputBinding:
+      position: 3
+      prefix: -a
 
 outputs:
   gene_out:
