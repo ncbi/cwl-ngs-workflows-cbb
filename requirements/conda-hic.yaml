@@ -1,0 +1,15 @@
+name: chipseq
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bedtools
+  - bedops
+  - bwa
+  - fastqc
+  - hicexplorer=3.4.3
+  - samtools
+  - sra-tools
+  - tabix
+  - trimmomatic

@@ -7,6 +7,8 @@ doc: Samtools is a suite of programs for interacting with high-throughput sequen
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
 
 hints:
   - $import: samtools-docker.yml

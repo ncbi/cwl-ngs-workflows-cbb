@@ -5,8 +5,14 @@ doc: Spliced Transcripts Alignment to a Reference
 label: STAR
 
 requirements:
-  - class: ShellCommandRequirement
-  - class: InlineJavascriptRequirement
+  ShellCommandRequirement: {}
+  InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
+    ramMax: |
+      ${
+          return inputs.limitGenomeGenerateRAM ? inputs.limitGenomeGenerateRAM/1000000 : 32000
+      }
 
 hints:
   - $import: star-docker.yml
@@ -81,6 +87,7 @@ inputs:
       in the 1st step of the 2-pass run
   - id: outFileNamePrefix
     type: string
+    default: ""
     inputBinding:
       position: 5
       prefix: '--outFileNamePrefix'
@@ -172,18 +179,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: '--readFilesCommand'
-  - id: readFilesIn
-    type: File
+  - id: reads
+    type: File[]
     inputBinding:
       position: 3
       prefix: '--readFilesIn'
-    doc: >
-      string(s): paths to files that contain input read1 (and, if needed, 
-      read2)
-  - id: readFilesIn_2
-    type: File?
-    inputBinding:
-      position: 4
     doc: >
       string(s): paths to files that contain input read1 (and, if needed, 
       read2)

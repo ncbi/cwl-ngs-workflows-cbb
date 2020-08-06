@@ -26,7 +26,7 @@ requirements:
           fc = as.numeric(args[2])
           fdr = as.numeric(args[3])
           out = args[4]
-
+          highlight_color = "red"
           data <- read.csv(args[1])
           print(paste("Genes: ", nrow(data)))
 
