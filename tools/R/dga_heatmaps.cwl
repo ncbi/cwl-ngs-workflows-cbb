@@ -38,7 +38,7 @@ requirements:
           highlight_color = "red"
 
           # Loading data
-          factors = read.table(args[1], header = TRUE, sep = "\t")
+          factors = read.table(args[1], header = TRUE, sep = ",")
           rownames(factors) <- factors[, sample_column]
           print(paste("Factors loaded:", nrow(factors)))
 
