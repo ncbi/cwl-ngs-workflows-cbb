@@ -219,7 +219,7 @@ inputs:
     type: File
     inputBinding:
       position: 4
-    doc: Array of FASTQ files
+    doc: FASTQ file
   - id: trimmomatic_options
     type: string?
     default: ""
@@ -232,7 +232,7 @@ inputs:
            if (nameroot.endsWith(".fastq")){
              nameroot = nameroot.replace(".fastq", "")
            }
-           var listing = nameroot + "_tr.fastq.gz ";
+           var listing = nameroot + ".fastq.gz ";
            return listing;
          }
   - id: slidingwindow
@@ -291,7 +291,7 @@ outputs:
   - id: trimmed
     type: File[]
     outputBinding:
-      glob: "*_tr.fastq.gz"
+      glob: "*.fastq.gz"
 
 baseCommand:
   - trimmomatic
