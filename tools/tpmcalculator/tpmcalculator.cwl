@@ -7,11 +7,20 @@ doc: TPMCalculator quantifies mRNA abundance directly from the alignments by par
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    ramMax: |
+      ${
+          return inputs.ramMax ? inputs.ramMax : 8000
+      }
 
 hints:
   - $import: tpmcalculator-docker.yml
+  - $import: tpmcalculator-bioconda.yml
 
 inputs:
+  ramMax:
+    type: int?
+    doc: Maximun the RAM in MB
   g:
     type: File
     inputBinding:
