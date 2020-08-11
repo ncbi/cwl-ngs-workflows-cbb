@@ -8,13 +8,12 @@ requirements:
   InlineJavascriptRequirement: {}
   StepInputExpressionRequirement: {}
   SubworkflowFeatureRequirement: {}
-  ResourceRequirement:
-    coresMin: $(inputs.threads)
 
 inputs:
   genomeDir: Directory
   reads: File[]
   threads: int
+  ramMaxSTAR: float?
 
 outputs:
   indexed_bam:
@@ -32,6 +31,9 @@ outputs:
   readspergene:
     outputSource: alignment/readspergene
     type: File?
+  mappingstats:
+    outputSource: alignment/mappingstats
+    type: File?
 
 steps:
   alignment:
@@ -39,6 +41,7 @@ steps:
     label: STAR
     in:
       reads: reads
+      limitGenomeGenerateRAM: ramMaxSTAR
       outFileNamePrefix:
         valueFrom: |
           ${
