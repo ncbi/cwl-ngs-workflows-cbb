@@ -11,7 +11,7 @@ requirements:
     coresMin: $(inputs.threads)
     ramMax: |
       ${
-          return inputs.limitGenomeGenerateRAM ? inputs.limitGenomeGenerateRAM/1000000 : 32000
+          return inputs.limitGenomeGenerateRAM ? inputs.limitGenomeGenerateRAM : 32000
       }
 
 hints:
@@ -63,9 +63,13 @@ inputs:
     inputBinding:
       position: 1
       prefix: '--limitGenomeGenerateRAM'
+      valueFrom: |
+        ${
+            return parseInt(self, 10) * 1000000;
+         }
     doc: |
       31000000000
-      int>0: maximum available RAM (bytes) for genome generation
+      int>0: maximum available RAM (Megabytes) for genome generation
   - id: limitOutSJcollapsed
     type: int?
     inputBinding:
