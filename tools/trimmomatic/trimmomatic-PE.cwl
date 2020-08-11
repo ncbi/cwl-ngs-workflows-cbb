@@ -237,11 +237,11 @@ inputs:
               }
               if (nameroot.endsWith("_1")){
                  nameroot = nameroot.slice(0, -2);
-                 listing += nameroot + "_tr_1.fastq.gz "
+                 listing += nameroot + "_1.fastq.gz "
                  listing += nameroot + "_U_1.fastq.gz ";
               }else if (nameroot.endsWith("_2")){
                  nameroot = nameroot.slice(0, -2);
-                 listing += nameroot + "_tr_2.fastq.gz "
+                 listing += nameroot + "_2.fastq.gz "
                  listing += nameroot + "_U_2.fastq.gz ";
               }
            }
@@ -303,7 +303,14 @@ outputs:
   - id: trimmed
     type: File[]
     outputBinding:
-      glob: "*_tr_*.fastq.gz"
+      glob: |
+        ${
+            var files = [];
+            for(var i = 0; i < inputs.input_files.length; i++){
+               files.push(inputs.input_files[i].basename);
+            }
+            return files;
+         }
   - id: error
     type: File[]
     outputBinding:
