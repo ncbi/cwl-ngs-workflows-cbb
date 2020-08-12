@@ -9,7 +9,7 @@ requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: ubuntu.yml
+  - $import: ubuntu-docker.yml
 
 inputs:
   v:

@@ -1,199 +1,162 @@
 class: Workflow
 cwlVersion: v1.0
+
 id: chip_seq_alignment
 doc: This workflow aligns ChIp-Seq samples
 label: ChIP-Seq alignment workflow
-$namespaces:
-  s: 'http://schema.org/'
-  sbg: 'https://www.sevenbridges.com/'
+
+requirements:
+  InlineJavascriptRequirement: {}
+  StepInputExpressionRequirement: {}
+  SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
+
 inputs:
-  - id: genome_index
-    type: Directory
-  - id: genome_prefix
-    type: string
-  - id: reads
-    type: 'File[]'
-  - id: readsquality
-    type: int
-  - id: subsample_nreads
-    type: int
-  - id: threads
-    type: int
+  genome_index: Directory
+  genome_prefix: string
+  reads:
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
+  readsquality: int
+  subsample_nreads: int
+  threads: int
+
 outputs:
-  - id: bam_flagstat_out
-    outputSource:
-      - alignment/bam_flagstat_out
-    type: File
-  - id: bam_index_out
-    outputSource:
-      - bam_index/out_sam
-    type: File
-  - id: bam_stats_out
-    outputSource:
-      - alignment/bam_stats_out
-    type: File
-  - id: bed_file_out
-    outputSource:
-      - bamtobed/out_stdout
-    type: File
-  - id: final_bam_flagstat_out
-    outputSource:
-      - final_bam_flagstat/out_stdout
-    type: File
-  - id: final_bam_out
-    outputSource:
-      - final_bam/out_sam
-    type: File
-  - id: pbc_out
-    outputSource:
-      - pbc/out
-    type: File
-  - id: phantompeakqualtools_output_out
-    outputSource:
-      - phantompeakqualtools/output_out
-    type: File
-  - id: phantompeakqualtools_output_savp
-    outputSource:
-      - phantompeakqualtools/output_savp
-    type: File?
-  - id: subsample_pseudoreplicate_gzip_out
-    outputSource:
-      - subsample/pseudoreplicate_gzip_out
-    type: 'File[]'
-  - id: subsample_subsample_out
-    outputSource:
-      - subsample/subsample_out
-    type: File
-  - id: subsample_tagalign_out
-    outputSource:
-      - subsample/tagalign_out
-    type: File
+  bam_flagstat_out:
+    outputSource: alignment/bam_flagstat_out
+    type: File[]
+  bam_index_out:
+    outputSource: bam_index/out_sam
+    type: File[]
+  bam_stats_out:
+    outputSource: alignment/bam_stats_out
+    type: File[]
+  bed_file_out:
+    outputSource: bamtobed/out_stdout
+    type: File[]
+  final_bam_flagstat_out:
+    outputSource: final_bam_flagstat/out_stdout
+    type: File[]
+  final_bam_out:
+    outputSource: final_bam/out_sam
+    type: File[]
+  pbc_out:
+    outputSource: pbc/out
+    type: File[]
+  phantompeakqualtools_output_out:
+    outputSource: phantompeakqualtools/output_out
+    type: File[]
+  phantompeakqualtools_output_savp:
+    outputSource: phantompeakqualtools/output_savp
+    type: File[]?
+  subsample_pseudoreplicate_gzip_out:
+    outputSource: subsample/pseudoreplicate_gzip_out
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
+  subsample_subsample_out:
+    outputSource: subsample/subsample_out
+    type: File[]
+  subsample_tagalign_out:
+    outputSource: subsample/tagalign_out
+    type: File[]
+
 steps:
-  - id: alignment
-    in:
-      - id: reads
-        source:
-          - reads
-      - id: genome_index
-        source: genome_index
-      - id: genome_prefix
-        source: genome_prefix
-      - id: threads
-        source: threads
-    out:
-      - id: bam_out
-      - id: bam_flagstat_out
-      - id: bam_stats_out
+  alignment:
     run: ../Alignments/bwa-alignment.cwl
     label: bwa alignment workflow for single-end samples
-  - id: bam_index
+    scatter: reads
     in:
-      - id: in_bam
-        source: final_bam/out_sam
-      - id: out_bai
-        valueFrom: '${ return inputs.in_bam.nameroot + ".bam.bai";}'
-    out:
-      - id: out_sam
+      reads: reads
+      genome_index: genome_index
+      genome_prefix: genome_prefix
+      threads: threads
+    out: [bam_out, bam_flagstat_out, bam_stats_out]
+  bam_index:
     run: ../../tools/samtools/samtools-index.cwl
     label: Samtools-index
-  - id: bamtobed
+    scatter: in_bam
     in:
-      - id: i
-        source: final_bam/out_sam
-      - id: stdout
-        valueFrom: '${ return inputs.i.nameroot + ".bed";}'
-    out:
-      - id: out_stdout
+      in_bam: final_bam/out_sam
+      out_bai:
+        valueFrom: '${ return inputs.in_bam.nameroot + ".bam.bai";}'
+    out: [out_sam]
+  bamtobed:
     run: ../../tools/bedtools/bedtools-bamtobed.cwl
     label: bedtools-bamtobed
-  - id: filtered_bam
+    scatter: i
     in:
-      - id: input
-        source: alignment/bam_out
-      - id: isbam
-        default: true
-      - id: output_name
-        valueFrom: '${ return inputs.input.nameroot + ".bam";}'
-      - id: readsquality
-        source: readsquality
-      - id: threads
-        source: threads
-    out:
-      - id: output
+      i: final_bam/out_sam
+      stdout:
+        valueFrom: '${ return inputs.i.nameroot + ".bed";}'
+    out: [out_stdout]
+  filtered_bam:
     run: ../../tools/samtools/samtools-view.cwl
     label: Samtools-view
-  - id: final_bam
+    scatter: input
     in:
-      - id: in_bam
-        source: filtered_bam/output
-      - id: out_bam
-        valueFrom: '${ return inputs.in_bam.nameroot + "_sorted.bam";}'
-      - id: threads
-        source: threads
-    out:
-      - id: out_sam
+      input: alignment/bam_out
+      isbam: { default: true }
+      output_name:
+        valueFrom: '${ return inputs.input.nameroot + ".bam";}'
+      readsquality: readsquality
+      threads: threads
+    out: [output]
+  final_bam:
     run: ../../tools/samtools/samtools-sort.cwl
     label: Samtools-sort
-  - id: final_bam_flagstat
+    scatter: in_bam
     in:
-      - id: in_bam
-        source: final_bam/out_sam
-      - id: stdout
+      in_bam: filtered_bam/output
+      out_bam:
+        valueFrom: '${ return inputs.in_bam.nameroot + "_sorted.bam";}'
+      threads: threads
+    out: [out_sam]
+  final_bam_flagstat:
+    run: ../../tools/samtools/samtools-flagstat.cwl
+    label: Samtools-flagstat
+    scatter: in_bam
+    in:
+      in_bam: final_bam/out_sam
+      stdout:
         valueFrom: >-
           ${ return
           inputs.in_bam.nameroot.replace("_sorted","_filtered.flagstat")}
-    out:
-      - id: out_stdout
-    run: ../../tools/samtools/samtools-flagstat.cwl
-    label: Samtools-flagstat
-  - id: pbc
-    in:
-      - id: bam_file
-        source: filtered_bam/output
-    out:
-      - id: out
+    out: [out_stdout]
+  pbc:
     run: ../File-formats/bedtools-bam-pbc.cwl
     label: Compute library complexity
-  - id: phantompeakqualtools
+    scatter: bam_file
     in:
-      - id: c
-        source: subsample/tagalign_out
-      - id: filtchr
-        default: chrM
-      - id: out
-        valueFrom: '${ return inputs.c.nameroot + ".cc.qc";}'
-      - id: p
-        source: threads
-      - id: savp
-        valueFrom: '${ return inputs.c.nameroot + ".cc.plot.pdf";}'
-    out:
-      - id: output_out
-      - id: output_savn
-      - id: output_savp
-      - id: output_savr
+      bam_file: filtered_bam/output
+    out: [out]
+  phantompeakqualtools:
     run: ../../tools/phantompeakqualtools/phantompeakqualtools.cwl
     label: Phantompeakqualtools
-  - id: subsample
+    scatter: c
     in:
-      - id: bam_file
-        source: final_bam/out_sam
-      - id: nreads
-        source: subsample_nreads
-    out:
-      - id: pseudoreplicate_gzip_out
-      - id: subsample_out
-      - id: tagalign_out
+      c: subsample/tagalign_out
+      filtchr: {default: chrM}
+      out:
+        valueFrom: '${ return inputs.c.nameroot + ".cc.qc";}'
+      p: threads
+      savp:
+        valueFrom: '${ return inputs.c.nameroot + ".cc.plot.pdf";}'
+    out: [output_out, output_savn, output_savp, output_savr]
+  subsample:
     run: ../File-formats/subample-pseudoreplicates.cwl
     label: Subsample BAM file creating a tagAlign and pseudoreplicates
-requirements:
-  - class: InlineJavascriptRequirement
-  - class: StepInputExpressionRequirement
-  - class: SubworkflowFeatureRequirement
+    scatter: bam_file
+    in:
+      bam_file: final_bam/out_sam
+      nreads: subsample_nreads
+    out: [pseudoreplicate_gzip_out, subsample_out, tagalign_out]
+
+$namespaces:
+  s: http://schema.org/
+
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
 $schemas:
-  - 'https://schema.org/version/latest/schema.rdf'
-'s:author':
-  - class: 's:Person'
-    's:email': 'mailto:r78v10a07@gmail.com'
-    's:identifier': 'https://orcid.org/0000-0002-4108-5982'
-    's:name': Roberto Vera Alvarez
-'s:license': 'https://spdx.org/licenses/OPL-1.0'
+  - https://schema.org/version/latest/schemaorg-current-http.rdf

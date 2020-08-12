@@ -21,19 +21,21 @@ inputs:
   genome_gtf: File
   q: int
   p: boolean?
+  ramMaxRSeQC: int?
+  ramMaxSTAR: float?
     
 outputs:
   indexed_bam:
-    outputSource: bam_index/out_sam
+    outputSource: alignment/indexed_bam
     type: File[]
   sorted_bam:
-    outputSource: bam_sort/out_sam
+    outputSource: alignment/sorted_bam
     type: File[]
   star_stats:
     outputSource: alignment/mappingstats
     type: File[]?
   stats_bam:
-    outputSource: bam_stats/out_stdout
+    outputSource: alignment/stats_bam
     type: File[]
   readspergene:
     outputSource: alignment/readspergene
@@ -81,84 +83,21 @@ outputs:
 
 steps:
   alignment:
-    run: ../../tools/star/star.cwl
-    label: STAR
+    run: ../Alignments/star-alignment.cwl
+    label: STAR-alingment
     scatter: reads
     in:
       reads: reads
-      outFileNamePrefix:
-        valueFrom: |
-          ${
-            var nameroot = inputs.reads[0].nameroot;
-            if (nameroot.endsWith(".fastq")){
-               nameroot = nameroot.replace(".fastq", "")
-            }
-            if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
-               nameroot = nameroot.slice(0, -2);
-            }
-            return nameroot;
-          }
-      alignEndsType: { default: "Local" }
-      alignSJDBoverhangMin: { default: 1 }
-      alignSJoverhangMin: { default: 15 }
       genomeDir: genomeDir
-      limitOutSJcollapsed: { default: 1000000 }
-      limitSjdbInsertNsj: { default: 1000000 }
-      outFilterMatchNminOverLread: { default: 0 }
-      outFilterMismatchNmax: { default: 33 }
-      outFilterMismatchNoverLmax: { default: 0.3 }
-      outFilterMultimapNmax: { default: 100 }
-      outFilterScoreMinOverLread: { default: 0.3 }
-      outFilterType: { default: "BySJout" }
-      outSAMtype:
-        default:
-          - BAM
-          - Unsorted
-      outSAMunmapped: { default: "Within" }
-      outStd: { default: "Log" }
-      readFilesCommand: { default: "zcat" }
-      seedSearchStartLmax: { default: 12 }
+      ramMaxSTAR: ramMaxSTAR
       threads: threads
-      twopassMode: { default: "Basic" }
-      winAnchorMultimapNmax: { default: 50 }
-      quantMode: { default: "GeneCounts" }
-    out: [aligned, bamRemDups, mappingstats, readspergene, transcriptomesam]
-  bam_sort:
-    run: ../../tools/samtools/samtools-sort.cwl
-    label: Samtools-sort
-    scatter: in_bam
-    in:
-      in_bam: alignment/aligned
-      out_bam:
-        valueFrom: >-
-          ${ return inputs.in_bam.nameroot.replace('Aligned.out', '') +
-          "_sorted.bam";}
-      threads: threads
-    out: [out_sam]
-  bam_index:
-    run: ../../tools/samtools/samtools-index.cwl
-    label: Samtools-index
-    scatter: in_bam
-    in:
-      in_bam: bam_sort/out_sam
-      out_bai:
-        valueFrom: '${ return inputs.in_bam.basename + ".bai";}'
-    out: [out_sam]
-  bam_stats:
-    run: ../../tools/samtools/samtools-stats.cwl
-    label: Samtools-stats
-    scatter: in_bam
-    in:
-      in_bam: alignment/aligned
-      stdout:
-        valueFrom: '${ return inputs.in_bam.nameroot + ".stats";}'
-    out:  [out_stdout]
+    out: [indexed_bam, sorted_bam, star_stats, stats_bam, readspergene, mappingstats]
   quantification:
     run: ../../tools/tpmcalculator/tpmcalculator.cwl
     label: tpmcalculator
     scatter: b
     in:
-      b: bam_sort/out_sam
+      b: alignment/sorted_bam
       g: genome_gtf
       q: q
       p: p
@@ -199,7 +138,7 @@ steps:
     scatter: i
     run: ../../tools/rseqc/rseqc-bam_stat.cwl
     in:
-      i: bam_sort/out_sam
+      i: alignment/sorted_bam
       q: q
       o:
         valueFrom: ${ return inputs.i.nameroot.replace('.bam', '') + "_rseqc.bam_stat.txt";}
@@ -210,7 +149,7 @@ steps:
     scatter: i
     run: ../../tools/rseqc/rseqc-infer_experiment.cwl
     in:
-      i: bam_sort/out_sam
+      i: alignment/sorted_bam
       q: q
       r: genome_bed
       o:
@@ -222,7 +161,7 @@ steps:
     scatter: i
     run: ../../tools/rseqc/rseqc-junction_annotation.cwl
     in:
-      i: bam_sort/out_sam
+      i: alignment/sorted_bam
       q: q
       r: genome_bed
       o:
@@ -253,7 +192,7 @@ steps:
     scatter: i
     run: ../../tools/rseqc/rseqc-junction_saturation.cwl
     in:
-      i: bam_sort/out_sam
+      i: alignment/sorted_bam
       q: q
       r: genome_bed
       o:
@@ -265,7 +204,7 @@ steps:
     scatter: i
     run: ../../tools/rseqc/rseqc-read_distribution.cwl
     in:
-      i: bam_sort/out_sam
+      i: alignment/sorted_bam
       r: genome_bed
       o:
         valueFrom: ${ return inputs.i.nameroot.replace('.bam', '') + "_rseqc.read_distribution.txt";}
@@ -276,7 +215,7 @@ steps:
     scatter: i
     run: ../../tools/rseqc/rseqc-read_quality.cwl
     in:
-      i: bam_sort/out_sam
+      i: alignment/sorted_bam
       q: q
       o:
         valueFrom: ${ return inputs.i.nameroot.replace('.bam', '') + "_rseqc";}

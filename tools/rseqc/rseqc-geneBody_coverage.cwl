@@ -8,12 +8,20 @@ doc: RSeQC package provides a number of useful modules that can comprehensively 
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    ramMax: |
+      ${
+          return inputs.ramMax ? inputs.ramMax : 32000
+      }
 
 hints:
   - $import: rseqc-docker.yml
   - $import: rseqc-bioconda.yml
 
 inputs:
+  ramMax:
+    type: int?
+    doc: Maximun the RAM in MB
   input-file:
     type: File[]?
     inputBinding:
