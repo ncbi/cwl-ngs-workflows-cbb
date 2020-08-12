@@ -7,6 +7,9 @@ doc: This package computes informative enrichment and quality measures for ChIP-
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.p)
+    ramMin: 2048
 
 hints:
   - $import: phantompeakqualtools-docker.yml

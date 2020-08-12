@@ -2,18 +2,20 @@
 cwlVersion: v1.0
 class: Workflow
 
-requirements:
-  - class: InlineJavascriptRequirement
-  - class: StepInputExpressionRequirement
-
 label: "ChIP-seq peak caller workflow MACS2 based"
 doc: "This workflow execute peak caller and QC for ChIP-seq using MACS2"
 
+requirements:
+  InlineJavascriptRequirement: {}
+  StepInputExpressionRequirement: {}
+  SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
+
 inputs:
-  homer_genome: string
+  genome_name: string
   genome_fasta: File
   genome_gtf: File
-  tagAlign_gz: File
+  tagAlign_gz: File[]
   macs_callpeaks_g: string
   macs_callpeaks_q: float
   nomodel: boolean?
@@ -22,44 +24,46 @@ inputs:
 outputs:
   readQC_plots:
     outputSource: readQC/plots
-    type: File[]
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
   macs_cutoff_pdf:
     outputSource: macs_cutoff/out_pdf
-    type: File
+    type: File[]
   macs_cutoff_inflection:
     outputSource: macs_cutoff/out_inflection
-    type: File
+    type: File[]
   macs_callpeak_q_value_narrowPeak:
     outputSource: macs_callpeak_q_value/narrowPeak
-    type: File
+    type: File[]
   macs_callpeak_q_value_xls:
     outputSource: macs_callpeak_q_value/xls
-    type: File
+    type: File[]
   macs_callpeak_q_value_bed:
     outputSource: macs_callpeak_q_value/bed
-    type: File
+    type: File[]
   homer_annotate_peaks_output:
     outputSource: homer_annotate_peaks/output
-    type: File
+    type: File[]
   homer_annotate_peaks_annStats:
     outputSource: homer_annotate_peaks/annStats_out
-    type: File?
+    type: File[]?
   lambda_tdf_out:
     outputSource: lambda_bdg_to_tdf/out_tdf
-    type: File
+    type: File[]
   pileup_tdf_out:
     outputSource: pileup_bdg_to_tdf/out_tdf
-    type: File
+    type: File[]
 
 steps:
   gzip_cat:
     run: ../../tools/basic/gzip.cwl
+    scatter: file
     in:
       d: { default: True}
       file: tagAlign_gz
     out: [output]
   homer_tags:
     run: ../../tools/homer/homer-makeTagDirectory.cwl
+    scatter: input
     in:
       tags_directory_name:
         valueFrom: ${ return inputs.input.nameroot + "_tags";}
@@ -70,11 +74,13 @@ steps:
     out: [tags_directory]
   readQC:
     run: ../../tools/R/readQC.cwl
+    scatter: tags_directory
     in:
       tags_directory: homer_tags/tags_directory
     out: [plots]
   macs_callpeak:
     run: ../../tools/macs/macs2-callpeak.cwl
+    scatter: t
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
@@ -92,6 +98,7 @@ steps:
     out: [cutoff_analysis]
   macs_cutoff:
     run: ../../tools/R/macs-cutoff.cwl
+    scatter: peak_cutoff_file
     in:
       peak_cutoff_file: macs_callpeak/cutoff_analysis
       out_pdf_name:
@@ -101,6 +108,8 @@ steps:
     out: [out_pdf,out_inflection]
   macs_callpeak_q_value:
     run: ../../tools/macs/macs2-callpeak.cwl
+    scatter: [t, q_file]
+    scatterMethod: dotproduct
     in:
       n:
         valueFrom: ${ return inputs.t.nameroot;}
@@ -119,8 +128,10 @@ steps:
     out: [lambda, pileup, narrowPeak, xls, bed]
   homer_annotate_peaks:
     run: ../../tools/homer/homer-annotatePeaks.cwl
+    scatter: [input, d]
+    scatterMethod: dotproduct
     in:
-      genome: homer_genome
+      genome: genome_fasta
       gtf: genome_gtf
       input: macs_callpeak_q_value/narrowPeak
       o:
@@ -132,18 +143,20 @@ steps:
     out: [output,annStats_out]
   lambda_bdg_to_tdf:
     run: ../../tools/igvtools/igvtools-totdf.cwl
+    scatter: i
     in:
       i: macs_callpeak_q_value/lambda
-      g: homer_genome
+      g: genome_name
       o:
         valueFrom: ${ return inputs.i.nameroot + ".tdf";}
       z: {default: 5}
     out: [out_tdf]
   pileup_bdg_to_tdf:
     run: ../../tools/igvtools/igvtools-totdf.cwl
+    scatter: i
     in:
       i: macs_callpeak_q_value/pileup
-      g: homer_genome
+      g: genome_name
       o:
         valueFrom: ${ return inputs.i.nameroot + ".tdf";}
       z: {default: 5}
@@ -152,13 +165,11 @@ steps:
 $namespaces:
   s: http://schema.org/
 
-$schemas:
-  - https://schema.org/version/latest/schema.rdf
-
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:license: https://spdx.org/licenses/OPL-1.0
+$schemas:
+  - https://schema.org/version/latest/schemaorg-current-http.rdf

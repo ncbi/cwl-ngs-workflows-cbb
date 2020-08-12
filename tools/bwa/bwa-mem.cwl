@@ -1,73 +1,83 @@
 class: CommandLineTool
 cwlVersion: v1.0
-$namespaces:
-  s: 'http://schema.org/'
-  sbg: 'https://www.sevenbridges.com/'
-baseCommand:
-  - bwa
-  - mem
+
+label: bwa-mem
+doc: >-
+  BWA is a software package for mapping DNA sequences against a large reference
+  genome
+
+hints:
+  - $import: bwa-docker.yml
+  - $import: bwa-bioconda.yml
+    
+requirements:
+  InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.t)
+    ramMin: 10240
+
 inputs:
-  - id: M
+  M:
     type: boolean?
     inputBinding:
       position: 1
       prefix: '-M'
-  - id: A
+  A:
     type: int?
     inputBinding:
       position: 1
       prefix: '-A'
       separate: false
-  - id: B
+  B:
     type: int?
     inputBinding:
       position: 1
       prefix: '-B'
       separate: false
-  - id: E
+  E:
     type: int?
     inputBinding:
       position: 1
       prefix: '-E'
       separate: false
-  - id: L
+  L:
     type: int?
     inputBinding:
       position: 1
       prefix: '-L'
       separate: false
-  - id: T
+  T:
     type: int?
     inputBinding:
       position: 1
       prefix: '-T'
-  - id: a
+  a:
     type: boolean?
     inputBinding:
       position: 1
       prefix: '-a'
-  - id: S
+  S:
     type: boolean?
     inputBinding:
       position: 1
       prefix: '-S'
-  - id: P
+  P:
     type: boolean?
     inputBinding:
       position: 1
       prefix: '-P'
-  - id: five
+  five:
     type: boolean?
     inputBinding:
       position: 1
       prefix: '-5'
-  - id: index
+  index:
     type: Directory
-  - id: reads
+  reads:
     type: File[]
     inputBinding:
       position: 5
-  - id: prefix
+  prefix:
     type: string
     inputBinding:
       position: 4
@@ -75,13 +85,14 @@ inputs:
         ${
           return inputs.index.path + "/" + self;
         }
-  - id: t
+  t:
     type: int?
     inputBinding:
       position: 1
       prefix: '-t'
+
 outputs:
-  - id: out_stdout
+  out_stdout:
     type: File
     outputBinding:
       glob: |
@@ -100,23 +111,16 @@ stdout: |
         return inputs.reads[0].nameroot.replace('_1.fastq', '') + '.sam';
    }
 
-doc: >-
-  BWA is a software package for mapping DNA sequences against a large reference
-  genome
-label: bwa-mem
-hints:
-  - $import: bwa-docker.yml
-  - $import: bwa-bioconda.yml
-    
-requirements:
-  - class: InlineJavascriptRequirement
-  
+baseCommand: [bwa, mem]
+
+$namespaces:
+  s: http://schema.org/
+
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-4108-5982
+    s:email: mailto:r78v10a07@gmail.com
+    s:name: Roberto Vera Alvarez
+
 $schemas:
-  - 'https://schema.org/version/latest/schema.rdf'
-'s:author':
-  - class: 's:Person'
-    's:email': 'mailto:r78v10a07@gmail.com'
-    's:identifier': 'https://orcid.org/0000-0002-4108-5982'
-    's:name': Roberto Vera Alvarez
-'s:codeRepository': 'https://github.com/lh3/bwa'
-'s:license': 'https://spdx.org/licenses/OPL-1.0'
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
