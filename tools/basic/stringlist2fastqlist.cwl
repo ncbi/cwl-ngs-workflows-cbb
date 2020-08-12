@@ -11,7 +11,7 @@ requirements:
       - $import: ../../types/fastq.yaml
 
 hints:
-  - $import: ubuntu.yml
+  - $import: ubuntu-docker.yml
 
 inputs:
   stringlist:

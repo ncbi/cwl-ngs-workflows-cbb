@@ -21,7 +21,7 @@ requirements:
 
 
 hints:
-  - $import: ubuntu.yml
+  - $import: ubuntu-docker.yml
 
 inputs:
   stringlist:
