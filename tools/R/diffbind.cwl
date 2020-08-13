@@ -23,29 +23,31 @@ requirements:
       - entryname: diffbind.R
         entry: |
           args = commandArgs(trailingOnly=TRUE)
-          factor = args[1]
           bedDir = args[2]
           bamDir = args[3]
           minMembers = as.numeric(args[4])
           peakcaller = args[5]
-          paired = NULL
+          paired = FALSE
           if (length(args) == 6){
             paired = TRUE
           }
 
           library("DiffBind")
-          samples <- read.csv(factor,sep = "\t")
+          samples <- read.csv(args[1],sep = "\t")
+          prefix <- paste('condition_', paste(unique(samples$Condition), collapse = '_vs_'), sep='')
           bed <- c()
           bam <- c()
-          for(i in samples$SampleID){
+          callers <- c()
+          for(i in samples$id){
               f <- paste(bedDir,"/", i,"_sorted_peaks.narrowPeak", sep="")
               bed <- c(bed,f)
               f <- paste(bamDir,"/", i,"_sorted.bam", sep="")
               bam <- c(bam,f)
+              callers <- c(callers, peakcaller)
           }
           samples$Peaks <- bed
           samples$bamReads <- bam
-          samples$PeakCaller <- peakcaller
+          samples$PeakCaller <- callers
           samples
           DBdata <- dba(sampleSheet=samples)
           DBdata <- dba.count(DBdata)
@@ -53,71 +55,71 @@ requirements:
               print("Doing paired analysis")
               DBdata <- dba.contrast(DBdata, categories=DBA_CONDITION, block=DBA_REPLICATE, minMembers = minMembers)
           }else{
+            print("Doing unpaired analysis")
               DBdata <- dba.contrast(DBdata, categories=DBA_CONDITION, minMembers = minMembers)
           }
           DBdata <- dba.analyze(DBdata, method=DBA_DESEQ2)
           DBdata <- dba.analyze(DBdata, method=DBA_EDGER)
           DBdata
-          png("Diffbind_deseq2_plot.png")
+          png(paste(prefix, "diffbind_deseq2_plot.png", sep='_'))
           plot(DBdata, method=DBA_DESEQ2)
           dev.off()
-          png("Diffbind_deseq2_plotHeatmap.png")
+          png(paste(prefix, "diffbind_deseq2_plotHeatmap.png", sep='_'))
           dba.plotHeatmap(DBdata, contrast=1, correlations=FALSE, method=DBA_DESEQ2)
           dev.off()
-          png("Diffbind_deseq2_plotMA.png")
+          png(paste(prefix, "diffbind_deseq2_plotMA.png", sep='_'))
           dba.plotMA(DBdata, method=DBA_DESEQ2)
           dev.off()
-          png("Diffbind_deseq2_plotVolcano.png")
+          png(paste(prefix, "diffbind_deseq2_plotVolcano.png", sep='_'))
           dba.plotVolcano(DBdata, method=DBA_DESEQ2)
           dev.off()
-          png("Diffbind_deseq2_plotPCA.png")
+          png(paste(prefix, "diffbind_deseq2_plotPCA.png", sep='_'))
           dba.plotPCA(DBdata, method=DBA_DESEQ2)
           dev.off()
-          png("Diffbind_deseq2_plotPCA_contrast.png")
+          png(paste(prefix, "diffbind_deseq2_plotPCA_contrast.png", sep='_'))
           dba.plotPCA(DBdata, contrast = 1, method=DBA_DESEQ2)
           dev.off()
-          png("Diffbind_deseq2_plotBox.png")
+          png(paste(prefix, "diffbind_deseq2_plotBox.png", sep='_'))
           dba.plotBox(DBdata, method=DBA_DESEQ2)
           dev.off()
-
-          png("Diffbind_edgeR_plot.png")
+          png(paste(prefix, "diffbind_edgeR_plot.png", sep='_'))
           plot(DBdata, method=DBA_EDGER)
           dev.off()
-          png("Diffbind_edgeR_plotHeatmap.png")
+          png(paste(prefix, "diffbind_edgeR_plotHeatmap.png", sep='_'))
           dba.plotHeatmap(DBdata, contrast=1, correlations=FALSE, method=DBA_EDGER)
           dev.off()
-          png("Diffbind_edgeR_plotMA.png")
+          png(paste(prefix, "diffbind_edgeR_plotMA.png", sep='_'))
           dba.plotMA(DBdata, method=DBA_EDGER)
           dev.off()
-          png("Diffbind_edgeR_plotVolcano.png")
+          png(paste(prefix, "diffbind_edgeR_plotVolcano.png", sep='_'))
           dba.plotVolcano(DBdata, method=DBA_EDGER)
           dev.off()
-          png("Diffbind_edgeR_plotPCA.png")
+          png(paste(prefix, "diffbind_edgeR_plotPCA.png", sep='_'))
           dba.plotPCA(DBdata, method=DBA_EDGER)
           dev.off()
-          png("Diffbind_edgeR_plotPCA_contrast.png")
+          png(paste(prefix, "diffbind_edgeR_plotPCA_contrast.png", sep='_'))
           dba.plotPCA(DBdata, contrast = 1, method=DBA_EDGER)
           dev.off()
-          png("Diffbind_edgeR_plotBox.png")
+          png(paste(prefix, "diffbind_edgeR_plotBox.png", sep='_'))
           dba.plotBox(DBdata, method=DBA_EDGER)
           dev.off()
 
           report <- dba.report(DBdata, method=DBA_EDGER, th=1, bCounts=TRUE, DataType=DBA_DATA_FRAME)
           score <- -10*(log10(report$FDR))
           write.table(cbind(report,rownames(report),score),
-                      "Diffbind_edgeR_report.xls", quote=FALSE, sep="\t",
+                      paste(prefix, "diffbind_edgeR_report.xls", sep='_'), quote=FALSE, sep="\t",
                       row.names=FALSE)
           write.table(cbind(report[,1:3],rownames(report),score),
-                      "Diffbind_edgeR_report.bed", quote=FALSE, sep="\t",
+                      paste(prefix, "diffbind_edgeR_report.bed", sep='_'), quote=FALSE, sep="\t",
                       row.names=FALSE, col.names=FALSE)
 
           report <- dba.report(DBdata, method=DBA_DESEQ2, th=1, bCounts=TRUE, DataType=DBA_DATA_FRAME)
           score <- -10*(log10(report$FDR))
           write.table(cbind(report,rownames(report),score),
-                      "Diffbind_deseq2_report.xls", quote=FALSE, sep="\t",
+                     paste(prefix, "diffbind_deseq2_report.xls", sep='_'), quote=FALSE, sep="\t",
                       row.names=FALSE)
           write.table(cbind(report[,1:3],rownames(report),score),
-                      "Diffbind_deseq2_report.bed", quote=FALSE, sep="\t",
+                      paste(prefix, "diffbind_deseq2_report.bed", sep='_'), quote=FALSE, sep="\t",
                       row.names=FALSE, col.names=FALSE)
 
 inputs:
