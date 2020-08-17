@@ -7,7 +7,7 @@ doc: Inflection point calculated from MACS2 peaks file
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_1
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_2
   SoftwareRequirement:
     packages:
       - package: 'bioconductor-diffbind'
