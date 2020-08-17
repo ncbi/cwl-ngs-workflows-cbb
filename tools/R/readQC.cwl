@@ -7,7 +7,7 @@ doc: NGS read Quality Control analysis
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_0
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_1
   SoftwareRequirement:
     packages:
       - package: 'bioconductor-diffbind'

@@ -12,6 +12,7 @@ requirements:
       ${
           return inputs.ramMax ? inputs.ramMax : 8000
       }
+    ramMin: 4096
 
 hints:
   - $import: tpmcalculator-docker.yml
