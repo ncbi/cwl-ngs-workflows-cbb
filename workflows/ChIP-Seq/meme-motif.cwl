@@ -6,24 +6,26 @@ requirements:
   InlineJavascriptRequirement: {}
   StepInputExpressionRequirement: {}
   SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
 
 label: "MEME motif"
 doc: "This workflow uses MEME suite for motif finding"
 
 inputs:
     genome: File
-    bed: File
+    bed: File[]
     nmotifs: int
-    memedb: File
+    memedb: File[]
 
 outputs:
     meme_out:
         outputSource: memechip/output
-        type: Directory
+        type: Directory[]
 
 steps:
     fastafrombed:
         run: ../File-formats/fasta-from-bed.cwl
+        scatter: bed
         in:
           fasta_out:
             valueFrom: ${ return inputs.bed.nameroot + ".fa";}
@@ -32,10 +34,12 @@ steps:
         out: [output]
     memechip:
         run: ../../tools/meme/meme-chip.cwl
+        scatter: [i, db]
+        scatterMethod: flat_crossproduct
         in:
           i: fastafrombed/output
           oc:
-            valueFrom: ${ return inputs.i.nameroot + "_meme";}
+            valueFrom: ${ return inputs.i.nameroot + "_" + inputs.db.nameroot;}
           time: { default: 300 }
           ccut: { default: 100 }
           order: { default: 1 }
@@ -49,16 +53,14 @@ steps:
           centrimo-ethresh: { default: 10.0 }
         out: [output]
 
+$namespaces:
+  s: http://schema.org/
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:license: https://spdx.org/licenses/OPL-1.0
-
-$namespaces:
-  s: http://schema.org/
-
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
