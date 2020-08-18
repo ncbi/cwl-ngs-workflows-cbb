@@ -48,8 +48,7 @@ requirements:
 
           tss_size = int(sys.argv[4]) + 1
           gff_df = pandas.read_csv(sys.argv[1], sep='\t', header=None, comment='#')
-
-          gff_df[9], gff_df[10], gff_df[11] = gff_df[8].str.split(";", n = 2).str
+          gff_df[[9,10,11]] = gff_df[8].str.split(";", n = 2, expand = True)
           for i in range(9,12):
               if not gff_df[gff_df[i].str.contains("transcript_id")].empty:
                   gff_df = gff_df.rename(index=str, columns={ i:'transcript_id'})
@@ -85,8 +84,8 @@ requirements:
           bed_df = bed_df.rename(index=str, columns={0: "#chrom", 1: "st", 2:"end", 3:"label", 4:"pvalue"})
 
           tpm_df = pandas.read_csv(sys.argv[3], sep='\t')
-          tpm_df['#chrom'], tpm_df['coordinate'] = tpm_df['coordinate'].str.split(":", n = 2).str
-          tpm_df['st'], tpm_df['end'] = tpm_df['coordinate'].str.split("-", n = 2).str
+          tpm_df[['#chrom', 'coordinate']] = tpm_df['coordinate'].str.split(":", n = 2, expand = True)
+          tpm_df[['st', 'end']] = tpm_df['coordinate'].str.split("-", n = 2, expand = True)
           tpm_df['st'] = tpm_df['st'].astype('int64')
           tpm_df['end'] = tpm_df['end'].astype('int64')
           tpm_df = tpm_df.drop(columns=['coordinate'])
@@ -160,17 +159,14 @@ outputs:
 
 baseCommand: ["python","my.py"]
 
+$namespaces:
+  s: http://schema.org/
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:license: https://spdx.org/licenses/OPL-1.0
-
-$namespaces:
-  s: http://schema.org/
-
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
-
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
