@@ -136,12 +136,6 @@ inputs:
 
       read. The value is the number of bases to keep, from the start of the
       read.
-  - id: end_mode
-    type: string
-    inputBinding:
-      position: 1
-    doc: |
-      Single End (SE) or Paired End (PE) mode
   - id: headcrop
     type: int?
     inputBinding:
@@ -293,6 +287,7 @@ outputs:
 
 baseCommand:
   - trimmomatic
+  - SE
 
 $namespaces:
   edam: 'http://edamontology.org/'
