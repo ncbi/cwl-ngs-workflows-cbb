@@ -42,7 +42,6 @@ steps:
     in:
       avgqual: avgqual
       crop: crop
-      end_mode: { default: "SE" }
       headcrop: headcrop
       illuminaClip: illuminaClip
       leading: leading

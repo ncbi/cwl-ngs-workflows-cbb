@@ -136,12 +136,6 @@ inputs:
 
       read. The value is the number of bases to keep, from the start of the
       read.
-  - id: end_mode
-    type: string
-    inputBinding:
-      position: 1
-    doc: |
-      Single End (SE) or Paired End (PE) mode
   - id: headcrop
     type: int?
     inputBinding:
@@ -305,7 +299,19 @@ outputs:
         ${
             var files = [];
             for(var i = 0; i < inputs.input_files.length; i++){
-               files.push(inputs.input_files[i].basename);
+               var nameroot = inputs.input_files[i].nameroot;
+               if (nameroot.endsWith(".fastq")){
+                  nameroot = nameroot.replace(".fastq", "")
+               }else if (nameroot.endsWith(".fq")){
+                  nameroot = nameroot.replace(".fq", "")
+               }
+               if (nameroot.endsWith("_1")){
+                  nameroot = nameroot.slice(0, -2);
+                  files.push(nameroot + "_1.fastq.gz");
+               }else if (nameroot.endsWith("_2")){
+                  nameroot = nameroot.slice(0, -2);
+                  files.push(nameroot + "_2.fastq.gz");
+               }
             }
             return files;
          }
@@ -316,6 +322,7 @@ outputs:
 
 baseCommand:
   - trimmomatic
+  - PE
 
 $namespaces:
   edam: 'http://edamontology.org/'
