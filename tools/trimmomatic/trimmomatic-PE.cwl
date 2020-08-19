@@ -1,9 +1,5 @@
 class: CommandLineTool
 cwlVersion: v1.0
-$namespaces:
-  edam: 'http://edamontology.org/'
-  s: 'http://schema.org/'
-  sbg: 'https://www.sevenbridges.com/'
 
 label: Trimmomatic
 doc: >
@@ -234,6 +230,8 @@ inputs:
               var nameroot = inputs.input_files[i].nameroot;
               if (nameroot.endsWith(".fastq")){
                  nameroot = nameroot.replace(".fastq", "")
+              }else if (nameroot.endsWith(".fq")){
+                 nameroot = nameroot.replace(".fq", "")
               }
               if (nameroot.endsWith("_1")){
                  nameroot = nameroot.slice(0, -2);
@@ -319,9 +317,13 @@ outputs:
 baseCommand:
   - trimmomatic
 
+$namespaces:
+  edam: 'http://edamontology.org/'
+  s: 'http://schema.org/'
+
 $schemas:
   - 'http://edamontology.org/EDAM_1.16.owl'
-  - 'https://schema.org/version/latest/schema.rdf'
+  - 'https://schema.org/version/latest/schemaorg-current-http.rdf'
 's:author':
   - class: 's:Person'
     's:email': 'mailto:r78v10a07@gmail.com'
