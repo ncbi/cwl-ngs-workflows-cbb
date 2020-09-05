@@ -9,7 +9,7 @@ doc: >-
 hints:
   - $import: bwa-docker.yml
   - $import: bwa-bioconda.yml
-    
+
 requirements:
   InlineJavascriptRequirement: {}
   ResourceRequirement:
@@ -51,6 +51,21 @@ inputs:
     inputBinding:
       position: 1
       prefix: '-T'
+  K:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '-K'
+  Y:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: '-Y'
+  R:
+    type: string?
+    inputBinding:
+      position: 1
+      prefix: '-R'
   a:
     type: boolean?
     inputBinding:
@@ -96,20 +111,40 @@ outputs:
     type: File
     outputBinding:
       glob: |
-          ${
-             if (inputs.reads.length == 1)
-                return inputs.reads[0].nameroot.replace('.fastq', '') + '.sam';
-             else
-                return inputs.reads[0].nameroot.replace('_1.fastq', '') + '.sam';
-           }
-    
+        ${
+          var nameroot = inputs.reads[0].nameroot;
+          if (nameroot.endsWith(".fastq")){
+            nameroot = nameroot.replace(".fastq", "");
+          }else if (nameroot.endsWith(".fq")){
+            nameroot = nameroot.replace(".fq", "");
+          }
+          if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
+            nameroot = nameroot.slice(0, -2);
+          }else if (nameroot.includes("_R1_")){
+            nameroot = nameroot.substring(1, nameroot.indexOf("_R1_"))
+          }else if (nameroot.includes("_R2_")){
+            nameroot = nameroot.substring(1, nameroot.indexOf("_R2_"))
+          }
+          return nameroot + '.sam';
+        }
+
 stdout: |
   ${
-     if (inputs.reads.length == 1)
-        return inputs.reads[0].nameroot.replace('.fastq', '') + '.sam';
-     else
-        return inputs.reads[0].nameroot.replace('_1.fastq', '') + '.sam';
-   }
+    var nameroot = inputs.reads[0].nameroot;
+    if (nameroot.endsWith(".fastq")){
+      nameroot = nameroot.replace(".fastq", "");
+    }else if (nameroot.endsWith(".fq")){
+      nameroot = nameroot.replace(".fq", "");
+    }
+    if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
+      nameroot = nameroot.slice(0, -2);
+    }else if (nameroot.includes("_R1_")){
+      nameroot = nameroot.substring(1, nameroot.indexOf("_R1_"))
+    }else if (nameroot.includes("_R2_")){
+      nameroot = nameroot.substring(1, nameroot.indexOf("_R2_"))
+    }
+    return nameroot + '.sam';
+  }
 
 baseCommand: [bwa, mem]
 
@@ -121,6 +156,5 @@ s:author:
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
-
 $schemas:
   - https://schema.org/version/latest/schemaorg-current-http.rdf
