@@ -6,6 +6,8 @@ doc: Build HiC matrix from independently mated read pairs
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
 
 hints:
   - $import: hicexplorer-docker.yml

@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Picard-MarkDuplicates
-doc: Picard MarkDuplicates command
+label: Picard-CollectAlignmentSummaryMetrics
+doc: Picard CollectAlignmentSummaryMetrics command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -13,54 +13,33 @@ hints:
   - $import: picard-bioconda.yml
 
 inputs:
-  input:
+  R:
     type: File
     inputBinding:
       position: 1
-      prefix: INPUT=
+      prefix: R=
       separate: false
-  output:
-    type: string
+  I:
+    type: File
+    secondaryFiles: [.bai, .sbi]
     inputBinding:
       position: 2
-      prefix: OUTPUT=
+      prefix: I=
       separate: false
-  metrics:
+  O:
     type: string
     inputBinding:
       position: 3
-      prefix: METRICS_FILE=
-      separate: false
-  validation:
-    type: string
-    inputBinding:
-      position: 4
-      prefix: VALIDATION_STRINGENCY=
-      separate: false
-  sorted:
-    type: string
-    inputBinding:
-      position: 5
-      prefix: ASSUME_SORTED=
-      separate: false
-  remove_duplicates:
-    type: string
-    inputBinding:
-      position: 6
-      prefix: REMOVE_DUPLICATES=
+      prefix: O=
       separate: false
 
 outputs:
-  output_bam:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.output)
-  metrics_out:
-    type: File
-    outputBinding:
-      glob: $(inputs.metrics)
+      glob: $(inputs.O)
 
-baseCommand: ["picard","MarkDuplicates"]
+baseCommand: ["picard","CollectAlignmentSummaryMetrics"]
 
 $namespaces:
   s: http://schema.org/

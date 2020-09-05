@@ -2,8 +2,8 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Picard-MarkDuplicates
-doc: Picard MarkDuplicates command
+label: Picard-CollectInsertSizeMetrics
+doc: Picard CollectInsertSizeMetrics command
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -13,54 +13,43 @@ hints:
   - $import: picard-bioconda.yml
 
 inputs:
-  input:
+  I:
     type: File
+    secondaryFiles: [.bai, .sbi]
     inputBinding:
       position: 1
-      prefix: INPUT=
+      prefix: I=
       separate: false
-  output:
+  O:
     type: string
     inputBinding:
       position: 2
-      prefix: OUTPUT=
+      prefix: O=
       separate: false
-  metrics:
+  H:
     type: string
     inputBinding:
       position: 3
-      prefix: METRICS_FILE=
+      prefix: H=
       separate: false
-  validation:
-    type: string
+  M:
+    type: float?
     inputBinding:
       position: 4
-      prefix: VALIDATION_STRINGENCY=
-      separate: false
-  sorted:
-    type: string
-    inputBinding:
-      position: 5
-      prefix: ASSUME_SORTED=
-      separate: false
-  remove_duplicates:
-    type: string
-    inputBinding:
-      position: 6
-      prefix: REMOVE_DUPLICATES=
+      prefix: M=
       separate: false
 
 outputs:
-  output_bam:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.output)
-  metrics_out:
+      glob: $(inputs.O)
+  histogram:
     type: File
     outputBinding:
-      glob: $(inputs.metrics)
+      glob: $(inputs.H)
 
-baseCommand: ["picard","MarkDuplicates"]
+baseCommand: ["picard","CollectInsertSizeMetrics"]
 
 $namespaces:
   s: http://schema.org/
