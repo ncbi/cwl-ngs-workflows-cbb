@@ -2,46 +2,54 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-sort
-doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
+label: Picard-CollectInsertSizeMetrics
+doc: Picard CollectInsertSizeMetrics command
 
 requirements:
   InlineJavascriptRequirement: {}
-  ResourceRequirement:
-    coresMin: $(inputs.threads)
 
 hints:
-  - $import: samtools-docker.yml
-  - $import: samtools-bioconda.yml
+  - $import: picard-docker.yml
+  - $import: picard-bioconda.yml
 
 inputs:
-  threads:
-    type: int
+  I:
+    type: File
+    secondaryFiles: [.bai, .sbi]
     inputBinding:
-      prefix: --threads
       position: 1
-  out_bam:
+      prefix: I=
+      separate: false
+  O:
     type: string
     inputBinding:
       position: 2
-      prefix: -o
-  in_bam:
-    type: File
+      prefix: O=
+      separate: false
+  H:
+    type: string
     inputBinding:
       position: 3
-  n:
-    type: boolean?
+      prefix: H=
+      separate: false
+  M:
+    type: float?
     inputBinding:
-      prefix: -n
-      position: 1
+      position: 4
+      prefix: M=
+      separate: false
 
 outputs:
-  out_sam:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.out_bam)
+      glob: $(inputs.O)
+  histogram:
+    type: File
+    outputBinding:
+      glob: $(inputs.H)
 
-baseCommand: [samtools, sort]
+baseCommand: ["picard","CollectInsertSizeMetrics"]
 
 $namespaces:
   s: http://schema.org/

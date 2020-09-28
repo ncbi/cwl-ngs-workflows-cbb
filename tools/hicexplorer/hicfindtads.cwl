@@ -6,6 +6,8 @@ doc: Find HiC topologically associating domains (TADs)
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: $(inputs.numberOfProcessors)
 
 hints:
   - $import: hicexplorer-docker.yml

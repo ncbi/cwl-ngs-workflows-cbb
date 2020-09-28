@@ -2,37 +2,34 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-merge
+label: Samtools-depth
 doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
 
 requirements:
   InlineJavascriptRequirement: {}
-  ShellCommandRequirement: {}
 
 hints:
   - $import: samtools-docker.yml
   - $import: samtools-bioconda.yml
 
 inputs:
-  out_bam:
+  o:
     type: string
+  a:
+    type: File
     inputBinding:
       position: 1
-  in_bam:
-    type: File[]
-    inputBinding:
-      position: 2
-      separate: true
-      itemSeparator: " "
-      shellQuote: false
+      prefix: -a
 
 outputs:
-  out_sam:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.out_bam)
+      glob: $(inputs.o)
 
-baseCommand: [samtools, merge]
+stdout: $(inputs.o)
+
+baseCommand: [samtools, depth]
 
 $namespaces:
   s: http://schema.org/

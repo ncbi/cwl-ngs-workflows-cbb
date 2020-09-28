@@ -2,37 +2,44 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: Samtools-merge
-doc: Samtools is a suite of programs for interacting with high-throughput sequencing data
+label: Picard-CollectAlignmentSummaryMetrics
+doc: Picard CollectAlignmentSummaryMetrics command
 
 requirements:
   InlineJavascriptRequirement: {}
-  ShellCommandRequirement: {}
 
 hints:
-  - $import: samtools-docker.yml
-  - $import: samtools-bioconda.yml
+  - $import: picard-docker.yml
+  - $import: picard-bioconda.yml
 
 inputs:
-  out_bam:
-    type: string
+  R:
+    type: File
     inputBinding:
       position: 1
-  in_bam:
-    type: File[]
+      prefix: R=
+      separate: false
+  I:
+    type: File
+    secondaryFiles: [.bai, .sbi]
     inputBinding:
       position: 2
-      separate: true
-      itemSeparator: " "
-      shellQuote: false
+      prefix: I=
+      separate: false
+  O:
+    type: string
+    inputBinding:
+      position: 3
+      prefix: O=
+      separate: false
 
 outputs:
-  out_sam:
+  output:
     type: File
     outputBinding:
-      glob: $(inputs.out_bam)
+      glob: $(inputs.O)
 
-baseCommand: [samtools, merge]
+baseCommand: ["picard","CollectAlignmentSummaryMetrics"]
 
 $namespaces:
   s: http://schema.org/

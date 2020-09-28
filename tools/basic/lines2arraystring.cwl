@@ -1,3 +1,4 @@
+#!/usr/bin/env cwl-runner
 cwlVersion: v1.0
 class: ExpressionTool
 
@@ -11,38 +12,25 @@ hints:
   - $import: ubuntu-docker.yml
 
 inputs:
-  table:
+  file:
     type: File
     inputBinding:
       loadContents: true
-  column_name:
-    type: string
 
 outputs:
-  rows:
+  output:
     type: string[]
 
 expression:
   "${
-     var lines = inputs.table.contents.split('\\n');
-     var header = lines[0].split(',');
-     var colIndex = -1;
-     var rows = [];
-     for (var i = 0; i < header.length; i++) {
-        if (header[i] == inputs.column_name){
-           colIndex = i;
-           break;
+      var lines = inputs.file.contents.split('\\n');
+      var strings = [];
+      for (var i = 1; i < lines.length; i++) {
+        if (lines[i] != ''){
+          strings.push(lines[i]);
         }
-     }
-     if (colIndex !== -1){
-        for (var i = 1; i < lines.length; i++) {
-           var col = lines[i].split(',')[colIndex];
-           if (col != undefined && col.length != 0){
-              rows.push(col)
-           }
-        }
-     }
-     return { 'rows': rows } ;
+      }
+      return { 'output': strings } ;
   }"
 
 $namespaces:
