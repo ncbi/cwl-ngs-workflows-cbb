@@ -3,20 +3,19 @@
 ## Requirements
  
  * Python 3.x
- * CWLtools
- * Docker  
+ * [CWLtool](https://github.com/common-workflow-language/cwltool)
+ * Node.JS
+ * Conda ([Bioconda](https://bioconda.github.io/)) or Docker  
 
-## Tools 
+## CWL Tools 
 Defined in folder *tools*
 
-## Workflows
+## CWL Workflows
 Defined in *workflows*
 
-## Bioconda environment
+## Conda execution
 
-We created some requirement files for installing in **conda** environment. 
-
-Please, see https://bioconda.github.io/ for Bioconda instalation.
+Install and configure Conda and [Bioconda](https://bioconda.github.io/)
 
 ### Creating a *~/.condarc* file
 
@@ -28,43 +27,33 @@ Create a *.condarc* in your home directory and add:
         - defaults
     ssl_verify: true
     
-### Bioconda environment for RNA-Seq
+### Bioconda environment cwltool
 
 #### Creating a *conda* environment
 
-    conda create -n rnaseq
+    conda create -n cwltool
     
-#### Installing the *Bioconda* packages
+#### Installing the packages
 
-    conda install -n rnaseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-rnaseq.txt
+    conda install -n rnaseq cwltool nodejs
 
-Check the https://github.com/ncbi/cwl-ngs-workflows-cbb/tree/master/requirements folder 
-for more environments files. 
+#### Activating the *cwltool* env
 
-#### Activating the *rnaseq* env
-
-    source activate rnaseq
+    conda activate cwltool
     
 Then, all the required programs and tools will be available in the user **$PATH**
 
-### Bioconda environment for ChIP-Seq
+#### Running cwltool
 
-#### Creating a *conda* environment
+Using Conda as runtime environment the **cwltool** should be executed with the following examples:
 
-    conda create -n chipseq
-    
-#### Installing the *Bioconda* packages
+    cwltool --no-container --beta-conda-dependencies --beta-dependencies-directory /path-to-directory/storing-conda-envs
 
-    conda install -n chipseq --file https://raw.githubusercontent.com/ncbi/cwl-ngs-workflows-cbb/master/requirements/conda-chipseq.txt
+## Docker execution
 
-Check the https://github.com/ncbi/cwl-ngs-workflows-cbb/tree/master/requirements folder 
-for more environments files. 
+Execute **cwltool** with these options if Docker is installed and user has permissions to pull images:
 
-#### Activating the *chipseq* env
-
-    source activate chipseq
-    
-Then, all the required programs and tools will be available in the user **$PATH**
+    cwltool  --no-read-only --beta-use-biocontainers
 
 # Public Domain notice
 
