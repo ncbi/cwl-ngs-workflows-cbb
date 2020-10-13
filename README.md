@@ -35,7 +35,7 @@ Create a *.condarc* in your home directory and add:
     
 #### Installing the packages
 
-    conda install -n rnaseq cwltool nodejs
+    conda install -n cwltool cwltool nodejs
 
 #### Activating the *cwltool* env
 
