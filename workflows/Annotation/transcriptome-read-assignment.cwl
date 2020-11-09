@@ -90,7 +90,17 @@ steps:
       - id: limitSjdbInsertNsj
         default: 1000000
       - id: outFileNamePrefix
-        valueFrom: '${ return inputs.readFilesIn.nameroot.replace(''_1.fastq'', '''') ;}'
+        valueFrom: |
+          ${
+            var nameroot = inputs.reads[0].nameroot;
+            if (nameroot.endsWith(".fastq")){
+               nameroot = nameroot.replace(".fastq", "")
+            }
+            if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
+               nameroot = nameroot.slice(0, -2);
+            }
+            return nameroot;
+          }
       - id: outFilterMatchNminOverLread
         default: 0
       - id: outFilterMismatchNmax
