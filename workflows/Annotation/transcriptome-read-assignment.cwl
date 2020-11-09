@@ -6,10 +6,8 @@ label: Transcriptome Read assignment
 inputs:
   - id: genome_fasta
     type: File
-  - id: reads_1
-    type: File
-  - id: reads_2
-    type: File
+  - id: reads
+    type: File[]
   - id: threads
     type: int
 
@@ -115,10 +113,8 @@ steps:
         default: Log
       - id: readFilesCommand
         default: zcat
-      - id: readFilesIn
-        source: reads_1
-      - id: readFilesIn_2
-        source: reads_2
+      - id: reads
+        source: reads
       - id: seedSearchStartLmax
         default: 12
       - id: threads
