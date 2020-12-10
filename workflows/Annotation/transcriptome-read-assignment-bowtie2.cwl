@@ -47,7 +47,7 @@ steps:
       - id: no_unal
         default: true
       - id: k
-        default: 5
+        default: 50
       - id: fastq1
         source: fastq1
       - id: fastq2
