@@ -231,10 +231,16 @@ inputs:
                  nameroot = nameroot.slice(0, -2);
                  listing += nameroot + "_1.fastq.gz "
                  listing += nameroot + "_U_1.fastq.gz ";
+              }else if (nameroot.includes("_R1_")){
+                 listing += nameroot + ".fastq.gz "
+                 listing += nameroot + "_U.fastq.gz ";
               }else if (nameroot.endsWith("_2")){
                  nameroot = nameroot.slice(0, -2);
                  listing += nameroot + "_2.fastq.gz "
                  listing += nameroot + "_U_2.fastq.gz ";
+              }else if (nameroot.includes("_R2_")){
+                 listing += nameroot + ".fastq.gz "
+                 listing += nameroot + "_U.fastq.gz ";
               }
            }
            return listing;
