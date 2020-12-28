@@ -14,7 +14,6 @@ inputs:
   vector_fsa: File
   total_per_file: int
   threads: int
-  vector_bp_cutoff: int
   min_length: int
   evalue: float
 
@@ -80,17 +79,9 @@ steps:
     in:
       fasta: uncompress_noequal/output
       blast: vector_blastn/output
-      vector_bp_cutoff: vector_bp_cutoff
       threads: threads
       min_length: min_length
     out: [fsa]
-  uncompress_no_vect:
-    run: ../../tools/basic/gzip.cwl
-    label: Uncompress no vector fsa fasta
-    in:
-      d: { default: True}
-      file: vector_removal/fsa
-    out: [output]
   duplicate_blastdb:
     run: ../../tools/blast/makeblastdb.cwl
     label: Make Duplicate BlastDB
@@ -98,7 +89,7 @@ steps:
       dbtype: { default: "nucl"}
       hash_index: { default: True}
       out: { default: "duplicate_blastdb"}
-      in: uncompress_no_vect/output
+      in: vector_removal/fsa
     out: [out_db]
   collect_duplicate_blastdb:
     run: ../../tools/basic/files2dir.cwl
@@ -113,7 +104,7 @@ steps:
     in:
       dbdir: collect_duplicate_blastdb/output
       db: { default: "duplicate_blastdb"}
-      query: uncompress_no_vect/output
+      query: vector_removal/fsa
       num_threads: threads
       out:
         valueFrom: ${ return inputs.query.nameroot + ".tsv";}
@@ -125,7 +116,7 @@ steps:
     run: ../../tools/python/duplicate-removal.cwl
     label: Remove duplicates from BlastN
     in:
-      fasta: uncompress_no_vect/output
+      fasta: vector_removal/fsa
       blast: duplicate_blastn/output
       threads: threads
     out: [fsa]

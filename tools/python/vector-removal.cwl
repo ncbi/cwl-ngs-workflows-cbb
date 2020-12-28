@@ -56,101 +56,116 @@ requirements:
           import sys
           import pandas
           import gzip
+          import datetime
           from Bio import SeqIO
-          from multiprocessing import Pool
+          from Bio.Seq import Seq
+          from Bio.SeqRecord import SeqRecord
+          from multiprocessing import Pool, Value
 
           fasta = sys.argv[1]
           blast_tsv = sys.argv[2]
-          vector_bp_cutoff = int(sys.argv[3])
-          threads = int(sys.argv[4])
-          min_length = int(sys.argv[5])
-          max_per_thread = 20000
-          total_transcripts = 0
+          threads = int(sys.argv[3])
+          min_length = int(sys.argv[4])
 
-          blast_df = pandas.read_csv(blast_tsv, sep='\t', header=None)
-          print('{} results loaded from Blast'.format(len(blast_df)))
+          if threads > 1:
+              threads = threads - 1
 
-          def worker_blast(s):
-              data = []
-              df = blast_df[blast_df[0].isin(s)]
-              for t in s:
-                  d = df[df[0] == t]
-                  data.append([t, d[2].min(), d[3].max()])
-              return pandas.DataFrame(data)
+          blast = pandas.read_csv(blast_tsv, sep='\t', header=None)
+          print('{} results loaded from Blast'.format(len(blast)))
+
+          filename, ext = os.path.splitext(os.path.basename(fasta))
+          if ext == '.gz':
+              handler = gzip.open(fasta, 'rt')
+              prefix  =  os.path.splitext(filename)[0] + '_novec'
+          else:
+              handler = open(fasta, 'r')
+              prefix = filename + '_novec'
+
+          transcripts = {}
+          count = 0
+          for record in SeqIO.parse(handler, "fasta"):
+              count += 1
+              transcripts[record.id] = record
+              print('{}'.format(count), end='\r')
+          total = len(transcripts)
+          print('{} transcripts to process'.format(total))
+          handler.close()
+
+          file_prefix = Value('i', 0)
+          counter = Value('i', 0)
+          start_time = datetime.datetime.now()
 
           def chunks(lst, n):
               """Yield successive n-sized chunks from lst."""
               for i in range(0, len(lst), n):
                   yield lst[i:i + n]
 
-          print('Using {} threads to create vector coordinates per trasncript'.format(threads))
+          def build_seqs(segs, rec):
+              last = 0
+              segments_to_build = []
+              for s in segs:
+                  if s[0] - 1 - last >= 200:
+                      segments_to_build.append([last,s[0] - 1])
+                  last = s[1] + 1
+              if len(rec.seq) - last >= 200:
+                  segments_to_build.append([last,len(rec.seq)])
+              return segments_to_build
+
+          def build_segments_worker(tlist):
+              global counter
+              global total
+              global file_prefix
+              with file_prefix.get_lock():
+                  file_prefix.value += 1
+                  pre = file_prefix.value
+              with open('{}_novect.fsa'.format(pre), "w") as novect_handle:
+                  blast_df = blast[blast[0].isin(tlist)]
+                  for t in tlist:
+                      trans = transcripts[t]
+                      df = blast_df[blast_df[0] == t][[2, 3]].sort_values(by=[2, 3]).drop_duplicates()
+                      if df.empty:
+                          if len(trans.seq) >= 200:
+                              SeqIO.write(trans, novect_handle, "fasta")
+                      else:
+                          segs = []
+                          index = 0
+                          last_seg = None
+                          for i, r in df.iterrows():
+                              if not segs:
+                                  index = 1
+                                  last_seg = [r[2], r[3]]
+                                  segs.append(last_seg)
+                              elif r[2] <= last_seg[1] and r[3] > last_seg[1]:
+                                  last_seg = [last_seg[0], r[3]]
+                                  segs[index - 1] = last_seg
+                              elif r[2] > last_seg[1]:
+                                  index += 1
+                                  last_seg = [r[2], r[3]]
+                                  segs.append(last_seg)
+                          segs_to_build = build_seqs(segs, trans)
+                          for s in segs_to_build:
+                              id = '{}|{}_{}'.format(t, s[0], s[1])
+                              rec = SeqRecord(trans.seq[s[0]:s[1]], id=id, name=id, description='')
+                              SeqIO.write(rec, novect_handle, "fasta")
+                      with counter.get_lock():
+                          counter.value += 1
+                          value = counter.value
+                          end_time = datetime.datetime.now()
+                          c = end_time - start_time
+                          print('{:3.2f}%\tRemaining: {:5.1f} secs Elapsed: {:5.1f} secs {}'.format((value * 100 / total), ((c.seconds * total / value) - c.seconds), c.seconds, 20 * ' '), end='\r')
           p = Pool(processes=threads)
-          data = p.map(worker_blast, [d for d in list(chunks(blast_df[0].unique(), 1000))])
-          blast_df = pandas.DataFrame()
-          for d in data:
-              blast_df = pandas.concat([blast_df, d])
-          p.close()
-          blast_df = blast_df.set_index(0)
-          print('{} transcript with vectors to remove'.format(len(blast_df)))
-
-          filename, ext = os.path.splitext(os.path.basename(fasta))
-          if ext == '.gz':
-              handle = gzip.open(fasta, 'rt')
-              prefix  =  os.path.splitext(filename)[0] + '_novec'
-          else:
-              handle = open(fasta, 'r')
-              prefix = filename + '_novec'
-
-          for record in SeqIO.parse(handle, "fasta"):
-              total_transcripts += 1
-          print('{} transcripts to process'.format(total_transcripts))
-          handle.close()
-
-          def worker_vector(s):
-              if ext == '.gz':
-                  handle = gzip.open(fasta, 'rt')
-              else:
-                  handle = open(fasta, 'r')
-              with open('{}.fsa'.format(s), "w") as output_handle:
-                  count = 0
-                  total = 0
-                  for r in SeqIO.parse(handle, "fasta"):
-                      if count == s + max_per_thread:
-                          break
-                      if count >= s:
-                          l = len(r.seq)
-                          if l >= min_length:
-                              try:
-                                  a = blast_df.loc[r.id]
-                                  if a[2] <= vector_bp_cutoff:
-                                      r.seq = r.seq[a[2] + 1:]
-                                      if len(r.seq) >= min_length:
-                                          total += 1
-                                          SeqIO.write(r, output_handle, "fasta")
-                                  elif l - vector_bp_cutoff <= a[1]:
-                                      r.seq = r.seq[0:a[1] - 1]
-                                      if len(r.seq) >= min_length:
-                                          total += 1
-                                          SeqIO.write(r, output_handle, "fasta")
-                              except:
-                                  total += 1
-                                  SeqIO.write(r, output_handle, "fasta")
-                      count += 1
-                  handle.close()
-              print('Chunk started in {} accepted {} transcripts'.format(s, total))
-
-          p = Pool(processes=threads)
-          data = p.map(worker_vector, [d for d in range(0, total_transcripts, max_per_thread)])
-          p.close()
-
-          output_handle = gzip.open('{}.fsa.gz'.format(prefix), "wt")
-          print('Writing final file {}.fsa.gz'.format(prefix))
-          for d in range(0, total_transcripts, max_per_thread):
-              with open('{}.fsa'.format(d)) as input_handle:
-                  for r in SeqIO.parse(input_handle, "fasta"):
-                      output_handle.write(r.format("fasta"))
-              os.remove('{}.fsa'.format(d))
-          output_handle.close()
+          transcripts_list = [d for d in list(chunks(list(transcripts.keys()), 1000))]
+          data = p.map(build_segments_worker, transcripts_list)
+          print('\n\nPrinting results...')
+          count = 0
+          with open('{}_novect.fsa'.format(prefix), "w") as output_handle:
+              for d in range(1, len(transcripts_list) + 1):
+                  with open('{}_novect.fsa'.format(d)) as input_handle:
+                      for r in SeqIO.parse(input_handle, "fasta"):
+                          count += 1
+                          SeqIO.write(r, output_handle, "fasta")
+                  os.remove('{}_novect.fsa'.format(d))
+          print('{} transcripts with no interior vectors'.format(count))
 
 inputs:
   fasta:
@@ -161,24 +176,20 @@ inputs:
     type: File
     inputBinding:
       position: 2
-  vector_bp_cutoff:
-    type: int
-    inputBinding:
-      position: 3
   threads:
     type: int
     inputBinding:
-      position: 4
+      position: 3
   min_length:
     type: int
     inputBinding:
-      position: 5
+      position: 4
 
 outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*_novec.fsa.gz'
+      glob: '*_novect.fsa'
 
 baseCommand: ["python","vector_removal.py"]
 
