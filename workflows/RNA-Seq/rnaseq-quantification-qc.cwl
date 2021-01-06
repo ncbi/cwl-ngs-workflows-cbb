@@ -174,6 +174,7 @@ steps:
   read_quality:
     run: ../../tools/rseqc/rseqc-read_quality.cwl
     in:
+      ramMax: ramMaxRSeQC
       i: bam
       q: q
       o:

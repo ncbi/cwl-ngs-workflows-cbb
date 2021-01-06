@@ -10,7 +10,7 @@ requirements:
   ResourceRequirement:
     ramMax: |
       ${
-          return inputs.ramMax ? inputs.ramMax : 32000
+          return inputs.ramMax ? inputs.ramMax : 18000
       }
 
 hints:
