@@ -121,9 +121,9 @@ outputs:
           if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
             nameroot = nameroot.slice(0, -2);
           }else if (nameroot.includes("_R1_")){
-            nameroot = nameroot.substring(1, nameroot.indexOf("_R1_"))
+            nameroot = nameroot.substring(0, nameroot.indexOf("_R1_"))
           }else if (nameroot.includes("_R2_")){
-            nameroot = nameroot.substring(1, nameroot.indexOf("_R2_"))
+            nameroot = nameroot.substring(0, nameroot.indexOf("_R2_"))
           }
           return nameroot + '.sam';
         }
@@ -139,9 +139,9 @@ stdout: |
     if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
       nameroot = nameroot.slice(0, -2);
     }else if (nameroot.includes("_R1_")){
-      nameroot = nameroot.substring(1, nameroot.indexOf("_R1_"))
+      nameroot = nameroot.substring(0, nameroot.indexOf("_R1_"))
     }else if (nameroot.includes("_R2_")){
-      nameroot = nameroot.substring(1, nameroot.indexOf("_R2_"))
+      nameroot = nameroot.substring(0, nameroot.indexOf("_R2_"))
     }
     return nameroot + '.sam';
   }
