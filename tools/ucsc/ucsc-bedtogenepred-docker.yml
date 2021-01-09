@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/ucsc-bedtogenepred:377--h446ed27_1
