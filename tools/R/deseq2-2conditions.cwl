@@ -96,7 +96,7 @@ requirements:
           print(paste('Processing Deseq2 condition:', condition))
           # We should use apeglm instead of normal but apeglm is not available in the
           # Biconda Deseq2 package.
-          res <- lfcShrink(dds, coef=condition, type="normal")
+          res <- lfcShrink(dds, coef=condition, type="apeglm")
 
           res <- results(dds, alpha=fdr)
           resOrdered <- res[order(res$padj),]
