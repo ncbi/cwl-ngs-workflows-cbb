@@ -4,4 +4,4 @@ packages:
     version:
       - '377'
     specs:
-      - https://anaconda.org/bioconda/ucsc-genepredtobed
+      - https://anaconda.org/bioconda/ucsc-bedtogenepred
