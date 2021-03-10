@@ -47,6 +47,8 @@ hints:
           - https://anaconda.org/conda-forge/networkx
 
 requirements:
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
@@ -76,10 +78,10 @@ requirements:
           filename, ext = os.path.splitext(os.path.basename(fasta))
           if ext == '.gz':
               handler = gzip.open(fasta, 'rt')
-              prefix  =  os.path.splitext(filename)[0] + '_novec'
+              prefix  =  os.path.splitext(filename)[0] + '_novect'
           else:
               handler = open(fasta, 'r')
-              prefix = filename + '_novec'
+              prefix = filename + '_novect'
 
           transcripts = {}
           count = 0
@@ -158,7 +160,7 @@ requirements:
           data = p.map(build_segments_worker, transcripts_list)
           print('\n\nPrinting results...')
           count = 0
-          with open('{}_novect.fsa'.format(prefix), "w") as output_handle:
+          with open('{}.fsa'.format(prefix), "w") as output_handle:
               for d in range(1, len(transcripts_list) + 1):
                   with open('{}_novect.fsa'.format(d)) as input_handle:
                       for r in SeqIO.parse(input_handle, "fasta"):

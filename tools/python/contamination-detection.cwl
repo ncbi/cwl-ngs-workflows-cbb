@@ -48,6 +48,8 @@ hints:
 
 
 requirements:
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:

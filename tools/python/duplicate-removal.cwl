@@ -41,6 +41,8 @@ hints:
           - https://anaconda.org/conda-forge/biopython
 
 requirements:
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
@@ -89,7 +91,7 @@ requirements:
                   return (True, id, [])
               return (False, id, df[1].unique())
 
-          p = Pool(processes=64)
+          p = Pool(processes=threads)
           data = p.map(worker, [d for d in records.keys()])
 
           print('Writing final file {}.fsa.gz'.format(prefix))
