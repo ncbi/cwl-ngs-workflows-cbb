@@ -97,21 +97,12 @@ requirements:
           file_name = paste('condition_',condition1, '_vs_',condition2,'_edgeR.csv',sep='')
           write.table(res, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
 
-          count <- nrow(res[(res$FDR <= fdr & res$logFC >= fc),])
-          print(paste('Genes with FDR >= ', fdr, " and logFC >= ", fc, ": ", count, sep=''))
-          count <- nrow(res[(res$FDR <= fdr & res$logFC <= -1.0 * fc),])
-          print(paste('Genes with FDR >= ', fdr, " and logFC <= ", fc, ": ", count, sep=''))
-
-          pdf(paste('condition_',condition1, '_vs_',condition2,'_edgeR_volcano.pdf',sep=''))
-          with(res, plot(logFC, -log10(FDR), pch=20, main=paste("Volcano plot\n",'condition_',condition1, '_vs_',condition2, sep='')))
-          with(subset(res, (FDR <= fdr & abs(logFC) >= fc)), points(logFC, -log10(FDR), pch=20, col=highlight_color))
-          dev.off()
+          count_upregulated <- nrow(res[(res$FDR <= fdr & res$logFC >= fc),])
+          print(paste('Genes with FDR >= ', fdr, " and logFC >= ", fc, ": ", count_upregulated, sep=''))
+          count_downregulated <- nrow(res[(res$FDR <= fdr & res$logFC <= -1.0 * fc),])
+          print(paste('Genes with FDR >= ', fdr, " and logFC <= ", fc, ": ", count_downregulated, sep=''))
 
           yy <- cpm(y, log=TRUE, prior.count = 1)
-          resOrdered_data <- res[(res$FDR <= fdr & abs(res$logFC) >= fc),]
-          topVarGenes <- rownames(resOrdered_data)
-          selY <- yy[topVarGenes,]
-
           pca <- prcomp(t(yy), scale. = TRUE)
           data.pca <- as.data.frame(pca$x[,c('PC1', 'PC2')])
           data.pca$condition <- factors.set$condition
@@ -125,38 +116,49 @@ requirements:
               ylab("PC2")
           ggsave(paste('condition_',condition1, '_vs_',condition2,'_edgeR_pca.pdf',sep=''))
 
-          pal <- colorRampPalette(c("white","blue"))
-          pdf(paste('condition_',condition1, '_vs_',condition2,'_edgeR_expression_heatmap.pdf',sep=''))
-          heatmap.2(selY, col=pal, Rowv=T, Colv=T,
-                    dendrogram = c("both"),
-                    trace="none",
-                    density.info=c("density"),
-                    key.xlab="Expression value",
-                    key.ylab="Density",
-                    main=paste("Expression\n",'condition_',condition1, '_vs_',condition2, sep=''),
-                    cexCol=.5,
-                    offsetCol=.0,
-                    cexRow=.5,
-                    margins=c(6,12),
-                    breaks=20,
-                    key=T,)
-          dev.off()
+          if (count_upregulated > 0 && count_downregulated > 0){
+            pdf(paste('condition_',condition1, '_vs_',condition2,'_edgeR_volcano.pdf',sep=''))
+            with(res, plot(logFC, -log10(FDR), pch=20, main=paste("Volcano plot\n",'condition_',condition1, '_vs_',condition2, sep='')))
+            with(subset(res, (FDR <= fdr & abs(logFC) >= fc)), points(logFC, -log10(FDR), pch=20, col=highlight_color))
+            dev.off()
 
-          pdf(paste('condition_',condition1, '_vs_',condition2,'_edgeR_correlation_heatmap.pdf',sep=''))
-          heatmap.2(cor(selY), col=pal, Rowv=T, Colv=T,
-                    dendrogram = c("column"),
-                    trace="none",
-                    density.info=c("density"),
-                    key.xlab="Expression value",
-                    key.ylab="Density",
-                    main=paste("Correlation\n",'condition_',condition1, '_vs_',condition2, sep=''),
-                    cexCol=.5,
-                    offsetCol=.0,
-                    cexRow=.5,
-                    margins=c(6,12),
-                    breaks=20,
-                    key=T,)
-          dev.off()
+            resOrdered_data <- res[(res$FDR <= fdr & abs(res$logFC) >= fc),]
+            topVarGenes <- rownames(resOrdered_data)
+            selY <- yy[topVarGenes,]
+
+            pal <- colorRampPalette(c("white","blue"))
+            pdf(paste('condition_',condition1, '_vs_',condition2,'_edgeR_expression_heatmap.pdf',sep=''))
+            heatmap.2(selY, col=pal, Rowv=T, Colv=T,
+                      dendrogram = c("both"),
+                      trace="none",
+                      density.info=c("density"),
+                      key.xlab="Expression value",
+                      key.ylab="Density",
+                      main=paste("Expression\n",'condition_',condition1, '_vs_',condition2, sep=''),
+                      cexCol=.5,
+                      offsetCol=.0,
+                      cexRow=.5,
+                      margins=c(6,12),
+                      breaks=20,
+                      key=T,)
+            dev.off()
+
+            pdf(paste('condition_',condition1, '_vs_',condition2,'_edgeR_correlation_heatmap.pdf',sep=''))
+            heatmap.2(cor(selY), col=pal, Rowv=T, Colv=T,
+                      dendrogram = c("column"),
+                      trace="none",
+                      density.info=c("density"),
+                      key.xlab="Expression value",
+                      key.ylab="Density",
+                      main=paste("Correlation\n",'condition_',condition1, '_vs_',condition2, sep=''),
+                      cexCol=.5,
+                      offsetCol=.0,
+                      cexRow=.5,
+                      margins=c(6,12),
+                      breaks=20,
+                      key=T,)
+            dev.off()
+          }
 
 inputs:
   factor:
@@ -218,15 +220,15 @@ outputs:
      outputBinding:
        glob: condition_*_edgeR_pca.pdf
    volcano_plot:
-     type: File
+     type: File?
      outputBinding:
        glob: condition_*_edgeR_volcano.pdf
    correlation_heatmap:
-     type: File
+     type: File?
      outputBinding:
        glob: condition_*_edgeR_correlation_heatmap.pdf
    expression_heatmap:
-     type: File
+     type: File?
      outputBinding:
        glob: condition_*_edgeR_expression_heatmap.pdf
 

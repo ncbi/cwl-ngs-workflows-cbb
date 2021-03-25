@@ -105,10 +105,10 @@ requirements:
           resOrdered_data <- data.frame("Gene_Id"=rownames(resOrdered_data),resOrdered_data)
           resOrdered_data <- resOrdered_data[!is.na(resOrdered_data$padj), ]
 
-          count <- nrow(resOrdered_data[(resOrdered_data$padj <= fdr & resOrdered_data$log2FoldChange >= fc),])
-          print(paste('Genes with FDR >= ', fdr, " and logFC >= ", fc, ": ", count, sep=''))
-          count <- nrow(resOrdered_data[(resOrdered_data$padj <= fdr & resOrdered_data$log2FoldChange <= -1.0 * fc),])
-          print(paste('Genes with FDR >= ', fdr, " and logFC <= ", fc, ": ", count, sep=''))
+          count_upregulated <- nrow(resOrdered_data[(resOrdered_data$padj <= fdr & resOrdered_data$log2FoldChange >= fc),])
+          print(paste('Genes with FDR >= ', fdr, " and logFC >= ", fc, ": ", count_upregulated, sep=''))
+          count_downregulated <- nrow(resOrdered_data[(resOrdered_data$padj <= fdr & resOrdered_data$log2FoldChange <= -1.0 * fc),])
+          print(paste('Genes with FDR >= ', fdr, " and logFC <= ", fc, ": ", count_downregulated, sep=''))
 
           file_name = paste(condition,'_deseq2.csv',sep='')
           write.table(resOrdered_data, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
@@ -118,11 +118,6 @@ requirements:
           file_name <- paste(condition, "_deseq2_pca.csv", sep="")
           write.table(data.pca, file_name, row.names=F, na="NA", append = F, quote= FALSE, sep = ",", col.names = T)
 
-          pdf(paste(condition,'_deseq2_volcano.pdf',sep=''))
-          with(resOrdered_data, plot(log2FoldChange, -log10(padj), pch=20, main=paste("Volcano plot\n",condition, sep='')))
-          with(subset(resOrdered_data, (padj <= fdr & abs(log2FoldChange) >= fc)), points(log2FoldChange, -log10(padj), pch=20, col="red"))
-          dev.off()
-
           percentVar <- round(100 * attr(data.pca, "percentVar"))
           ggplot(data.pca, aes(PC1, PC2, color=condition)) +
                   geom_point(size=1) +
@@ -131,41 +126,48 @@ requirements:
                   ylab(paste0("PC2: ",percentVar[2],"% variance"))
           ggsave(paste(condition,'_deseq2_pca.pdf',sep=''))
 
-          resOrdered_data <- resOrdered_data[(resOrdered_data$padj <= fdr & abs(resOrdered_data$log2FoldChange) >= fc),]
-          topVarGenes <- rownames(resOrdered_data)
-          if (length(topVarGenes) > 0){
-              pal <- colorRampPalette(c("white","blue"))
-              pdf(paste(condition,'_deseq2_expression_heatmap.pdf',sep=''))
-              heatmap.2(assay(rld)[ topVarGenes, ], col=pal, Rowv=T, Colv=T,
-                        dendrogram = c("both"),
-                        trace="none",
-                        density.info=c("density"),
-                        key.xlab="Expression value",
-                        key.ylab="Density",
-                        main=paste("Expression\n",condition, sep=''),
-                        cexCol=.5,
-                        offsetCol=.0,
-                        cexRow=.5,
-                        margins=c(6,12),
-                        breaks=20,
-                        key=T,)
-              dev.off()
+          if (count_upregulated > 0 && count_downregulated > 0){
+            pdf(paste(condition,'_deseq2_volcano.pdf',sep=''))
+            with(resOrdered_data, plot(log2FoldChange, -log10(padj), pch=20, main=paste("Volcano plot\n",condition, sep='')))
+            with(subset(resOrdered_data, (padj <= fdr & abs(log2FoldChange) >= fc)), points(log2FoldChange, -log10(padj), pch=20, col="red"))
+            dev.off()
 
-              pdf(paste(condition,'_deseq2_correlation_heatmap.pdf',sep=''))
-              heatmap.2(cor(assay(rld)[ topVarGenes, ]), col=pal, Rowv=T, Colv=T,
-                        dendrogram = c("column"),
-                        trace="none",
-                        density.info=c("density"),
-                        key.xlab="Expression value",
-                        key.ylab="Density",
-                        main=paste("Correlation\n",condition, sep=''),
-                        cexCol=.5,
-                        offsetCol=.0,
-                        cexRow=.5,
-                        margins=c(6,12),
-                        breaks=20,
-                        key=T,)
-              dev.off()
+            resOrdered_data <- resOrdered_data[(resOrdered_data$padj <= fdr & abs(resOrdered_data$log2FoldChange) >= fc),]
+            topVarGenes <- rownames(resOrdered_data)
+            if (length(topVarGenes) > 0){
+                pal <- colorRampPalette(c("white","blue"))
+                pdf(paste(condition,'_deseq2_expression_heatmap.pdf',sep=''))
+                heatmap.2(assay(rld)[ topVarGenes, ], col=pal, Rowv=T, Colv=T,
+                          dendrogram = c("both"),
+                          trace="none",
+                          density.info=c("density"),
+                          key.xlab="Expression value",
+                          key.ylab="Density",
+                          main=paste("Expression\n",condition, sep=''),
+                          cexCol=.5,
+                          offsetCol=.0,
+                          cexRow=.5,
+                          margins=c(6,12),
+                          breaks=20,
+                          key=T,)
+                dev.off()
+
+                pdf(paste(condition,'_deseq2_correlation_heatmap.pdf',sep=''))
+                heatmap.2(cor(assay(rld)[ topVarGenes, ]), col=pal, Rowv=T, Colv=T,
+                          dendrogram = c("column"),
+                          trace="none",
+                          density.info=c("density"),
+                          key.xlab="Expression value",
+                          key.ylab="Density",
+                          main=paste("Correlation\n",condition, sep=''),
+                          cexCol=.5,
+                          offsetCol=.0,
+                          cexRow=.5,
+                          margins=c(6,12),
+                          breaks=20,
+                          key=T,)
+                dev.off()
+            }
           }
 
 inputs:
@@ -224,15 +226,15 @@ outputs:
      outputBinding:
        glob: condition_*_deseq2_pca.pdf
    volcano_plot:
-     type: File
+     type: File?
      outputBinding:
        glob: condition_*_deseq2_volcano.pdf
    correlation_heatmap:
-     type: File
+     type: File?
      outputBinding:
        glob: condition_*_deseq2_correlation_heatmap.pdf
    expression_heatmap:
-     type: File
+     type: File?
      outputBinding:
        glob: condition_*_deseq2_expression_heatmap.pdf
 
