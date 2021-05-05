@@ -15,6 +15,14 @@ hints:
   - $import: samtools-bioconda.yml
 
 inputs:
+  S:
+    type: boolean
+    default: false
+    inputBinding:
+      position: 2
+      prefix: -S
+    doc: |
+      input format is auto-detected
   isbam:
     type: boolean
     default: false
@@ -64,7 +72,6 @@ inputs:
     type: string[]?
     inputBinding:
       position: 1
-
     doc: |
       read tag to strip (repeatable) [null]
   input:

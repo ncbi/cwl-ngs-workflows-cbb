@@ -16,6 +16,21 @@ hints:
   - $import: bowtie2-bioconda.yml
 
 inputs:
+  all:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --all
+  best:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --best
+  m:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -m
   p:
     type: int?
     inputBinding:

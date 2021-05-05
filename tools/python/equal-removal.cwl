@@ -6,7 +6,7 @@ doc: This tools remove equal sequences
 
 hints:
   DockerRequirement:
-    dockerImageId: cwl-ngs-workflows-cbb-equal-removal:3.7
+    dockerImageId: cwl-ngs-workflows-cbb-biopython:3.7
     dockerFile: |
       # Base Image
       FROM quay.io/biocontainers/python:3.7

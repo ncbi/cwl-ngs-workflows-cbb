@@ -1,8 +1,8 @@
 class: CommandLineTool
 cwlVersion: v1.0
 
-label: split_fasta
-doc: Split fasta file in multiple files
+label: split_genome_by_window
+doc: Split genome in fasta file in multiple files using window size and overload
 
 hints:
   DockerRequirement:
@@ -35,63 +35,77 @@ hints:
           - https://anaconda.org/conda-forge/biopython
 
 requirements:
+  ResourceRequirement:
+    coresMin: $(inputs.threads)
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
-      - entryname: split-fasta.py
+      - entryname: split-genome-by-window.py
         entry: |
           import os
           import sys
           import gzip
           from Bio import SeqIO
+          from Bio.SeqRecord import SeqRecord
+          from multiprocessing import Pool
 
           fasta = sys.argv[1]
-          total_per_file = int(sys.argv[2])
+          window = int(sys.argv[2])
+          overlap = int(sys.argv[3])
+          threads = int(sys.argv[4])
 
           filename, ext = os.path.splitext(os.path.basename(fasta))
           if ext == '.gz':
               handle = gzip.open(fasta, 'rt')
-              prefix  =  '{}_{}'.format(os.path.splitext(filename)[0], total_per_file)
           else:
               handle = open(fasta, 'r')
-              prefix = '{}_{}'.format(filename, total_per_file)
 
-          count = 0
-          total = 0
-          trans_deleted = 0
-          output_handle = gzip.open('{}_{}.fsa.gz'.format(total_per_file, total + 1), "wt")
-          print('Writing file {}_{}.fsa.gz'.format(total_per_file, total + 1))
+          def worker(r):
+              start = 0
+              length = len(r.seq)
+              while True:
+                  end = window + start
+                  if end > length:
+                      end = length
+                  with open('{}_{}.fsa'.format(r.id,start), 'w') as output_handle:
+                      record = SeqRecord(r.seq[start:end],
+                             id='{}_{}'.format(r.id,start), name="",
+                             description="")
+                      output_handle.write(record.format("fasta"))
+                  start += window - overlap
+                  if end == length:
+                      break
 
-          for r in SeqIO.parse(handle, "fasta"):
-              if count == total_per_file:
-                  count = 0
-                  total += 1
-                  output_handle.close()
-                  output_handle = gzip.open('{}_{}.fsa.gz'.format(total_per_file, total + 1), "wt")
-                  print('Writing final file {}_{}.fsa.gz'.format(total_per_file, total + 1))
-              count += 1
-              trans_deleted += 1
-              output_handle.write(r.format("fasta"))
+          p = Pool(processes=threads)
+          results = p.map(worker, [r for r in SeqIO.parse(handle, "fasta")])
+          p.close()
           handle.close()
-          output_handle.close()
 
 inputs:
   fasta:
     type: File
     inputBinding:
       position: 1
-  total_per_file:
+  window:
     type: int
     inputBinding:
       position: 2
+  overlap:
+    type: int
+    inputBinding:
+      position: 3
+  threads:
+    type: int
+    inputBinding:
+      position: 4
 
 outputs:
   output:
     type: File[]
     outputBinding:
-      glob: '*.fsa.gz'
+      glob: '*.fsa'
 
-baseCommand: ["python","split-fasta.py"]
+baseCommand: ["python","split-genome-by-window.py"]
 
 s:author:
   - class: s:Person

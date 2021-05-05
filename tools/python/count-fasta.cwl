@@ -6,7 +6,7 @@ doc: Count number of sequences in a fasta file
 
 hints:
   DockerRequirement:
-    dockerImageId: cwl-ngs-workflows-cbb-count-fasta:3.7
+    dockerImageId: cwl-ngs-workflows-cbb-biopython:3.7
     dockerFile: |
       # Base Image
       FROM quay.io/biocontainers/python:3.7

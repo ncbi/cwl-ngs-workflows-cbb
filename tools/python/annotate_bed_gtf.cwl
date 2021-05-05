@@ -6,7 +6,7 @@ doc: This tools annotate bed files from GFF
 
 hints:
   DockerRequirement:
-    dockerImageId: cwl-ngs-workflows-cbb-annotate-bed-gff:3.7
+    dockerImageId: cwl-ngs-workflows-cbb-pandas:3.7
     dockerFile: |
       # Base Image
       FROM quay.io/biocontainers/python:3.7

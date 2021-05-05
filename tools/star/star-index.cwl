@@ -65,6 +65,11 @@ inputs:
     inputBinding:
       position: 8
       prefix: --sjdbGTFfile
+  genomeSAindexNbases:
+    type: int?
+    inputBinding:
+      prefix: --genomeSAindexNbases
+      position: 9
 
 outputs:
   indices_txt:

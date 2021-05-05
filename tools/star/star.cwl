@@ -224,6 +224,12 @@ inputs:
     inputBinding:
       position: 1
       prefix: '--quantMode'
+  - id: alignIntronMax
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '--alignIntronMax'
+
 outputs:
   - id: aligned
     type: File

@@ -6,7 +6,7 @@ doc: This tools remove duplicate sequences
 
 hints:
   DockerRequirement:
-    dockerImageId: cwl-ngs-workflows-cbb-duplicate-removal:3.7
+    dockerImageId: cwl-ngs-workflows-cbb-biopython-pandas:3.7
     dockerFile: |
       # Base Image
       FROM quay.io/biocontainers/python:3.7

@@ -4,14 +4,21 @@ doc: This workflow download SRA samples and aligng them to a transcriptome fasta
 label: Transcriptome Read assignment with Bowtie2
 
 inputs:
-  - id: genome_fasta
-    type: File
   - id: fastq1
     type: File
   - id: fastq2
     type: File
   - id: threads
     type: int
+  - id: bowtie2_index
+    type: File
+    secondaryFiles:
+      - .1.bt2
+      - .2.bt2
+      - .3.bt2
+      - .4.bt2
+      - .rev.1.bt2
+      - .rev.2.bt2
 
 outputs:
   - id: indexed_bam
@@ -28,40 +35,50 @@ outputs:
     type: File
 
 steps:
-  - id: index
-    in:
-      - id: reference
-        source: genome_fasta
-      - id: base
-        valueFrom: '${ return inputs.reference.basename;}'
-    out:
-      - id: output
-    run: ../../tools/bowtie/bowtie2-build.cwl
-    label: Bowtie2-build
   - id: alignment
     in:
       - id: p
         source: threads
       - id: q
         default: true
-      - id: no_unal
+      - id: all
         default: true
-      - id: k
-        default: 5
+      - id: S
+        default: true
       - id: fastq1
         source: fastq1
       - id: fastq2
         source: fastq2
       - id: x
-        source: index/output
+        source: bowtie2_index
     out:
       - id: output
     run: ../../tools/bowtie/bowtie2.cwl
     label: Bowtie2
+  - id: bam_filter
+    in:
+      - id: input
+        source: alignment/output
+      - id: output_name
+        valueFrom: '${ return inputs.input.nameroot + ".bam";}'
+      - id: threads
+        source: threads
+      - id: readswithoutbits
+        default: 4
+      - id: S
+        default: true
+      - id: isbam
+        default: true
+    out:
+      - id: output
+    run: ../../tools/samtools/samtools-view.cwl
+    label: Samtools-sort
+    doc: |
+      Sort BAM file
   - id: bam_sort
     in:
       - id: in_bam
-        source: alignment/output
+        source: bam_filter/output
       - id: out_bam
         valueFrom: '${ return inputs.in_bam.nameroot + "_sorted.bam";}'
       - id: threads
@@ -84,7 +101,6 @@ steps:
     label: Samtools-index
     doc: |
       Creates the BAM index file
-
   - id: bam_stats
     in:
       - id: in_bam
