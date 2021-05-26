@@ -23,16 +23,16 @@ requirements:
       - entryname: deseq2.R
         entry: |
           args = commandArgs(trailingOnly=TRUE)
-          gene_column = args[3]
-          sample_column = args[4]
-          condition1 = args[5]
-          condition2 = args[6]
-          fc = as.numeric(args[7])
-          fdr = as.numeric(args[8])
-          min_reads = as.integer(args[9])
+          gene_column = args[4]
+          sample_column = args[5]
+          condition1 = args[6]
+          condition2 = args[7]
+          fc = as.numeric(args[8])
+          fdr = as.numeric(args[9])
+          min_TPM = as.integer(args[10])
           pairwise = NULL
-          if (length(args) == 10){
-            pairwise = args[10]
+          if (length(args) == 11){
+            pairwise = args[11]
           }
 
           library(DESeq2)
@@ -47,6 +47,10 @@ requirements:
           data = read.table(args[2], header = TRUE, sep = "\t", comment.char = '')
           print(paste("Columns in the matrix:", ncol(data)))
           print(paste("Genes in the matrix:", nrow(data)))
+
+          tpm_data = read.table(args[3], header = TRUE, sep = "\t", comment.char = '')
+          print(paste("Columns in the TPM matrix:", ncol(tpm_data)))
+          print(paste("Genes in the TPM matrix:", nrow(tpm_data)))
 
           # Creating factors variable
           conditions <- c(condition2,condition1)
@@ -70,7 +74,13 @@ requirements:
           rownames(data.counts) <- data.set[, gene_column]
           data.counts[is.na(data.counts)] <- 0
 
-          keep <- (rowSums(data.counts > min_reads) >= min_number_samples)
+          tpm_data.set <- tpm_data[c(gene_column, rownames(factors.set))]
+          tpm_data.counts <- tpm_data.set[,!(names(tpm_data.set) %in% c(gene_column))]
+          rownames(tpm_data.counts) <- tpm_data.set[, gene_column]
+          tpm_data.counts[is.na(tpm_data.counts)] <- 0
+
+          keep <- (rowSums(tpm_data.counts >= min_TPM) >= min_number_samples)
+
           genes_filtered <- rownames(data.counts[keep, ])
           data.counts <- data.counts[genes_filtered,]
           data.set <- subset(data.set, unlist(data[gene_column]) %in% genes_filtered)
@@ -179,38 +189,42 @@ inputs:
     type: File
     inputBinding:
       position: 2
+  tpm_matrix:
+    type: File
+    inputBinding:
+      position: 3
   gene_column:
     type: string
     inputBinding:
-      position: 3
+      position: 4
   sample_column:
     type: string
     inputBinding:
-      position: 4
+      position: 5
   condition1:
     type: string
     inputBinding:
-      position: 5
+      position: 6
   condition2:
     type: string
     inputBinding:
-      position: 6
+      position: 7
   fc:
     type: float
     inputBinding:
-      position: 7
+      position: 8
   fdr:
     type: float
     inputBinding:
-      position: 8
-  min_reads:
+      position: 9
+  min_tpm:
     type: int
     inputBinding:
-      position: 9
+      position: 10
   pairwise:
     type: string?
     inputBinding:
-      position: 10
+      position: 11
 
 outputs:
    dga:
