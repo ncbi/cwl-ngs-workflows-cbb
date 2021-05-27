@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/blast:2.9.0--pl526he19e7b1_7
+ dockerPull: quay.io/biocontainers/blast:2.11.0--pl526he19e7b1_0
