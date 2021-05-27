@@ -278,7 +278,7 @@ inputs:
       position: 1
       prefix: -dbsize
   searchsp:
-    type: int?
+    type: long?
     inputBinding:
       position: 1
       prefix: -searchsp

@@ -23,6 +23,12 @@ outputs:
   fastq2_output:
     outputSource: create_clean_fastq/output2
     type: File?
+  contaminated_ids:
+    outputSource: extract_read_ids/output
+    type: File
+  contaminated_blast:
+    outputSource: vector_blastn/output
+    type: File
 
 steps:
   vector_blastdb:
@@ -107,8 +113,8 @@ steps:
       gapextend: { default: 3 }
       dust: { default: "yes" }
       soft_masking: { default: "true" }
-      searchsp: { default: 127 }
-      max_target_seqs: {default: 1}
+      max_target_seqs: {default: 1 }
+      searchsp: { default: 1750000000000 }
     out: [ output ]
   extract_read_ids:
     label: Extract read IDs
