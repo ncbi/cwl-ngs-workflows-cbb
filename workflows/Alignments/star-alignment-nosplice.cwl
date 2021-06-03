@@ -94,8 +94,6 @@ steps:
     label: Samtools-index
     in:
       in_bam: bam_sort/out_sam
-      out_bai:
-        valueFrom: '${ return inputs.in_bam.basename + ".bai";}'
     out: [out_sam]
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl

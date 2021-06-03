@@ -75,8 +75,6 @@ steps:
     scatter: in_bam
     in:
       in_bam: final_bam/out_sam
-      out_bai:
-        valueFrom: '${ return inputs.in_bam.nameroot + ".bam.bai";}'
     out: [out_sam]
   bamtobed:
     run: ../../tools/bedtools/bedtools-bamtobed.cwl

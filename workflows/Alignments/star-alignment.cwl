@@ -16,11 +16,8 @@ inputs:
   ramMaxSTAR: float?
 
 outputs:
-  indexed_bam:
-    outputSource: bam_index/out_sam
-    type: File
   sorted_bam:
-    outputSource: bam_sort/out_sam
+    outputSource: bam_index/out_sam
     type: File
   star_stats:
     outputSource: alignment/mappingstats
@@ -95,8 +92,6 @@ steps:
     label: Samtools-index
     in:
       in_bam: bam_sort/out_sam
-      out_bai:
-        valueFrom: '${ return inputs.in_bam.basename + ".bai";}'
     out: [out_sam]
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl

@@ -2,31 +2,35 @@
 cwlVersion: v1.0
 class: CommandLineTool
 
-label: MEME-getzise
-doc: MEME Suite
+label: hmmbuild
+doc: prepare an HMM database
 
 requirements:
   InlineJavascriptRequirement: {}
 
 hints:
-  - $import: meme-docker.yml
-  - $import: meme-bioconda.yml
+  - $import: hmmer-docker.yml
+  - $import: hmmer-bioconda.yml
 
 inputs:
-  i:
+  msa:
     type: File
     inputBinding:
-      position: 1
-  o:
+      position: 2
+    doc: |
+      MSA file
+  hmm:
     type: string
+    inputBinding:
+      position: 1
 
 outputs:
-  output:
-    type: stdout
+  hmm:
+    type: File
+    outputBinding:
+      glob: $(inputs.hmm)
 
-stdout: $(inputs.o)
-
-baseCommand: ["getsize"]
+baseCommand: ["hmmbuild"]
 
 s:author:
   - class: s:Person
@@ -34,7 +38,7 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:codeRepository: http://meme-suite.org
+s:codeRepository: http://hmmer.org/
 s:license: https://spdx.org/licenses/OPL-1.0
 
 $namespaces:
@@ -42,3 +46,4 @@ $namespaces:
 
 $schemas:
   - https://schema.org/version/latest/schemaorg-current-http.rdf
+

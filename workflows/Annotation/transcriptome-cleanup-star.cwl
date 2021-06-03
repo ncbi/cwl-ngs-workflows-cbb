@@ -7,20 +7,32 @@ requirements:
 - class: StepInputExpressionRequirement
 
 label: transcriptome_cleanup
-doc: "This workflow detect and remove vector, duplicate and contamination from a transcriptome fasta file"
+doc: "This workflow detect and remove vector, duplicate and contamination from fastq files"
 
 inputs:
-  trans_fsa_gz: File
-  vector_fsa: File
-  total_per_file: int
+  reads: File[]
   threads: int
-  min_length: int
-  evalue: float
+  ramMaxSTAR: float?
 
 outputs:
-  split_fasta_fsa:
-    outputSource: split_fasta/output
-    type: File[]
+  equal_seq_removal_fsa:
+    outputSource: equal_seq_removal/fsa
+    type: File
+  equal_seq_removal_tsv:
+    outputSource: equal_seq_removal/tsv
+    type: File
+  vector_blastn_output:
+    outputSource: vector_blastn/output
+    type: File
+  vector_removal_fsa:
+    outputSource: vector_removal/fsa
+    type: File
+  duplicate_blastn_output:
+    outputSource: duplicate_blastn/output
+    type: File
+  duplicate_removal_fsa:
+    outputSource: duplicate_removal/fsa
+    type: File
 
 steps:
   equal_seq_removal:
@@ -120,13 +132,6 @@ steps:
       blast: duplicate_blastn/output
       threads: threads
     out: [fsa]
-  split_fasta:
-    run: ../../tools/python/split-fasta.cwl
-    label: Split fasta
-    in:
-      fasta: duplicate_removal/fsa
-      total_per_file: total_per_file
-    out: [output]
 
 s:author:
   - class: s:Person

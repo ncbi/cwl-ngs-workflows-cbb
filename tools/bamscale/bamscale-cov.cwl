@@ -177,7 +177,7 @@ hints:
   - $import: bamscale-docker.yml
   - $import: bamscale-bioconda.yml
 $schemas:
-  - 'https://schema.org/version/latest/schema.rdf'
+  - 'https://schema.org/version/latest/schemaorg-current-http.rdf'
 's:author':
   - class: 's:Person'
     's:email': 'mailto:r78v10a07@gmail.com'

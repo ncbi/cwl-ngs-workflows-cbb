@@ -122,4 +122,4 @@ $namespaces:
   s: http://schema.org/
 
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf

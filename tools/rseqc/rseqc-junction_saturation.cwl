@@ -23,6 +23,7 @@ inputs:
     doc: Maximun the RAM in MB
   i:
     type: File
+    secondaryFiles: .bai
     inputBinding:
       position: 1
       prefix: -i
@@ -88,4 +89,4 @@ $namespaces:
   s: http://schema.org/
 
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf

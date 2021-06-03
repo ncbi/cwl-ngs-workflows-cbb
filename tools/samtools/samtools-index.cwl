@@ -20,14 +20,13 @@ inputs:
     type: File
     inputBinding:
       position: 1
-  out_bai:
-    type: string
 
 outputs:
   out_sam:
     type: File
+    secondaryFiles: .bai
     outputBinding:
-      glob: "*.bai"
+      glob: $(inputs.in_bam.basename)
 
 baseCommand: [samtools, index, -b]
 

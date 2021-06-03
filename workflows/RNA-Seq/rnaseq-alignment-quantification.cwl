@@ -25,9 +25,6 @@ inputs:
   ramMaxSTAR: float?
     
 outputs:
-  indexed_bam:
-    outputSource: alignment/indexed_bam
-    type: File[]
   sorted_bam:
     outputSource: alignment/sorted_bam
     type: File[]
@@ -76,10 +73,6 @@ outputs:
   read_distribution_out:
     outputSource: read_distribution/output
     type: File[]
-  read_quality_out:
-    outputSource: read_quality/output
-    type: {"type": "array", "items": {"type": "array", "items": "File"}}
-
 
 steps:
   alignment:
@@ -91,7 +84,7 @@ steps:
       genomeDir: genomeDir
       ramMaxSTAR: ramMaxSTAR
       threads: threads
-    out: [indexed_bam, sorted_bam, star_stats, stats_bam, readspergene, mappingstats]
+    out: [sorted_bam, star_stats, stats_bam, readspergene, mappingstats]
   quantification:
     run: ../../tools/tpmcalculator/tpmcalculator.cwl
     label: tpmcalculator
@@ -211,17 +204,6 @@ steps:
     out: [output]
     doc: |
       Read distribution
-  read_quality:
-    scatter: i
-    run: ../../tools/rseqc/rseqc-read_quality.cwl
-    in:
-      i: alignment/sorted_bam
-      q: q
-      o:
-        valueFrom: ${ return inputs.i.nameroot.replace('.bam', '') + "_rseqc";}
-    out: [output]
-    doc: |
-      Read quality
 
 $namespaces:
   s: http://schema.org/

@@ -7,6 +7,9 @@ doc: prepare an HMM database for faster hmmscan searches
 
 requirements:
   InlineJavascriptRequirement: {}
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.hmmfile)
 
 hints:
   - $import: hmmer-docker.yml
@@ -58,5 +61,5 @@ $namespaces:
   s: http://schema.org/
 
 $schemas:
-  - https://schema.org/version/latest/schema.rdf
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
 

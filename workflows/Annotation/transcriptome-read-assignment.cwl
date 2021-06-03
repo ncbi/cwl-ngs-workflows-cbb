@@ -147,8 +147,6 @@ steps:
     in:
       - id: in_bam
         source: bam_sort/out_sam
-      - id: out_bai
-        valueFrom: '${ return inputs.in_bam.basename + ".bai";}'
     out:
       - id: out_sam
     run: ../../tools/samtools/samtools-index.cwl

@@ -47,6 +47,7 @@ baseCommand: [ "zcat" ]
 
 $namespaces:
   s: http://schema.org/
+  edam: http://edamontology.org/
 
 s:author:
   - class: s:Person
