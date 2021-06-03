@@ -14,7 +14,7 @@ inputs:
   threads: int
   vector_fsa: File
   fastq1: File
-  fastq2: File
+  fastq2: File?
 
 outputs:
   fastq1_output:
@@ -23,11 +23,8 @@ outputs:
   fastq2_output:
     outputSource: create_clean_fastq/output2
     type: File?
-  contaminated_ids:
-    outputSource: extract_read_ids/output
-    type: File
-  contaminated_blast:
-    outputSource: vector_blastn/output
+  clean_fasta_:
+    outputSource: create_clean_fasta_from_fastq/output
     type: File
 
 steps:
@@ -49,47 +46,7 @@ steps:
     out: [ output ]
   create_fasta_from_fastq:
     label: Create FASTA from FASTQ
-    run:
-      class: CommandLineTool
-      label: Create FASTA from FASTQ
-      requirements:
-        InlineJavascriptRequirement: { }
-      hints:
-        - $import: ../../tools/basic/ubuntu-docker.yml
-      inputs:
-        fastq1:
-          type: File
-          streamable: true
-          inputBinding:
-            position: 1
-        fastq2:
-          type: File
-          streamable: true
-          inputBinding:
-            position: 2
-        pipe:
-          type: string
-          default: "|"
-          inputBinding:
-            position: 3
-            shellQuote: False
-        sed:
-          type: string
-          default: " -n '1~4s/^@/>/p;2~4p'"
-          inputBinding:
-            position: 4
-            prefix: sed
-            shellQuote: False
-      outputs:
-        output:
-          type: File
-          streamable: true
-          outputBinding:
-            glob: $(inputs.fastq1.nameroot + ".fsa")
-
-      stdout: $(inputs.fastq1.nameroot + ".fsa")
-
-      baseCommand: [ "zcat" ]
+    run: ../../tools/basic/fastq2fasta.cwl
     in:
       fastq1: fastq1
       fastq2: fastq2
@@ -182,3 +139,10 @@ steps:
       names: extract_read_ids/output
       include: {default: "f"}
     out: [output, output2]
+  create_clean_fasta_from_fastq:
+    label: Create FASTA from FASTQ
+    run: ../../tools/basic/fastq2fasta.cwl
+    in:
+      fastq1: create_clean_fastq/output
+      fastq2: create_clean_fastq/output2
+    out: [ output ]
