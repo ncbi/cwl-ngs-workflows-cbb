@@ -5,6 +5,7 @@ label: Create FASTA from FASTQ
 
 requirements:
   InlineJavascriptRequirement: { }
+  ShellCommandRequirement: {}
 
 hints:
   - $import: ../../tools/basic/ubuntu-docker.yml
