@@ -15,7 +15,7 @@ inputs:
   tax_pickle: File
   tax_id: int
   fastq1: File
-  fastq2: File?
+  fastq2: File
 
 outputs:
   fastq1_output:
