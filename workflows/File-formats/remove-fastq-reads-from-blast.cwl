@@ -16,6 +16,7 @@ inputs:
   tax_id: int
   fastq1: File
   fastq2: File
+  threads: it
 
 outputs:
   fastq1_output:
