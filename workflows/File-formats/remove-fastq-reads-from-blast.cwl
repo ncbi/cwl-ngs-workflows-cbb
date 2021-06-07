@@ -28,16 +28,16 @@ outputs:
     type: File?
   fastqc1_html:
     outputSource: fastqc1/out_html
-    type: {"type": "array", "items": {"type": "array", "items": "File"}}
+    type: File[]
   fastqc1_zip:
     outputSource: fastqc1/out_zip
-    type: {"type": "array", "items": {"type": "array", "items": "File"}}
+    type: File[]
   fastqc2_html:
     outputSource: fastqc2/out_html
-    type: {"type": "array", "items": {"type": "array", "items": "File"}}
+    type: File[]
   fastqc2_zip:
     outputSource: fastqc2/out_zip
-    type: {"type": "array", "items": {"type": "array", "items": "File"}}
+    type: File[]
 
 steps:
   contaminated_reads:
@@ -65,7 +65,6 @@ steps:
   fastqc1:
     run: ../../tools/fastqc/fastqc.cwl
     label: fastqc
-    scatter: fastq
     in:
       fastq:
         source: create_clean_fastq/output
@@ -75,7 +74,6 @@ steps:
   fastqc2:
     run: ../../tools/fastqc/fastqc.cwl
     label: fastqc
-    scatter: fastq
     in:
       fastq:
         source: create_clean_fastq/output2
