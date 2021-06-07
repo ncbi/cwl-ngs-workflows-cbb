@@ -24,6 +24,18 @@ outputs:
   fastq2_output:
     outputSource: create_clean_fastq/output2
     type: File?
+  fastqc1_html:
+    outputSource: fastqc1/out_html
+    type: File
+  fastqc1_zip:
+    outputSource: fastqc1/out_zip
+    type: File
+  fastqc2_html:
+    outputSource: fastqc2/out_html
+    type: File
+  fastqc2_zip:
+    outputSource: fastqc2/out_zip
+    type: File
 
 steps:
   contaminated_reads:
@@ -48,3 +60,17 @@ steps:
       names: contaminated_reads/output
       include: {default: "f"}
     out: [output, output2]
+  fastqc1:
+    run: ../../tools/fastqc/fastqc.cwl
+    label: fastqc
+    in:
+      fastq: create_clean_fastq/output
+      threads: threads
+    out: [ out_html, out_zip ]
+  fastqc2:
+    run: ../../tools/fastqc/fastqc.cwl
+    label: fastqc
+    in:
+      fastq: create_clean_fastq/output2
+      threads: threads
+    out: [ out_html, out_zip ]
