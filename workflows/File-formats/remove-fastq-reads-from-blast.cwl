@@ -9,6 +9,7 @@ requirements:
   StepInputExpressionRequirement: {}
   SubworkflowFeatureRequirement: {}
   ShellCommandRequirement: {}
+  ScatterFeatureRequirement: {}
 
 inputs:
   blastdir: Directory
@@ -27,16 +28,16 @@ outputs:
     type: File?
   fastqc1_html:
     outputSource: fastqc1/out_html
-    type: File
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
   fastqc1_zip:
     outputSource: fastqc1/out_zip
-    type: File
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
   fastqc2_html:
     outputSource: fastqc2/out_html
-    type: File
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
   fastqc2_zip:
     outputSource: fastqc2/out_zip
-    type: File
+    type: {"type": "array", "items": {"type": "array", "items": "File"}}
 
 steps:
   contaminated_reads:
@@ -64,14 +65,20 @@ steps:
   fastqc1:
     run: ../../tools/fastqc/fastqc.cwl
     label: fastqc
+    scatter: fastq
     in:
-      fastq: create_clean_fastq/output
+      fastq:
+        source: create_clean_fastq/output
+        valueFrom: ${ return [ self ]; }
       threads: threads
     out: [ out_html, out_zip ]
   fastqc2:
     run: ../../tools/fastqc/fastqc.cwl
     label: fastqc
+    scatter: fastq
     in:
-      fastq: create_clean_fastq/output2
+      fastq:
+        source: create_clean_fastq/output2
+        valueFrom: ${ return [ self ]; }
       threads: threads
     out: [ out_html, out_zip ]
