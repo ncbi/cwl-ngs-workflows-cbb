@@ -1,6 +1,6 @@
 #!/usr/bin/env cwl-runner
 cwlVersion: v1.0
-class: q
+class: CommandLineTool
 
 label: TransDecoder.LongOrfs
 doc: TransDecoder.LongOrfs Transcriptome Protein Prediction
