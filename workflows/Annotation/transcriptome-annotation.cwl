@@ -55,7 +55,7 @@ steps:
       outfmt: { default: "6 qseqid sgi saccver length pident evalue bitscore score staxid"}
       evalue: evalue
       query: uncompress_trans/output
-      task: megablast
+      task: { default: "megablast"}
     out: [output]
   contamination_removal:
     run: ../../tools/python/contamination-detection.cwl

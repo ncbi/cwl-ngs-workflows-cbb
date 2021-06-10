@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'augustus'
+    version:
+      - '3.4.0-1'
+    specs:
+      - https://anaconda.org/bioconda/augustus

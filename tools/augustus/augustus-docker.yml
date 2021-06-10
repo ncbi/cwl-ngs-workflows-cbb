@@ -1,0 +1,3 @@
+class: DockerRequirement
+dockerPull: quay.io/biocontainers/augustus:3.4.0--pl5262hb677c0c_1
+
