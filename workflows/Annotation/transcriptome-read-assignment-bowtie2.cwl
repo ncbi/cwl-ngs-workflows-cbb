@@ -10,15 +10,8 @@ inputs:
     type: File
   - id: threads
     type: int
-  - id: bowtie2_index
+  - id: genome_fasta
     type: File
-    secondaryFiles:
-      - .1.bt2
-      - .2.bt2
-      - .3.bt2
-      - .4.bt2
-      - .rev.1.bt2
-      - .rev.2.bt2
 
 outputs:
   - id: indexed_bam
@@ -35,6 +28,16 @@ outputs:
     type: File
 
 steps:
+  - id: bowtie_index
+    in:
+      - id: reference
+        source: genome_fasta
+      - id: base
+        valueFrom: '${ return inputs.reference.basename;}'
+    out:
+      - id: output
+    run: ../../tools/bowtie/bowtie2-build.cwl
+    label: Bowtie2
   - id: alignment
     in:
       - id: p
@@ -50,7 +53,7 @@ steps:
       - id: fastq2
         source: fastq2
       - id: x
-        source: bowtie2_index
+        source: bowtie2_index/output
     out:
       - id: output
     run: ../../tools/bowtie/bowtie2.cwl
