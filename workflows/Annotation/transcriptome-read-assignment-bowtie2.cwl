@@ -28,7 +28,7 @@ outputs:
     type: File
 
 steps:
-  - id: bowtie_index
+  - id: bowtie2_index
     in:
       - id: reference
         source: genome_fasta
