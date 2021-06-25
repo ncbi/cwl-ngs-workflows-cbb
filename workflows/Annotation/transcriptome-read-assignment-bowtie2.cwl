@@ -34,6 +34,8 @@ steps:
         source: genome_fasta
       - id: base
         valueFrom: '${ return inputs.reference.basename;}'
+      - id: threads
+        source: threads
     out:
       - id: output
     run: ../../tools/bowtie/bowtie2-build.cwl
