@@ -135,7 +135,13 @@ steps:
       out:
         valueFrom: ${ return inputs.in.basename.replace('_1.fastq.gz', '_clean_1.fastq.gz')}
       out2:
-        valueFrom: ${ return inputs.in2.basename.replace('_2.fastq.gz', '_clean_2.fastq.gz')}
+        valueFrom: |
+          ${
+              if (inputs.in2 != null){
+                return inputs.in2.basename.replace('_2.fastq.gz', '_clean_2.fastq.gz');
+              }
+              return null;
+          }
       names: extract_read_ids/output
       include: {default: "f"}
     out: [output, output2]
