@@ -142,27 +142,28 @@ steps:
                nameroot = nameroot.replace(".fq", "");
              }
              if (nameroot.endsWith("_1")){
-               nameroot = nameroot.replace('_1', '_clean_1.fastq.gz')}
+               nameroot = nameroot.replace('_1', '_clean_1.fastq.gz');
              }else if (nameroot.includes("_R1_")){
                nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_clean_1.fastq.gz';
              } else{
                nameroot = nameroot + '_clean.fastq.gz';
              }
              return nameroot;
+          }
       out2:
         valueFrom: |
           ${
               if (inputs.in2 != null){
-                 var nameroot = inputs.in.nameroot;
+                 var nameroot = inputs.in2.nameroot;
                  if (nameroot.endsWith(".fastq")){
                    nameroot = nameroot.replace(".fastq", "");
                  }else if (nameroot.endsWith(".fq")){
                    nameroot = nameroot.replace(".fq", "");
                  }
                  if (nameroot.endsWith("_2")){
-                   nameroot = nameroot.replace('_2', '_clean_2.fastq.gz')}
+                   nameroot = nameroot.replace('_2', '_clean_2.fastq.gz');
                  }else if (nameroot.includes("_R2_")){
-                   nameroot = nameroot.substring(1, nameroot.indexOf("_R2_")) + '_clean_2.fastq.gz'
+                   nameroot = nameroot.substring(1, nameroot.indexOf("_R2_")) + '_clean_2.fastq.gz';
                  }
                  return nameroot;
               }
