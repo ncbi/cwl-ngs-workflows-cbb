@@ -16,7 +16,7 @@ inputs:
   tax_pickle: File
   tax_id: int
   fastq1: File
-  fastq2: File
+  fastq2: File?
   threads: int
 
 outputs:
@@ -56,9 +56,42 @@ steps:
       in: fastq1
       in2: fastq2
       out:
-        valueFrom: ${ return inputs.in.basename.replace('_1.fastq.gz', '_noCont_1.fastq.gz')}
+        valueFrom: |
+          ${
+             var nameroot = inputs.in.nameroot;
+             if (nameroot.endsWith(".fastq")){
+               nameroot = nameroot.replace(".fastq", "");
+             }else if (nameroot.endsWith(".fq")){
+               nameroot = nameroot.replace(".fq", "");
+             }
+             if (nameroot.endsWith("_1")){
+               nameroot = nameroot.replace('_1', '_noCont_1.fastq.gz');
+             }else if (nameroot.includes("_R1_")){
+               nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_noCont_1.fastq.gz';
+             } else{
+               nameroot = nameroot + '_noCont.fastq.gz';
+             }
+             return nameroot;
+          }
       out2:
-        valueFrom: ${ return inputs.in2.basename.replace('_2.fastq.gz', '_noCont_2.fastq.gz')}
+        valueFrom: |
+          ${
+              if (inputs.in2 != null){
+                 var nameroot = inputs.in2.nameroot;
+                 if (nameroot.endsWith(".fastq")){
+                   nameroot = nameroot.replace(".fastq", "");
+                 }else if (nameroot.endsWith(".fq")){
+                   nameroot = nameroot.replace(".fq", "");
+                 }
+                 if (nameroot.endsWith("_2")){
+                   nameroot = nameroot.replace('_2', '_noCont_2.fastq.gz');
+                 }else if (nameroot.includes("_R2_")){
+                   nameroot = nameroot.substring(1, nameroot.indexOf("_R2_")) + '_noCont_2.fastq.gz';
+                 }
+                 return nameroot;
+              }
+              return null;
+          }
       names: contaminated_reads/output
       include: {default: "f"}
     out: [output, output2]
