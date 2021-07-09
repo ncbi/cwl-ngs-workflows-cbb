@@ -93,7 +93,7 @@ requirements:
           tax_ids = [int(i) for i in successors(tax_id, tax)]
           print('{} taxonomies IDs in the list'.format(len(tax_ids)))
 
-          files = [f for dr, ds, files in os.walk(blastdir) for f in files if f.endswith('.out.gz')]
+          files = [f for dr, ds, files in os.walk(blastdir) for f in files if f.endswith('.tsv')]
           queries = []
           count = 0
           total = len(files)
