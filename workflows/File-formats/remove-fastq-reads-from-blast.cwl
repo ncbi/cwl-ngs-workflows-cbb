@@ -34,10 +34,10 @@ outputs:
     type: File[]
   fastqc2_html:
     outputSource: fastqc2/out_html
-    type: File[]
+    type: File[]?
   fastqc2_zip:
     outputSource: fastqc2/out_zip
-    type: File[]
+    type: File[]?
 
 steps:
   contaminated_reads:
