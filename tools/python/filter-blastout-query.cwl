@@ -101,7 +101,7 @@ requirements:
               count += 1
               print('Processing file: {}/{}\r'.format(count, total), end='')
               df = pandas.read_csv(os.path.join(blastdir, f), sep='\t', header=None)
-              queries.extend(df[~df[8].isin(tax_ids)][0].unique())
+              queries.extend(df[~df[6].isin(tax_ids)][0].unique())
           queries = set(queries)
           with open(output, 'w') as f_cont:
               for r in queries:
