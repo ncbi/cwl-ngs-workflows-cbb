@@ -1,5 +1,5 @@
 class: Workflow
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 doc: This workflow clean up vectros from fastq files
 label: FASTQ Vector Removal
@@ -106,6 +106,7 @@ steps:
     out: [ out_html, out_zip ]
   fastqc2:
     run: ../../tools/fastqc/fastqc.cwl
+    when: $(inputs.fastq[0] != null)
     label: fastqc
     in:
       fastq:
