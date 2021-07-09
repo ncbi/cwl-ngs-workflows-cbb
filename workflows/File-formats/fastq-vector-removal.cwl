@@ -144,7 +144,9 @@ steps:
              if (nameroot.endsWith("_1")){
                nameroot = nameroot.replace('_1', '_clean_1.fastq.gz')}
              }else if (nameroot.includes("_R1_")){
-               nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_clean_1.fastq.gz'
+               nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_clean_1.fastq.gz';
+             } else{
+               nameroot = nameroot + '_clean.fastq.gz';
              }
              return nameroot;
       out2:
