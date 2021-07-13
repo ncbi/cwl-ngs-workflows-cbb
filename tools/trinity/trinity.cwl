@@ -47,17 +47,24 @@ inputs:
       position: 5
       prefix: --SS_lib_type
   left:
-    type: File[]
+    type: File[]?
     inputBinding:
       position: 6
       prefix: --left
       shellQuote: False
       itemSeparator: ','
   right:
-    type: File[]
+    type: File[]?
     inputBinding:
       position: 7
       prefix: --right
+      shellQuote: False
+      itemSeparator: ','
+  single:
+    type: File[]?
+    inputBinding:
+      position: 6
+      prefix: --single
       shellQuote: False
       itemSeparator: ','
 
