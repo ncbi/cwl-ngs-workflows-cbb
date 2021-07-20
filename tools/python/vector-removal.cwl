@@ -113,6 +113,15 @@ requirements:
                   segments_to_build.append([last,len(rec.seq)])
               return segments_to_build
 
+          def terminal_vector(df, trans_len):
+              return df[((df[2] <= 25) | (df[3] >= trans_len - 25)) & (df[7] >= 19)]
+
+          def internal_vector(df, trans_len):
+              return df[((df[2] > 25) | (df[3] < trans_len - 25)) & (df[7] >= 25)]
+
+          def vectors(df, trans_len):
+              return pandas.concat([terminal_vector(df, trans_len), internal_vector(df, trans_len)])
+
           def build_segments_worker(tlist):
               global counter
               global total
@@ -124,9 +133,10 @@ requirements:
                   blast_df = blast[blast[0].isin(tlist)]
                   for t in tlist:
                       trans = transcripts[t]
-                      df = blast_df[blast_df[0] == t][[2, 3]].sort_values(by=[2, 3]).drop_duplicates()
+                      trans_len = len(trans.seq)
+                      df = vectors(blast_df[blast_df[0] == t], trans_len)
                       if df.empty:
-                          if len(trans.seq) >= 200:
+                          if trans_len >= 200:
                               SeqIO.write(trans, novect_handle, "fasta")
                       else:
                           segs = []

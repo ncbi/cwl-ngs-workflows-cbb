@@ -62,7 +62,7 @@ steps:
       out:
         valueFrom: ${ return inputs.query.nameroot + ".tsv";}
       outfmt: { default: "6 qseqid saccver qstart qend length evalue bitscore score" }
-      evalue: { default: 5 }
+      evalue: { default: 700 }
       task: { default: "blastn" }
       reward: { default: 1 }
       penalty: { default: -5 }
