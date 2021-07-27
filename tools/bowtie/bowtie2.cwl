@@ -110,9 +110,9 @@ inputs:
       valueFrom: |
         ${
           if (!inputs.fastq2){
-            return "-U " + self;
+            return "-U " + self.path;
           }
-          return "-1 " + self;
+          return "-1 " + self.path;
         }
   fastq2:
     type: File?
