@@ -7,7 +7,7 @@ inputs:
   - id: fastq1
     type: File
   - id: fastq2
-    type: File
+    type: File?
   - id: threads
     type: int
   - id: genome_fasta
