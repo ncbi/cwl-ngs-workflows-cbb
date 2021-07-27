@@ -107,6 +107,7 @@ inputs:
     type: File
     inputBinding:
       position: 3
+      shellQuote: false
       valueFrom: |
         ${
           if (!inputs.fastq2){
