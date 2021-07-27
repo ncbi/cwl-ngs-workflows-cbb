@@ -107,12 +107,19 @@ inputs:
     type: File
     inputBinding:
       position: 3
-      prefix: "-1"
+      valueFrom: |
+        ${
+          if (!inputs.fastq2){
+            return "-U " + self;
+          }
+          return "-1 " + self;
+        }
   fastq2:
     type: File?
     inputBinding:
       position: 4
       prefix: "-2"
+
 
 outputs:
   output:
