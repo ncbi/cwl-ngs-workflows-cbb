@@ -50,12 +50,12 @@ requirements:
           filename, ext = os.path.splitext(os.path.basename(fasta))
           if ext == '.gz':
               handle = gzip.open(fasta, 'rt')
-              prefix  =  os.path.splitext(filename)[0] + '_noequal'
+              prefix  =  os.path.splitext(filename)[0]
           else:
               handle = open(fasta, 'r')
-              prefix = filename + '_noequal'
+              prefix = filename
 
-          with gzip.open('{}.fsa.gz'.format(prefix), "wt") as fout, gzip.open('{}.tsv.gz'.format(prefix), "wt") as fouttsv:
+          with gzip.open('{}_noequal.fsa.gz'.format(prefix), "wt") as fout, gzip.open('{}_equal_ids.tsv.gz'.format(prefix), "wt") as fouttsv:
               dedup_records = defaultdict(list)
               for record in SeqIO.parse(handle, "fasta"):
                   dedup_records[str(record.seq)].append(record)
@@ -78,7 +78,7 @@ outputs:
   tsv:
     type: File
     outputBinding:
-      glob: '*_noequal.tsv.gz'
+      glob: '*_equal_ids.tsv.gz'
 
 baseCommand: ["python","equal_removal.py"]
 

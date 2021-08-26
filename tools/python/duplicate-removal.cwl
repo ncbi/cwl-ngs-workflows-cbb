@@ -25,24 +25,17 @@ hints:
       USER root
       # Adding Python packages
       RUN python -m pip install \
-          biopython==1.77  \
-          pandas==1.0.5
+          biopython==1.779
   SoftwareRequirement:
     packages:
-      - package: 'pandas'
-        version:
-          - '1.0.5'
-        specs:
-          - https://anaconda.org/conda-forge/pandas
       - package: 'biopython'
         version:
-          - '1.71'
+          - '1.79'
         specs:
           - https://anaconda.org/conda-forge/biopython
 
 requirements:
-  ResourceRequirement:
-    coresMin: $(inputs.threads)
+  ResourceRequirement: {}
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
@@ -50,79 +43,51 @@ requirements:
         entry: |
           import os
           import sys
-          import pandas
           import gzip
           from Bio import SeqIO
           from collections import defaultdict
           from multiprocessing import Pool
 
           fasta = sys.argv[1]
-          blast_tsv = sys.argv[2]
-          threads = int(sys.argv[3])
-
-          df_blast = pandas.read_csv(blast_tsv, sep='\t', header=None)
-          df_blast = df_blast[df_blast[0] != df_blast[1]].sort_values(by=0)
-          print('{} results loaded from Blast'.format(len(df_blast)))
-
           filename, ext = os.path.splitext(os.path.basename(fasta))
           if ext == '.gz':
               handle = gzip.open(fasta, 'rt')
-              prefix  =  os.path.splitext(filename)[0] + '_nodup'
+              prefix  =  os.path.splitext(filename)[0]
           else:
               handle = open(fasta, 'r')
-              prefix = filename + '_nodup'
+              prefix = filename
 
-          records_len = {}
-          records = {}
+          count = 0
           dedup_records = defaultdict(list)
           for record in SeqIO.parse(handle, "fasta"):
-              records_len[record.id] = len(record.seq)
+              count += 1
               dedup_records[str(record.seq)].append(record)
-          for seq, record in dedup_records.items():
-              records[record[0].id] = record[0]
-          print('Sequences: {} Records: {}'.format(len(records_len), len(records)))
+
+          print('Sequences: {} Non redundant: {}'.format(count, len(dedup_records)))
+          with gzip.open('{}_nodup.fsa.gz'.format(prefix), "wt") as fout, open('{}_dup.ids'.format(prefix), "w") as fout_ids:
+              for seq, record in dedup_records.items():
+                  fout.write(record[0].format("fasta"))
+                  if len(record) > 1:
+                      for r in record[1:]:
+                          fout_ids.write(r.id + '\n')
+
           handle.close()
-
-          def worker(id):
-              s = len(records[id].seq)
-              df = df_blast[df_blast[0] == id]
-              df = df[df.apply(lambda x: records_len[x[1]] == s, axis=1)]
-              if df.empty:
-                  return (True, id, [])
-              return (False, id, df[1].unique())
-
-          p = Pool(processes=threads)
-          data = p.map(worker, [d for d in records.keys()])
-
-          print('Writing final file {}.fsa.gz'.format(prefix))
-          with gzip.open('{}.fsa.gz'.format(prefix), "wt") as fout:
-              unique = []
-              for d in data:
-                  if d[0]:
-                      fout.write(records[d[1]].format("fasta"))
-                  elif not any(elem in d[2] for elem in unique):
-                      unique.append(d[1])
-                      fout.write(records[d[1]].format("fasta"))
 
 inputs:
   fasta:
     type: File
     inputBinding:
       position: 1
-  blast:
-    type: File
-    inputBinding:
-      position: 2
-  threads:
-    type: int
-    inputBinding:
-      position: 2
 
 outputs:
   fsa:
     type: File
     outputBinding:
       glob: '*_nodup.fsa.gz'
+  ids:
+    type: File
+    outputBinding:
+      glob: '*_dup.ids'
 
 baseCommand: ["python","duplicate_removal.py"]
 

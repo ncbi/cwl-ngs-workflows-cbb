@@ -108,7 +108,7 @@ steps:
       num_threads: threads
       out:
         valueFrom: ${ return inputs.query.nameroot + ".tsv";}
-      outfmt: { default: "6 qseqid saccver qstart qend length evalue bitscore score"}
+      outfmt: { default: "6 qseqid saccver qstart qend length evalue bitscore score pident"}
       evalue: evalue
       task: { default: "blastn" }
     out: [output]

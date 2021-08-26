@@ -1,12 +1,12 @@
 class: CommandLineTool
 cwlVersion: v1.0
 
-label: vector_removal
-doc: This tools detect vectors from a Blast TSV file
+label: contaminant_removal
+doc: This tools detect contaminants from a Blast TSV file
 
 hints:
   DockerRequirement:
-    dockerImageId: cwl-ngs-workflows-cbb-vector-removal:3.7
+    dockerImageId: cwl-ngs-workflows-cbb-contaminants-removal:3.7
     dockerFile: |
       # Base Image
       FROM quay.io/biocontainers/python:3.7
@@ -52,7 +52,7 @@ requirements:
   InlineJavascriptRequirement: {}
   InitialWorkDirRequirement:
     listing:
-      - entryname: vector_removal.py
+      - entryname: contaminants_removal.py
         entry: |
           import os
           import sys
@@ -75,8 +75,14 @@ requirements:
           blast = pandas.read_csv(blast_tsv, sep='\t', header=None,
                                   names=['qseqid', 'sseqid', 'pident', 'length', 'mismatch', 'gapopen',
                                          'qlen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore', 'score'])
-          blast['coverage'] = blast['length']*100/blast['qlen']
           print('{} results loaded from Blast'.format(len(blast)))
+
+          blast['coverage'] = blast['length']*100/blast['qlen']
+          df_cont = blast[((blast['pident'] >= 98.0) & (blast['length'] >= 40))|((blast['pident'] >= 94.0) & (blast['length'] >= 100))|((blast['pident'] >= 90.0) & (blast['length'] >= 200))]
+          df_cont = df_cont[df_cont['coverage'] >= 75].sort_values(by=['qseqid', 'coverage']).drop_duplicates(subset='qseqid', keep="last")
+          contaminated_ids = df_cont['qseqid'].unique()
+          print('{} contaminated IDs'.format(len(contaminated_ids)))
+          blast = blast[~blast['qseqid'].isin(contaminated_ids)]
 
           filename, ext = os.path.splitext(os.path.basename(fasta))
           if ext == '.gz':
@@ -89,9 +95,10 @@ requirements:
           transcripts = {}
           count = 0
           for record in SeqIO.parse(handler, "fasta"):
-              count += 1
-              transcripts[record.id] = record
-              print('{}'.format(count), end='\r')
+              if record.id not in contaminated_ids:
+                  count += 1
+                  transcripts[record.id] = record
+                  print('{}'.format(count), end='\r')
           total = len(transcripts)
           print('{} transcripts to process'.format(total))
           handler.close()
@@ -109,21 +116,21 @@ requirements:
               last = 0
               segments_to_build = []
               for s in segs:
-                  if s[0] - 1 - last >= 200:
+                  if s[0] - 1 - last >= min_length:
                       segments_to_build.append([last,s[0] - 1])
                   last = s[1] + 1
-              if len(rec.seq) - last >= 200:
+              if len(rec.seq) - last >= min_length:
                   segments_to_build.append([last,len(rec.seq)])
               return segments_to_build
 
-          def terminal_vector(df):
-              return df[((df['qstart'] <= 25) | (df['qend'] >= df['qlen'] - 25)) & (df['score'] >= 19)]
+          def terminal_contamination(df):
+              return df[((df['qstart'] <= 25) | (df['qend'] >= df['qlen'] - 25))]
 
-          def internal_vector(df):
-              return df[((df['qstart'] > 25) | (df['qend'] < df['qlen'] - 25)) & (df['score'] >= 25)]
+          def internal_contamination(df):
+              return df[((df['qstart'] > 25) | (df['qend'] < df['qlen'] - 25))]
 
-          def vectors(df):
-              return pandas.concat([terminal_vector(df), internal_vector(df)])
+          def contaminations(df):
+              return pandas.concat([terminal_contamination(df), internal_contamination(df)])
 
           def build_segments_worker(tlist):
               global counter
@@ -132,15 +139,15 @@ requirements:
               with file_prefix.get_lock():
                   file_prefix.value += 1
                   pre = file_prefix.value
-              with open('{}_novect.fsa'.format(pre), "w") as novect_handle, open('{}_vect.ids'.format(pre), "w") as vect_handle:
+              with open('{}_nocont.fsa'.format(pre), "w") as nocont_handle, open('{}_cont.ids'.format(pre), "w") as cont_handle:
                   blast_df = blast[blast['qseqid'].isin(tlist)]
                   for t in tlist:
                       trans = transcripts[t]
                       trans_len = len(trans.seq)
-                      df = vectors(blast_df[blast_df['qseqid'] == t])
+                      df = contaminations(blast_df[blast_df['qseqid'] == t])
                       if df.empty:
-                          if trans_len >= 200:
-                              SeqIO.write(trans, novect_handle, "fasta")
+                          if trans_len >= min_length:
+                              SeqIO.write(trans, nocont_handle, "fasta")
                       else:
                           segs = []
                           index = 0
@@ -162,11 +169,11 @@ requirements:
                               for s in segs_to_build:
                                   id = '{}|{}_{}'.format(t, s[0], s[1])
                                   rec = SeqRecord(trans.seq[s[0]:s[1]], id=id, name=id, description='')
-                                  SeqIO.write(rec, novect_handle, "fasta")
+                                  SeqIO.write(rec, nocont_handle, "fasta")
                           else:
                               df = df.sort_values(by=['qseqid', 'coverage']).drop_duplicates(subset='qseqid', keep="last")
                               for i, r in df.iterrows():
-                                  vect_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
+                                  cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
 
                       with counter.get_lock():
                           counter.value += 1
@@ -179,21 +186,26 @@ requirements:
           data = p.map(build_segments_worker, transcripts_list)
           print('\n\nPrinting results...')
           count = 0
-          vect_count = 0
-          with open('{}_novect.fsa'.format(prefix), "w") as output_handle, open('{}_vect.ids'.format(prefix), "w") as vect_handle:
+          cont_count = 0
+          with open('{}_nocont.fsa'.format(prefix), "w") as output_handle, open('{}_cont.ids'.format(prefix), "w") as cont_handle:
+              cont_handle.write('{}\t{}\t{}\t{}\t{}\n'.format('qseqid','sseqid','pident','evalue','bitscore','coverage'))
+              for i, r in df_cont.iterrows():
+                  cont_count += 1
+                  cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
               for d in range(1, len(transcripts_list) + 1):
-                  with open('{}_novect.fsa'.format(d)) as input_handle:
+                  with open('{}_nocont.fsa'.format(d)) as input_handle:
                       for r in SeqIO.parse(input_handle, "fasta"):
                           count += 1
                           SeqIO.write(r, output_handle, "fasta")
-                  os.remove('{}_novect.fsa'.format(d))
-                  with open('{}_vect.ids'.format(d)) as input_handle:
+                  os.remove('{}_nocont.fsa'.format(d))
+                  with open('{}_cont.ids'.format(d)) as input_handle:
                       for r in input_handle:
-                          vect_count += 1
-                          vect_handle.write(r)
-                  os.remove('{}_vect.ids'.format(d))
-          print('{} transcripts with no interior vectors'.format(count))
-          print('{} transcripts discarded due to vectors'.format(vect_count))
+                          cont_count += 1
+                          cont_handle.write(r)
+                  os.remove('{}_cont.ids'.format(d))
+
+          print('{} transcripts with no contamination'.format(count))
+          print('{} transcripts discarded due to contamination'.format(cont_count))
 
 
 
@@ -219,13 +231,13 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*_novect.fsa'
-  vect:
+      glob: '*_nocont.fsa'
+  cont:
     type: File
     outputBinding:
-      glob: '*_vect.ids'
+      glob: '*_cont.ids'
 
-baseCommand: ["python","vector_removal.py"]
+baseCommand: ["python","contaminants_removal.py"]
 
 s:author:
   - class: s:Person
