@@ -257,7 +257,6 @@ s:author:
     s:name: Roberto Vera Alvarez
 
 s:codeRepository: http://www.clustal.org/omega/
-s:license: https://spdx.org/licenses/GPL-2.0-only
 
 $namespaces:
   s: http://schema.org/

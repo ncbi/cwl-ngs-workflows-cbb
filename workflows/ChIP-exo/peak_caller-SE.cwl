@@ -139,4 +139,4 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-s:license: https://spdx.org/licenses/OPL-1.0
+

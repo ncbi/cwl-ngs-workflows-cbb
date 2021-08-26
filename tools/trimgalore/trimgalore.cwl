@@ -316,7 +316,6 @@ s:author:
     s:name: Roberto Vera Alvarez
 
 s:codeRepository: https://github.com/FelixKrueger/TrimGalore/
-s:license: https://spdx.org/licenses/GPL-3.0
 
 $namespaces:
   s: http://schema.org/

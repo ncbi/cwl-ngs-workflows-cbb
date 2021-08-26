@@ -55,7 +55,7 @@ s:author:
     s:name: Roberto Vera Alvarez
 
 s:codeRepository: http://hmmer.org/
-s:license: https://spdx.org/licenses/OPL-1.0
+
 
 $namespaces:
   s: http://schema.org/
