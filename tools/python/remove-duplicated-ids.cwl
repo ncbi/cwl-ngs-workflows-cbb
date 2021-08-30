@@ -49,8 +49,8 @@ requirements:
           with open(sys.argv[1], 'r') as handle, open(fasta, "w") as fout:
               dedup_records = defaultdict()
               for record in SeqIO.parse(handle, "fasta"):
-                  r = dedup_records.setdefault(record.id, record)
-                  if r == record:
+                  r = dedup_records.setdefault(record.id, None)
+                  if not r:
                       fout.write(record.format("fasta"))
 
 inputs:
