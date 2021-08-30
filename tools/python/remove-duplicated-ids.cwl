@@ -55,7 +55,7 @@ requirements:
               handle = open(fasta, 'r')
               prefix = filename
 
-          with gzip.open('{}_nodup.fsa.gz'.format(prefix), "wt") as fout:
+          with open('{}.fsa'.format(prefix), "w") as fout:
               dedup_records = defaultdict()
               for record in SeqIO.parse(handle, "fasta"):
                   r = dedup_records.setdefault(record.id, record)
@@ -72,7 +72,7 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*_nodup.fsa.gz'
+      glob: '*_nodup.fsa'
 
 baseCommand: ["python","duplicate_removal.py"]
 
