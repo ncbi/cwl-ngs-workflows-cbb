@@ -58,11 +58,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: --version
-  num_cores:
-    type: int?
-    inputBinding:
-      position: 1
-      prefix: --num_cores
   source:
     type: string?
     inputBinding:

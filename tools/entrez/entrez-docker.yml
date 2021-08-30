@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/entrez-direct:13.9--pl5262he881be0_2

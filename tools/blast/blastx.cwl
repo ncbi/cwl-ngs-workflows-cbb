@@ -7,6 +7,11 @@ doc: NCBI BlastX Translated Query-Protein Subject BLAST
 
 requirements:
   InlineJavascriptRequirement: {}
+  ResourceRequirement:
+    coresMin: |
+      ${
+                return inputs.num_threads ? inputs.num_threads : 1
+        }
 
 hints:
   - $import: blast-docker.yml
