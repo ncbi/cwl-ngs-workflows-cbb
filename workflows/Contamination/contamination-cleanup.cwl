@@ -16,6 +16,7 @@ inputs:
   min_length: int
   vector_fsa: File
   contaminant_fsa: File
+  ribo_fsa: File
 
 outputs:
   equal_seq_removal_1_tsv:
@@ -45,6 +46,24 @@ outputs:
   equal_seq_removal_tsv:
     outputSource: contamination_removal/equal_seq_removal_tsv
     type: File
+  mitochondrial_removal_fsa:
+    outputSource: mitochondrial_removal/filtered_fsa
+    type: File
+  mitochondrial_removal_tsv:
+    outputSource: mitochondrial_removal/filtered_ids
+    type: File
+  mitochondrial_removal_blastn:
+    outputSource: mitochondrial_removal/mito_blastn_tsv
+    type: File
+  ribosomal_removal_fsa:
+    outputSource: ribosomal_removal/filtered_fsa
+    type: File
+  ribosomal_removal_tsv:
+    outputSource: ribosomal_removal/filtered_ids
+    type: File
+  ribosomal_removal_blastn:
+    outputSource: ribosomal_removal/ribosomal_blastn_tsv
+    type: File
 
 steps:
   vector_removal:
@@ -65,3 +84,19 @@ steps:
       min_length: min_length
       contaminant_fsa: contaminant_fsa
     out: [ contaminant_blastn_tsv, contamination_removal_cont, equal_seq_removal_fsa, equal_seq_removal_tsv ]
+  mitochondrial_removal:
+    run: mitochondrial-cleanup.cwl
+    label: Remove mitochondrial from FASTA
+    in:
+      trans_fsa_gz: contamination_removal/equal_seq_removal_fsa
+      threads: threads
+      min_length: min_length
+    out: [ mito_blastn_tsv, filtered_fsa, filtered_ids]
+  ribosomal_removal:
+    run: ribosomal-cleanup.cwl
+    label: Remove ribosomal from FASTA
+    in:
+      trans_fsa_gz: mitochondrial_removal/filtered_fsa
+      threads: threads
+      ribo_fsa: ribo_fsa
+    out: [ ribosomal_blastn_tsv, filtered_fsa, filtered_ids]
