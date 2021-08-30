@@ -41,21 +41,11 @@ requirements:
       - entryname: duplicate_removal.py
         entry: |
           import os
-          import sys
-          import gzip
           from Bio import SeqIO
           from collections import defaultdict
 
-          fasta = sys.argv[1]
-          filename, ext = os.path.splitext(os.path.basename(fasta))
-          if ext == '.gz':
-              handle = gzip.open(fasta, 'rt')
-              prefix  =  os.path.splitext(filename)[0]
-          else:
-              handle = open(fasta, 'r')
-              prefix = filename
-
-          with open('{}.fsa'.format(prefix), "w") as fout:
+          fasta = os.path.basename(sys.argv[1])
+          with open(sys.argv[1], 'r') as handle, open(fasta, "w") as fout:
               dedup_records = defaultdict()
               for record in SeqIO.parse(handle, "fasta"):
                   r = dedup_records.setdefault(record.id, record)
@@ -72,7 +62,7 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*_nodup.fsa'
+      glob: $(inputs.fasta.basename)
 
 baseCommand: ["python","duplicate_removal.py"]
 
