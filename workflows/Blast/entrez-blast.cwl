@@ -17,8 +17,8 @@ inputs:
 
 outputs:
   blastn_db:
-    outputSource: collect_blastdb/output
-    type: Directory
+    outputSource: blastdb/out_db
+    type: File[]
   fsa:
     outputSource: remove_duplicated_ids/fsa
     type: File
@@ -48,10 +48,3 @@ steps:
       out: out
       in: remove_duplicated_ids/fsa
     out: [ out_db ]
-  collect_blastdb:
-    run: ../../tools/basic/files2dir.cwl
-    label: Collect BlastDB
-    in:
-      files: blastdb/out_db
-      dir: out
-    out: [output]
