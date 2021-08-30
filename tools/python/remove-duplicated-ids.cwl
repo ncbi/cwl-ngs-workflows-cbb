@@ -46,7 +46,7 @@ requirements:
           from collections import defaultdict
 
           fasta = os.path.basename(sys.argv[1])
-          with open(sys.argv[1], 'r') as handle, open(fasta, "w") as fout:
+          with open(sys.argv[1], 'r') as handle, open(fasta + '.fsa', "w") as fout:
               dedup_records = defaultdict()
               for record in SeqIO.parse(handle, "fasta"):
                   r = dedup_records.setdefault(record.id, False)
@@ -64,7 +64,7 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: $(inputs.fasta.basename)
+      glob: $(inputs.fasta.basename).fsa
 
 baseCommand: ["python","duplicate_removal.py"]
 
