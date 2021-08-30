@@ -19,6 +19,9 @@ outputs:
   blastn_db:
     outputSource: collect_blastdb/output
     type: Directory
+  fsa:
+    outputSource: remove_duplicated_ids/fsa
+    type: File
 
 steps:
   download_entrez_fsa:
@@ -30,6 +33,12 @@ steps:
       format: {default: "fasta"}
       out: out
     out: [fsa]
+  remove_duplicated_ids:
+    run: ../../tools/python/remove-duplicated-ids.cwl
+    label: Remove duplicated IDs
+    in:
+      fasta: download_entrez_fsa/fsa
+    out: [fsa]
   blastdb:
     run: ../../tools/blast/makeblastdb.cwl
     label: Make BlastDB
@@ -37,7 +46,7 @@ steps:
       dbtype: dbtype
       hash_index: { default: True }
       out: out
-      in: download_entrez_fsa/fsa
+      in: remove_duplicated_ids/fsa
     out: [ out_db ]
   collect_blastdb:
     run: ../../tools/basic/files2dir.cwl
