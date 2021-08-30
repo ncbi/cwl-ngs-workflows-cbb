@@ -41,6 +41,7 @@ requirements:
       - entryname: duplicate_removal.py
         entry: |
           import os
+          import sys
           from Bio import SeqIO
           from collections import defaultdict
 
