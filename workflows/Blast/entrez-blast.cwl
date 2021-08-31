@@ -44,7 +44,6 @@ steps:
     label: Make BlastDB
     in:
       dbtype: dbtype
-      hash_index: { default: True }
       out: out
       in: remove_duplicated_ids/fsa
     out: [ out_db ]
