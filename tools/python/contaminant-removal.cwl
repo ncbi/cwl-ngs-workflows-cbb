@@ -175,12 +175,7 @@ requirements:
                               for i, r in df.iterrows():
                                   cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
 
-                      with counter.get_lock():
-                          counter.value += 1
-                          value = counter.value
-                          end_time = datetime.datetime.now()
-                          c = end_time - start_time
-                          print('{:3.2f}%\tRemaining: {:5.1f} secs Elapsed: {:5.1f} secs {}'.format((value * 100 / total), ((c.seconds * total / value) - c.seconds), c.seconds, 20 * ' '), end='\r')
+
           p = Pool(processes=threads)
           transcripts_list = [d for d in list(chunks(list(transcripts.keys()), 1000))]
           data = p.map(build_segments_worker, transcripts_list)
