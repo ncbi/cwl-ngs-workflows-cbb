@@ -10,7 +10,6 @@ label: contamination_foreign_chromosome
 doc: "This workflow detect and remove foreign chromosome from a DNA fasta file"
 
 inputs:
-  query: string
   trans_fsa_gz: File
   threads: int
   out: string
