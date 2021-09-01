@@ -70,7 +70,7 @@ steps:
     run: ../../tools/python/contaminant-removal.cwl
     label: Remove contaminants from BlastN
     in:
-      fasta: uncompress_noequal/output
+      fasta: trans_fsa
       blast: contaminant_blastn/output
       threads: threads
       min_length: min_length
