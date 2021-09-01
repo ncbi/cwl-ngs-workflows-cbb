@@ -24,11 +24,8 @@ outputs:
   contamination_removal_cont:
     outputSource: contamination_removal/contamination_removal_cont
     type: File
-  equal_seq_removal_fsa:
-    outputSource: contamination_removal/equal_seq_removal_fsa
-    type: File
-  equal_seq_removal_tsv:
-    outputSource: contamination_removal/equal_seq_removal_tsv
+  contamination_removal_fsa:
+    outputSource: contamination_removal/contamination_removal_fsa
     type: File
   mitochondrial_removal_fsa:
     outputSource: mitochondrial_removal/filtered_fsa
@@ -58,12 +55,12 @@ steps:
       threads: threads
       min_length: min_length
       contaminant_fsa: contaminant_fsa
-    out: [ contaminant_blastn_tsv, contamination_removal_cont, equal_seq_removal_fsa, equal_seq_removal_tsv ]
+    out: [ contaminant_blastn_tsv, contamination_removal_cont, contamination_removal_fsa ]
   mitochondrial_removal:
     run: mitochondrial-cleanup.cwl
     label: Remove mitochondrial from FASTA
     in:
-      trans_fsa_gz: contamination_removal/equal_seq_removal_fsa
+      trans_fsa_gz: contamination_removal/contamination_removal_fsa
       threads: threads
       min_length: min_length
     out: [ mito_blastn_tsv, filtered_fsa, filtered_ids]
