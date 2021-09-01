@@ -187,7 +187,7 @@ requirements:
           print('\n\nPrinting results...')
           count = 0
           cont_count = 0
-          with open('{}_nocont.fsa'.format(prefix), "w") as output_handle, open('{}_cont.ids'.format(prefix), "w") as cont_handle:
+          with gzip.open('{}_nocont.fsa.gz'.format(prefix), "wt") as output_handle, open('{}_cont.ids'.format(prefix), "w") as cont_handle:
               cont_handle.write('{}\t{}\t{}\t{}\t{}\n'.format('qseqid','sseqid','pident','evalue','bitscore','coverage'))
               for i, r in df_cont.iterrows():
                   cont_count += 1
@@ -231,7 +231,7 @@ outputs:
   fsa:
     type: File
     outputBinding:
-      glob: '*_nocont.fsa'
+      glob: '*_nocont.fsa.gz'
   cont:
     type: File
     outputBinding:
