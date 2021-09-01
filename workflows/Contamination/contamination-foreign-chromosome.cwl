@@ -12,7 +12,6 @@ doc: "This workflow detect and remove foreign chromosome from a DNA fasta file"
 inputs:
   trans_fsa_gz: File
   threads: int
-  out: string
   blastdb: Directory
   blastdb_name: string
 
@@ -38,7 +37,8 @@ steps:
       db: blastdb_name
       query: uncompress_noequal/output
       num_threads: threads
-      out: out
+      out:
+        valueFrom: ${ return inputs.query.nameroot + "_" + inputs.db + "_blastn.tsv";}
       outfmt: { default: "6 qseqid sseqid pident length mismatch gapopen qlen qstart qend sstart send evalue bitscore score"}
       word_size: { default: 28 }
       best_hit_overhang: { default: 0.1 }
