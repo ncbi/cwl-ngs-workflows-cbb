@@ -10,7 +10,7 @@ label: contaminant_cleanup
 doc: "This workflow detect and remove contamination from a DNA fasta file"
 
 inputs:
-  trans_fsa_gz: File
+  trans_fsa: File
   threads: int
   min_length: int
   contaminant_fsa: File
@@ -31,13 +31,6 @@ outputs:
 
 
 steps:
-  uncompress_noequal:
-    run: ../../tools/basic/gzip.cwl
-    label: Uncompress non equal sequences fasta
-    in:
-      d: { default: True}
-      file: trans_fsa_gz
-    out: [output]
   contaminant_blastdb:
     run: ../../tools/blast/makeblastdb.cwl
     label: Make Contaminant BlastDB
@@ -60,7 +53,7 @@ steps:
     in:
       dbdir: collect_blastdb/output
       db: { default: "myblastdb"}
-      query: uncompress_noequal/output
+      query: trans_fsa
       num_threads: threads
       out:
         valueFrom: ${ return inputs.query.nameroot + "_contaminant_blastn.tsv";}

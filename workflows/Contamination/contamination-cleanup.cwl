@@ -11,7 +11,7 @@ label: contamination_cleanup
 doc: "This workflow detect and remove contamination from a DNA fasta file"
 
 inputs:
-  trans_fsa_gz: File
+  trans_fsa: File
   threads: int
   min_length: int
   contaminant_fsa: File
@@ -54,7 +54,7 @@ steps:
     run: contaminant-cleanup.cwl
     label: Remove contaminants from FASTA
     in:
-      trans_fsa_gz: trans_fsa_gz
+      trans_fsa: trans_fsa
       threads: threads
       min_length: min_length
       contaminant_fsa: contaminant_fsa
