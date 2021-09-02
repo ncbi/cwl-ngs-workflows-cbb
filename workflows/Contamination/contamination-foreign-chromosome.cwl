@@ -44,7 +44,6 @@ steps:
       best_hit_overhang: { default: 0.1 }
       best_hit_score_edge: { default: 0.1 }
       evalue: { default: 0.0001 }
-      min_raw_gapped_score: { default: 100 }
       penalty: { default: -5 }
       perc_identity: { default: 98.0 }
       task: { default: "megablast" }
