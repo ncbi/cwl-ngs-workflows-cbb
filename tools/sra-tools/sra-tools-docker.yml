@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: ncbi/sra-tools:latest
+ dockerPull: quay.io/biocontainers/sra-tools:2.11.0--pl5262h314213e_0
