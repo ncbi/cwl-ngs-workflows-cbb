@@ -16,35 +16,21 @@ inputs:
   min_length: int
   contaminant_fsa: File
   ribo_fsa: File
+  total_per_file: int
 
 outputs:
-  contaminant_blastn_tsv:
-    outputSource: contamination_removal/contaminant_blastn_tsv
-    type: File
   contamination_removal_cont:
     outputSource: contamination_removal/contamination_removal_cont
-    type: File
-  contamination_removal_fsa:
-    outputSource: contamination_removal/contamination_removal_fsa
-    type: File
-  mitochondrial_removal_fsa:
-    outputSource: mitochondrial_removal/filtered_fsa
     type: File
   mitochondrial_removal_tsv:
     outputSource: mitochondrial_removal/filtered_ids
     type: File
-  mitochondrial_removal_blastn:
-    outputSource: mitochondrial_removal/mito_blastn_tsv
-    type: File
-  ribosomal_removal_fsa:
-    outputSource: ribosomal_removal/filtered_fsa
-    type: File
   ribosomal_removal_tsv:
     outputSource: ribosomal_removal/filtered_ids
     type: File
-  ribosomal_removal_blastn:
-    outputSource: ribosomal_removal/ribosomal_blastn_tsv
-    type: File
+  split_fasta_fsa:
+    outputSource: split_fasta/output
+    type: File[]
 
 steps:
   contamination_removal:
@@ -72,3 +58,10 @@ steps:
       threads: threads
       ribo_fsa: ribo_fsa
     out: [ ribosomal_blastn_tsv, filtered_fsa, filtered_ids]
+  split_fasta:
+    run: ../../tools/python/split-fasta.cwl
+    label: Split fasta
+    in:
+      fasta: ribosomal_removal/filtered_fsa
+      total_per_file: total_per_file
+    out: [ output ]

@@ -58,7 +58,6 @@ requirements:
 
           count = 0
           total = 0
-          trans_deleted = 0
           output_handle = gzip.open('{}_{}.fsa.gz'.format(total_per_file, total + 1), "wt")
           print('Writing file {}_{}.fsa.gz'.format(total_per_file, total + 1))
 
@@ -70,7 +69,6 @@ requirements:
                   output_handle = gzip.open('{}_{}.fsa.gz'.format(total_per_file, total + 1), "wt")
                   print('Writing final file {}_{}.fsa.gz'.format(total_per_file, total + 1))
               count += 1
-              trans_deleted += 1
               output_handle.write(r.format("fasta"))
           handle.close()
           output_handle.close()
