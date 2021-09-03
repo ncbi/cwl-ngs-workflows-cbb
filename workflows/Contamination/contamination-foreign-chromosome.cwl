@@ -46,7 +46,7 @@ steps:
       evalue: { default: 0.0001 }
       penalty: { default: -5 }
       perc_identity: { default: 98.0 }
-      max_target_seqs: { default: 10}
+      max_target_seqs: { default: 5}
       task: { default: "megablast" }
       dust: { default: "yes" }
       soft_masking: { default: "true"}
