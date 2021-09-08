@@ -14,6 +14,7 @@ inputs:
   threads: int
   blastdb: Directory
   blastdb_name: string
+  perc_identity: float
 
 
 outputs:
@@ -45,7 +46,7 @@ steps:
       best_hit_score_edge: { default: 0.1 }
       evalue: { default: 0.0001 }
       penalty: { default: -5 }
-      perc_identity: { default: 98.0 }
+      perc_identity: perc_identity
       max_target_seqs: { default: 5}
       task: { default: "megablast" }
       dust: { default: "yes" }
