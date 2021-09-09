@@ -24,7 +24,7 @@ outputs:
     outputSource: create_clean_fastq/output2
     type: File?
   contaminated_reads_ids:
-    outputSource: contaminated_reads_ids/ids
+    outputSource: extract_contaminated_reads_ids/ids
     type: File
 
 steps:
