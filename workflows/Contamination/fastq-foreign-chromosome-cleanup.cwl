@@ -54,11 +54,11 @@ steps:
                nameroot = nameroot.replace(".fq", "");
              }
              if (nameroot.endsWith("_1")){
-               nameroot = nameroot.replace('_1', '_clean_foreign_1.fastq.gz');
+               nameroot = nameroot.replace('_1', '_foreign_1.fastq.gz');
              }else if (nameroot.includes("_R1_")){
-               nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_clean_foreign_1.fastq.gz';
+               nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_foreign_1.fastq.gz';
              } else{
-               nameroot = nameroot + '_clean_foreign.fastq.gz';
+               nameroot = nameroot + '_foreign.fastq.gz';
              }
              return nameroot;
           }
@@ -73,9 +73,9 @@ steps:
                    nameroot = nameroot.replace(".fq", "");
                  }
                  if (nameroot.endsWith("_2")){
-                   nameroot = nameroot.replace('_2', '_clean_foreign_2.fastq.gz');
+                   nameroot = nameroot.replace('_2', '_foreign_2.fastq.gz');
                  }else if (nameroot.includes("_R2_")){
-                   nameroot = nameroot.substring(1, nameroot.indexOf("_R2_")) + '_clean_foreign_2.fastq.gz';
+                   nameroot = nameroot.substring(1, nameroot.indexOf("_R2_")) + '_foreign_2.fastq.gz';
                  }
                  return nameroot;
               }
