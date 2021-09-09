@@ -139,7 +139,7 @@ requirements:
               with file_prefix.get_lock():
                   file_prefix.value += 1
                   pre = file_prefix.value
-              with open('{}_nocont.fsa'.format(pre), "w") as nocont_handle, open('{}_cont.ids'.format(pre), "w") as cont_handle:
+              with open('{}_nocont_tmp.fsa'.format(pre), "w") as nocont_handle, open('{}_cont_tmp.ids'.format(pre), "w") as cont_handle:
                   blast_df = blast[blast['qseqid'].isin(tlist)]
                   for t in tlist:
                       trans = transcripts[t]
@@ -175,7 +175,6 @@ requirements:
                               for i, r in df.iterrows():
                                   cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
 
-
           p = Pool(processes=threads)
           transcripts_list = [d for d in list(chunks(list(transcripts.keys()), 1000))]
           data = p.map(build_segments_worker, transcripts_list)
@@ -188,16 +187,16 @@ requirements:
                   cont_count += 1
                   cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
               for d in range(1, len(transcripts_list) + 1):
-                  with open('{}_nocont.fsa'.format(d)) as input_handle:
+                  with open('{}_nocont_tmp.fsa'.format(d)) as input_handle:
                       for r in SeqIO.parse(input_handle, "fasta"):
                           count += 1
                           SeqIO.write(r, output_handle, "fasta")
-                  os.remove('{}_nocont.fsa'.format(d))
-                  with open('{}_cont.ids'.format(d)) as input_handle:
+                  os.remove('{}_nocont_tmp.fsa'.format(d))
+                  with open('{}_cont_tmp.ids'.format(d)) as input_handle:
                       for r in input_handle:
                           cont_count += 1
                           cont_handle.write(r)
-                  os.remove('{}_cont.ids'.format(d))
+                  os.remove('{}_cont_tmp.ids'.format(d))
 
           print('{} transcripts with no contamination'.format(count))
           print('{} transcripts discarded due to contamination'.format(cont_count))
