@@ -68,6 +68,7 @@ requirements:
           blast_tsv = sys.argv[2]
           threads = int(sys.argv[3])
           min_length = int(sys.argv[4])
+          sequence_chunk = int(sys.argv[5])
 
           if threads > 1:
               threads = threads - 1
@@ -98,7 +99,6 @@ requirements:
               if record.id not in contaminated_ids:
                   count += 1
                   transcripts[record.id] = record
-                  print('{}'.format(count), end='\r')
           total = len(transcripts)
           print('{} transcripts to process'.format(total))
           handler.close()
@@ -175,10 +175,11 @@ requirements:
                               for i, r in df.iterrows():
                                   cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
 
+          print('Processing sequences by cunks of 1000')
           p = Pool(processes=threads)
-          transcripts_list = [d for d in list(chunks(list(transcripts.keys()), 1000))]
+          transcripts_list = [d for d in list(chunks(list(transcripts.keys()), sequence_chunk))]
           data = p.map(build_segments_worker, transcripts_list)
-          print('\n\nPrinting results...')
+          print('Printing results')
           count = 0
           cont_count = 0
           with gzip.open('{}_nocont.fsa.gz'.format(prefix), "wt") as output_handle, open('{}_cont.ids'.format(prefix), "w") as cont_handle:
@@ -220,6 +221,10 @@ inputs:
     type: int
     inputBinding:
       position: 4
+  sequence_chunk:
+    type: int
+    inputBinding:
+      position: 5
 
 outputs:
   fsa:

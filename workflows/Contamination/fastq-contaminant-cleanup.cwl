@@ -71,4 +71,5 @@ steps:
       blast: contaminant_blastn/output
       threads: threads
       min_length: min_length
+      sequence_chunk: { default: 1000000}
     out: [ fsa, cont ]

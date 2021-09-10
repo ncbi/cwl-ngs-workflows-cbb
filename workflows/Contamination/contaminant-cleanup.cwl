@@ -74,6 +74,7 @@ steps:
       blast: contaminant_blastn/output
       threads: threads
       min_length: min_length
+      sequence_chunk: { default: 1000}
     out: [ fsa, cont ]
   equal_seq_removal:
     run: ../../tools/python/equal-removal.cwl
