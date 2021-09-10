@@ -1,6 +1,5 @@
-#!/usr/bin/env cwl-runner
-cwlVersion: v1.0
 class: Workflow
+cwlVersion: v1.2
 
 requirements:
   - class: InlineJavascriptRequirement
@@ -15,6 +14,7 @@ inputs:
   kingdom: string
   file_name_prefix: string
   blast_tsv_dir: Directory
+  threads: int
 
 outputs:
   fastq1_output:
@@ -26,6 +26,18 @@ outputs:
   contaminated_reads_ids:
     outputSource: extract_contaminated_reads_ids/ids
     type: File
+  fastqc1_html:
+    outputSource: fastqc1/out_html
+    type: File[]
+  fastqc1_zip:
+    outputSource: fastqc1/out_zip
+    type: File[]
+  fastqc2_html:
+    outputSource: fastqc2/out_html
+    type: File[]?
+  fastqc2_zip:
+    outputSource: fastqc2/out_zip
+    type: File[]?
 
 steps:
   extract_contaminated_reads_ids:
@@ -84,3 +96,22 @@ steps:
       names: extract_contaminated_reads_ids/ids
       include: { default: "f" }
     out: [ output, output2 ]
+  fastqc1:
+    run: ../../tools/fastqc/fastqc.cwl
+    label: fastqc
+    in:
+      fastq:
+        source: create_clean_fastq/output
+        valueFrom: ${ return [ self ]; }
+      threads: threads
+    out: [ out_html, out_zip ]
+  fastqc2:
+    run: ../../tools/fastqc/fastqc.cwl
+    when: $(inputs.fastq[0] != null)
+    label: fastqc
+    in:
+      fastq:
+        source: create_clean_fastq/output2
+        valueFrom: ${ return [ self ]; }
+      threads: threads
+    out: [ out_html, out_zip ]
