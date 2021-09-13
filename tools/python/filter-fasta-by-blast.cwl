@@ -120,7 +120,7 @@ requirements:
                       else:
                           filtered += 1
                           ids_handle.write(record.id + '\n')
-                      print('Total: {} Used: {} Discarded: {}'.format(count, used, filtered), end='\r')
+              print('Total: {} Used: {} Discarded: {}'.format(count, used, filtered))
               handler.close()
 
 
