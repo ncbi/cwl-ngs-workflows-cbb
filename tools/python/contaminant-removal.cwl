@@ -175,7 +175,7 @@ requirements:
                               for i, r in df.iterrows():
                                   cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
 
-          print('Processing sequences by cunks of 1000')
+          print('Processing sequences by cunks of {}'.format(sequence_chunk))
           p = Pool(processes=threads)
           transcripts_list = [d for d in list(chunks(list(transcripts.keys()), sequence_chunk))]
           data = p.map(build_segments_worker, transcripts_list)

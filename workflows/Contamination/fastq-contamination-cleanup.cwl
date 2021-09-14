@@ -41,6 +41,7 @@ steps:
       threads: threads
       min_length: min_length
       contaminant_fsa: contaminant_fsa
+      sequence_chunk: total_per_file
     out: [ contaminant_blastn_tsv, contamination_removal_cont, contamination_removal_fsa ]
   mitochondrial_removal:
     run: mitochondrial-cleanup.cwl

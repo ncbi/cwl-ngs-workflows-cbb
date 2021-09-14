@@ -14,6 +14,7 @@ inputs:
   threads: int
   min_length: int
   contaminant_fsa: File
+  sequence_chunk: int
 
 outputs:
   contaminant_blastn_tsv:
@@ -71,5 +72,5 @@ steps:
       blast: contaminant_blastn/output
       threads: threads
       min_length: min_length
-      sequence_chunk: { default: 1000000}
+      sequence_chunk: sequence_chunk
     out: [ fsa, cont ]
