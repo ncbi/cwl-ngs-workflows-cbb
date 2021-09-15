@@ -58,9 +58,7 @@ requirements:
           import sys
           import pandas
           import gzip
-          import datetime
           from Bio import SeqIO
-          from Bio.Seq import Seq
           from Bio.SeqRecord import SeqRecord
           from multiprocessing import Pool, Value
 
@@ -93,24 +91,23 @@ requirements:
               handler = open(fasta, 'r')
               prefix = filename
 
-          transcripts = {}
-          count = 0
-          for record in SeqIO.parse(handler, "fasta"):
-              if record.id not in contaminated_ids:
-                  count += 1
-                  transcripts[record.id] = record
-          total = len(transcripts)
-          print('{} transcripts to process'.format(total))
+          total = 0
+          positions = [0]
+          line = handler.readline()
+          while line:
+              if line.startswith('>'):
+                  total += 1
+                  if total == sequence_chunk:
+                      total = 0
+                      positions.append(pos)
+                      print('position: {}'.format(pos))
+              pos = handler.tell()
+              line = handler.readline()
+          print('{} chunks of {} sequences to process'.format(len(positions), sequence_chunk))
           handler.close()
 
           file_prefix = Value('i', 0)
           counter = Value('i', 0)
-          start_time = datetime.datetime.now()
-
-          def chunks(lst, n):
-              """Yield successive n-sized chunks from lst."""
-              for i in range(0, len(lst), n):
-                  yield lst[i:i + n]
 
           def build_seqs(segs, rec):
               last = 0
@@ -132,17 +129,32 @@ requirements:
           def contaminations(df):
               return pandas.concat([terminal_contamination(df), internal_contamination(df)])
 
-          def build_segments_worker(tlist):
+          def build_segments_worker(position):
               global counter
               global total
               global file_prefix
               with file_prefix.get_lock():
                   file_prefix.value += 1
                   pre = file_prefix.value
+              filename, ext = os.path.splitext(os.path.basename(fasta))
+              if ext == '.gz':
+                  handler = gzip.open(fasta, 'rt')
+              else:
+                  handler = open(fasta, 'r')
+              handler.seek(position, 0)
+              total = 0
+              sequences = {}
+              for record in SeqIO.parse(handler, "fasta"):
+                  total += 1
+                  if total > sequence_chunk:
+                      break
+                  sequences[record.id] = record
+              handler.close()
+
               with open('{}_nocont_tmp.fsa'.format(pre), "w") as nocont_handle, open('{}_cont_tmp.ids'.format(pre), "w") as cont_handle:
-                  blast_df = blast[blast['qseqid'].isin(tlist)]
-                  for t in tlist:
-                      trans = transcripts[t]
+                  blast_df = blast[blast['qseqid'].isin(sequences.keys())]
+                  for t in sequences:
+                      trans = sequences[t]
                       trans_len = len(trans.seq)
                       df = contaminations(blast_df[blast_df['qseqid'] == t])
                       if df.empty:
@@ -157,7 +169,7 @@ requirements:
                                   index = 1
                                   last_seg = [r['qstart'], r['qend']]
                                   segs.append(last_seg)
-                              elif r['qstart'] <= last_seg[1] and r['qend'] > last_seg[1]:
+                              elif r['qstart'] <= last_seg[1] < r['qend']:
                                   last_seg = [last_seg[0], r['qend']]
                                   segs[index - 1] = last_seg
                               elif r['qstart'] > last_seg[1]:
@@ -177,8 +189,7 @@ requirements:
 
           print('Processing sequences by cunks of {}'.format(sequence_chunk))
           p = Pool(processes=threads)
-          transcripts_list = [d for d in list(chunks(list(transcripts.keys()), sequence_chunk))]
-          data = p.map(build_segments_worker, transcripts_list)
+          data = p.map(build_segments_worker, positions)
           print('Printing results')
           count = 0
           cont_count = 0
@@ -187,7 +198,7 @@ requirements:
               for i, r in df_cont.iterrows():
                   cont_count += 1
                   cont_handle.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(r['qseqid'],r['sseqid'],r['pident'],r['evalue'],r['bitscore'],r['coverage']))
-              for d in range(1, len(transcripts_list) + 1):
+              for d in range(1, len(positions) + 1):
                   with open('{}_nocont_tmp.fsa'.format(d)) as input_handle:
                       for r in SeqIO.parse(input_handle, "fasta"):
                           count += 1
@@ -201,8 +212,6 @@ requirements:
 
           print('{} transcripts with no contamination'.format(count))
           print('{} transcripts discarded due to contamination'.format(cont_count))
-
-
 
 inputs:
   fasta:
