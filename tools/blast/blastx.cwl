@@ -188,12 +188,12 @@ inputs:
       position: 1
       prefix: -negative_taxids
   taxidlist:
-    type: string?
+    type: File?
     inputBinding:
       position: 1
       prefix: -taxidlist
   negative_taxidlist:
-    type: string?
+    type: File?
     inputBinding:
       position: 1
       prefix: -negative_taxidlist
