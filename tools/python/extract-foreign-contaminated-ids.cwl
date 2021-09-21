@@ -49,7 +49,7 @@ requirements:
           wDir = sys.argv[3]
           out = sys.argv[4]
 
-          foreign_databases = ['archaea','other_eukaryota', 'arthropoda', 'fungi',
+          foreign_databases = ['archaea','other_eukaryota', 'arthropoda', 'fungi', 'chordata',
                                'other_metazoa', 'viruses_and_viroids', 'viridiplantae', 'bacteria']
 
           foreign_databases.remove(kingdom)
