@@ -40,7 +40,7 @@ steps:
       num_threads: threads
       out:
         valueFrom: ${ return inputs.query.nameroot + "_" + inputs.db + "_blastn.tsv";}
-      outfmt: { default: "6 qseqid sseqid pident length mismatch gapopen qlen qstart qend sstart send evalue bitscore score"}
+      outfmt: { default: "6 qseqid sseqid pident length mismatch gapopen qlen qstart qend sstart send evalue bitscore score staxid"}
       word_size: { default: 28 }
       best_hit_overhang: { default: 0.1 }
       best_hit_score_edge: { default: 0.1 }
