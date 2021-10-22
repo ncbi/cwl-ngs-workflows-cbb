@@ -11,9 +11,11 @@ doc: "This workflow remove foreign chromosome comtamination from blastn TSV file
 inputs:
   fastq1: File
   fastq2: File?
-  kingdom: string
+  tax_group: string
   file_name_prefix: string
-  blast_tsv_dir: Directory
+  partitions: int
+  data_dir: Directory
+  tax_group_pickle: File
   threads: int
 
 outputs:
@@ -23,8 +25,8 @@ outputs:
   fastq2_output:
     outputSource: create_clean_fastq/output2
     type: File?
-  contaminated_reads_ids:
-    outputSource: extract_contaminated_reads_ids/ids
+  decontaminated_reads_ids:
+    outputSource: extract_clean_reads_ids/output
     type: File
   fastqc1_html:
     outputSource: fastqc1/out_html
@@ -40,16 +42,17 @@ outputs:
     type: File[]?
 
 steps:
-  extract_contaminated_reads_ids:
-    label: Extract contaminated reads IDs
-    run: ../../tools/python/extract-foreign-contaminated-ids.cwl
+  extract_clean_reads_ids:
+    label: Extract decontaminated reads IDs
+    run: ../../tools/python/extract-clean-from-foreign-blastn.cwl
     in:
-      kingdom: kingdom
+      tax_group: tax_group
       file_name_prefix: file_name_prefix
-      blast_tsv_dir: blast_tsv_dir
-      out:
-        valueFrom: ${ return inputs.blast_tsv_dir.basename + "contaminated_reads.ids";}
-    out: [ ids ]
+      partitions: partitions
+      threads: threads
+      tax_group_pickle: tax_group_pickle
+      data_dir: data_dir
+    out: [ output ]
   create_clean_fastq:
     label: Creates clean FASTQ
     run: ../../tools/bbmap/filterbyname.cwl
@@ -93,8 +96,8 @@ steps:
               }
               return null;
           }
-      names: extract_contaminated_reads_ids/ids
-      include: { default: "f" }
+      names: extract_clean_reads_ids/output
+      include: { default: "t" }
     out: [ output, output2 ]
   fastqc1:
     run: ../../tools/fastqc/fastqc.cwl
