@@ -22,12 +22,11 @@ inputs:
   seqType: string
   left: File[]
   right: File[]
-  d: Directory
 
 outputs:
-#  trinity_output:
-#    outputSource: trinity_assembly/output
-#    type: Directory
+  trinity_output:
+    outputSource: trinity_assembly/output
+    type: Directory
   quantifycation_kallisto_output:
     outputSource: quantifycation_kallisto/output
     type: Directory[]
@@ -36,22 +35,22 @@ outputs:
     type: Directory[]
 
 steps:
-#  trinity_assembly:
-#    run: ../../tools/trinity/trinity.cwl
-#    label: Trinity de Novo assembly
-#    in:
-#      max_memory: max_memory
-#      CPU: threads
-#      output: output
-#      seqType: seqType
-#      left: left
-#      right: right
-#    out: [ output ]
+  trinity_assembly:
+    run: ../../tools/trinity/trinity.cwl
+    label: Trinity de Novo assembly
+    in:
+      max_memory: max_memory
+      CPU: threads
+      output: output
+      seqType: seqType
+      left: left
+      right: right
+    out: [ output ]
   extracting_transcript_file:
     run: ../../tools/basic/extract-file-from-dir.cwl
     label: Extracting transcript file
     in:
-      d: d
+      d: trinity_assembly/output
       filename: {default: "Trinity.fasta"}
       o: {default: "Trinity.fasta"}
     out: [output]
