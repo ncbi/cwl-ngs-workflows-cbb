@@ -67,6 +67,11 @@ inputs:
     inputBinding:
       position: 8
       prefix: --output_dir
+  trinity_mode:
+    type: boolean?
+    inputBinding:
+      position: 8
+      prefix: --trinity_mode
 
 outputs:
   output:
