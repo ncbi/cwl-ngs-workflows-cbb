@@ -69,7 +69,7 @@ steps:
       left: left
       right: right
       output_dir:
-        valueFrom: '${ return inputs.left.nameroot.replace(".fastq.gz","_kallisto");}'
+        valueFrom: '${ return inputs.left.nameroot.replace(".fastq","_kallisto");}'
     out: [ output ]
   quantifycation_salmon:
     run: ../../tools/trinity/align_and_estimate_abundance.cwl
@@ -86,7 +86,7 @@ steps:
       left: left
       right: right
       output_dir:
-        valueFrom: '${ return inputs.left.nameroot.replace(".fastq.gz","_salmon");}'
+        valueFrom: '${ return inputs.left.nameroot.replace(".fastq","_salmon");}'
     out: [ output ]
 
 $namespaces:
