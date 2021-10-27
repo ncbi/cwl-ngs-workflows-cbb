@@ -27,7 +27,7 @@ inputs:
       prefix: -db
       valueFrom: ${ return inputs.dbdir.path + "/" + self;}
   query:
-    type: File
+    type: File?
     inputBinding:
       position: 1
       prefix: -query
