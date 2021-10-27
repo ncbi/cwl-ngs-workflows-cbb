@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'magicblast'
+    version:
+      - '1.5.0'
+    specs:
+      - https://anaconda.org/bioconda/magicblast
