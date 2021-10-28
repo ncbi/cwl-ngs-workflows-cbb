@@ -17,6 +17,9 @@ inputs:
   threads: int
 
 outputs:
+  out_unaligned_output:
+    outputSource: alignment/out_unaligned_output
+    type: File
   sorted_bam:
     outputSource: bam_index/out_sam
     type: File
@@ -46,8 +49,23 @@ steps:
             }
             return nameroot + ".sam";
           }
-      no_unaligned: { default: True }
-    out: [output]
+      unaligned_fmt: {default: "fasta"}
+      out_unaligned:
+        valueFrom: |
+          ${
+            var nameroot = inputs.query.nameroot;
+            if (nameroot.endsWith(".fastq")){
+               nameroot = nameroot.replace(".fastq", "")
+            }
+            if (nameroot.endsWith(".fa")){
+               nameroot = nameroot.replace(".fa", "")
+            }
+            if (nameroot.endsWith("_1") || nameroot.endsWith("_2")){
+               nameroot = nameroot.slice(0, -2);
+            }
+            return nameroot + "_unaligned.fa";
+          }
+    out: [output, out_unaligned_output]
   samtools_view:
     run: ../../tools/samtools/samtools-view.cwl
     label: Samtools-view
