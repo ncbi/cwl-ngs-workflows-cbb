@@ -168,23 +168,7 @@ steps:
     in:
       in: include_tax_group_aligned_ids/output
       out:
-        valueFrom: |
-          ${
-             var nameroot = inputs.in.nameroot;
-             if (nameroot.endsWith(".fastq")){
-               nameroot = nameroot.replace(".fastq", "");
-             }else if (nameroot.endsWith(".fq")){
-               nameroot = nameroot.replace(".fq", "");
-             }
-             if (nameroot.endsWith("_1")){
-               nameroot = nameroot.replace('_1', '_noforeign_1.fastq.gz');
-             }else if (nameroot.includes("_R1_")){
-               nameroot = nameroot.substring(1, nameroot.indexOf("_R1_")) + '_noforeign_1.fastq.gz';
-             } else{
-               nameroot = nameroot + '_foreign.fastq.gz';
-             }
-             return nameroot;
-          }
+        valueFrom: ${ return inputs.in.nameroot.replace(".fa", "_noforeign.fa");}
       names: screen_taxonomic_group_8/filter_fsa
       include: { default: "t" }
     out: [ output, output2 ]
