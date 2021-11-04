@@ -11,6 +11,7 @@ requirements:
 inputs:
   fastq1: File
   fastq2: File?
+  fsa: File
   total_per_file: int
 
 outputs:

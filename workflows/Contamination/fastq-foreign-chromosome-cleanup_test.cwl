@@ -158,7 +158,7 @@ steps:
     in:
       in: fsa
       out:
-        valueFrom: ${ return inputs.fastq1.basename;}
+        valueFrom: ${ return inputs.in.basename;}
       names: screen_target_taxonomic_group/aligned_ids
       include: { default: "t" }
     out: [ output ]
