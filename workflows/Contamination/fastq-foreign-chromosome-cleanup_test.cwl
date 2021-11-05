@@ -27,6 +27,9 @@ outputs:
   fsa_output:
     outputSource: include_not_aligned_ids/output
     type: File
+  tax_group_ids:
+    outputSource: screen_target_taxonomic_group/aligned_ids
+    type: File
   tax_group_1_ids:
     outputSource: screen_taxonomic_group_1/aligned_ids
     type: File
@@ -163,12 +166,32 @@ steps:
       include: { default: "t" }
     out: [ output ]
   include_not_aligned_ids:
-    label: Creates clean FASTQ
-    run: ../../tools/bbmap/filterbyname.cwl
+    label: Creates clean FASTA
+    run:
+      class: CommandLineTool
+      label: Cat
+      requirements:
+        InlineJavascriptRequirement: { }
+      hints:
+        - $import: ../../tools/basic/ubuntu-docker.yml
+      inputs:
+        file1:
+          type: File
+          inputBinding:
+            position: 1
+        file2:
+          type: File
+          inputBinding:
+            position: 2
+      outputs:
+        output:
+          type: File
+          outputBinding:
+            glob: $(inputs.file1.nameroot + "_noforeign.fa")
+
+      stdout: $(inputs.file1.nameroot + "_noforeign.fa")
+      baseCommand: [ "cat" ]
     in:
-      in: include_tax_group_aligned_ids/output
-      out:
-        valueFrom: ${ return inputs.in.nameroot.replace(".fa", "_noforeign.fa");}
-      names: screen_taxonomic_group_8/filter_fsa
-      include: { default: "t" }
-    out: [ output, output2 ]
+      file1: include_tax_group_aligned_ids/output
+      file2: screen_taxonomic_group_8/filter_fsa
+    out: [ output ]

@@ -66,7 +66,7 @@ steps:
     in:
       in: fsa
       out:
-        valueFrom: ${ return inputs.names.nameroot + ".fsa"; }
+        valueFrom: ${ return inputs.names.nameroot + ".fa"; }
       names: find_aligned_ids/output
       include: { default: "f" }
     out: [ output ]
