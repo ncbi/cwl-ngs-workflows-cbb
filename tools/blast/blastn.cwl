@@ -103,7 +103,7 @@ inputs:
       prefix: -subject_loc
   outfmt:
     type: string?
-    default: "6 qseqid sgi saccver evalue bitscore score staxid"
+    default: "6 qseqid sseqid pident slen length mismatch gapopen qlen qstart qend sstart send evalue bitscore score staxid"
     inputBinding:
       position: 1
       prefix: -outfmt
