@@ -35,7 +35,7 @@ steps:
       query: fsa
       num_threads: threads
       out:
-        valueFrom: ${ return inputs.query.nameroot + "_" + inputs.db + ".tsv";}
+        valueFrom: ${ return inputs.query.nameroot + "_" + inputs.db + "_blastn.tsv";}
       outfmt: { default: "6 qseqid sseqid pident slen length mismatch gapopen qlen qstart qend sstart send evalue bitscore score staxid" }
       word_size: { default: 28 }
       best_hit_overhang: { default: 0.1 }
