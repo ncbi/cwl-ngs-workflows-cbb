@@ -89,6 +89,7 @@ requirements:
                 blast = pandas.read_csv(args.blastout, sep='\t', names=args.columns.split(' '))
                 blast = blast[blast['pident'] >= float(args.pident)]
                 if not blast.empty:
+                    print('Blast hits to analyze: {}'.format(len(blast)))
                     blast['coverage'] = blast['length']*100/blast['qlen']
                     ids = set(blast[blast['coverage'] >= float(args.coverage)]['qseqid'].unique())
                     if ids:
@@ -104,6 +105,7 @@ requirements:
                             if i:
                                 fout.write('{}\n'.format(i))
                 else:
+                    print('No Blast hits to analyze')
                     f = open(args.out, "w")
                     f.close()
 
