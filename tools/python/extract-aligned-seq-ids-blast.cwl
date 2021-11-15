@@ -67,10 +67,10 @@ requirements:
                 for s in grouped_sseqid.groups:
                     d = grouped_sseqid.get_group(s)
                     overlaps = find_overlaps(list(d[['qstart', 'qend']].to_records(index=False)))
-                    coverage = 0
+                    cover = 0
                     for o in overlaps:
-                        coverage += o[1] - o[0] + 1
-                    if coverage >= cutoff:
+                        cover += o[1] - o[0] + 1
+                    if cover * 100/d.iloc[0]['qlen'] >= cutoff:
                         return g
                 return None
 
