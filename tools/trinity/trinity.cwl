@@ -11,7 +11,7 @@ requirements:
   ResourceRequirement:
     ramMax: |
       ${
-          return inputs.max_memory ? inputs.max_memory : 2000
+          return inputs.max_memory ? parseInt(inputs.max_memory.replace('G','')) : 2000
       }
     ramMin: 2000
     coresMin: $(inputs.CPU)
