@@ -197,6 +197,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: -num_threads
+  mt_mode:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -mt_mode
   remote:
     type: boolean?
     inputBinding:
