@@ -71,7 +71,8 @@ steps:
       gapextend: { default: 3 }
       dust: { default: "yes" }
       soft_masking: { default: "true" }
-      max_target_seqs: {default: 1 }
+      max_target_seqs: { default: 5 }
+      max_hsps: { default: 10 }
       searchsp: { default: 1750000000000 }
     out: [ output ]
   extract_read_ids:
