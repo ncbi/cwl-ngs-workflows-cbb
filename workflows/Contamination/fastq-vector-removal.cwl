@@ -59,7 +59,7 @@ steps:
       db: { default: "myblastdb" }
       query: create_fasta_from_fastq/output
       num_threads: threads
-      mt_mode: { default: 1 }
+      mt_mode: { default: 0 }
       out:
         valueFrom: ${ return inputs.query.nameroot + ".tsv";}
       outfmt: { default: "6 qseqid saccver qstart qend length evalue bitscore score" }
