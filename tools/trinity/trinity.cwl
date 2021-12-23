@@ -67,6 +67,11 @@ inputs:
       prefix: --single
       shellQuote: False
       itemSeparator: ','
+  no_version_check:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --no_version_check
 
 outputs:
   output:
