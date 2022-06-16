@@ -229,6 +229,11 @@ inputs:
     inputBinding:
       position: 1
       prefix: '--alignIntronMax'
+  - id: chimSegmentMin
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: '--chimSegmentMin'
 
 outputs:
   - id: aligned
@@ -284,6 +289,16 @@ outputs:
           var p=inputs.outFileNamePrefix?inputs.outFileNamePrefix:"";
           return p+"Aligned.toTranscriptome.out.bam";
         }
+  - id: chimeric
+    type: File?
+    outputBinding:
+      glob: |
+        ${
+          
+          var p=inputs.outFileNamePrefix?inputs.outFileNamePrefix:"";
+          return p+"Chimeric.out.junction";
+        }
+    
 
 baseCommand:
   - STAR
