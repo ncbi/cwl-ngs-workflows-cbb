@@ -7,12 +7,12 @@ doc: Creates a JSON with the PCA data
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_2
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:3.4.11--r41h619a076_0
   SoftwareRequirement:
     packages:
       - package: 'bioconductor-diffbind'
         version:
-          - '2.16.0'
+          - '3.4.11'
         specs:
           - https://anaconda.org/bioconda/bioconductor-diffbind
 

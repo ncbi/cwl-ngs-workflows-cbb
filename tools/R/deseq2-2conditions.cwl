@@ -12,7 +12,7 @@ hints:
     packages:
       - package: 'bioconductor-diffbind'
         version:
-          - '2.16.0'
+          - '3.4.11'
         specs:
           - https://anaconda.org/bioconda/bioconductor-diffbind
 
