@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/trim-galore:0.6.5--0
+ dockerPull: quay.io/biocontainers/trim-galore:0.6.7--hdfd78af_0
