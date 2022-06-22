@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'bbmap'
     version:
-      - '38.90'
+      - '38.96'
     specs:
       - https://anaconda.org/bioconda/bbmap

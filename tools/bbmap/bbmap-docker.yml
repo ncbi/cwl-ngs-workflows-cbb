@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/bbmap:38.90--he522d1c_1
+ dockerPull: quay.io/biocontainers/bbmap:38.96--h5c4e2a8_1
