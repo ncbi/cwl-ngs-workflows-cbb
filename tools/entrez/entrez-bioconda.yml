@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'entrez-direct'
     version:
-      - '13.9'
+      - '16.2'
     specs:
       - https://anaconda.org/bioconda/entrez-direct
