@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/samtools:1.10--h9402c20_2
+ dockerPull: quay.io/biocontainers/samtools:1.15.1--h1170115_0
