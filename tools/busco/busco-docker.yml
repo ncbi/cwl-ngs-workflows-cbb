@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/busco:5.2.2--pyhdfd78af_0
+ dockerPull: quay.io/biocontainers/busco:5.3.2--pyhdfd78af_0
