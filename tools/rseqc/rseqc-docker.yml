@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/rseqc:3.0.1--py37h516909a_1
+ dockerPull: quay.io/biocontainers/rseqc:4.0.0--py39hbf8eff0_2
