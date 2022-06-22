@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: ubuntu:18.04
+ dockerPull: ubuntu:20.04
