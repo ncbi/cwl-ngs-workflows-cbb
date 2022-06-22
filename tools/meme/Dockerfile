@@ -1,12 +1,12 @@
 # Base Image
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # Metadata
 LABEL base.image="ubuntu:18.04"
 LABEL version="1"
 LABEL software="MEME"
-LABEL software.version="5.0.4"
-LABEL description="This image provides MEME suite 5.0.4"
+LABEL software.version="5.4.0"
+LABEL description="This image provides MEME suite 5.4.0"
 LABEL tags="MEME"
 LABEL website="http://meme-suite.org"
 
@@ -36,13 +36,13 @@ RUN apt-get clean && \
     apt-get purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV FILE=meme-5.0.4.tar.gz
-ENV URL=http://meme-suite.org/meme-software/5.0.4/
-ENV MOTIF_DB=motif_databases.12.18.tgz
-ENV MOTIF_DB_URL=http://meme-suite.org/meme-software/Databases/motifs/motif_databases.12.18.tgz
+ENV FILE=meme-5.4.0.tar.gz
+ENV URL=https://meme-suite.org/meme/meme-software/5.4.0/
+ENV MOTIF_DB=motif_databases.12.23.tgz
+ENV MOTIF_DB_URL=https://meme-suite.org/meme/meme-software/Databases/motifs/motif_databases.12.23.tgz
 ENV GOMO_DB=gomo_databases.3.2.tgz
-ENV GOMO_DB_URL=http://meme-suite.org/meme-software/Databases/gomo/gomo_databases.3.2.tgz
-ENV FOLDER=meme-5.0.4
+ENV GOMO_DB_URL=https://meme-suite.org/meme/meme-software/Databases/gomo/gomo_databases.3.2.tgz
+ENV FOLDER=meme-5.4.0
 ENV DST=/tmp
 
 RUN adduser --disabled-password --gecos '' ubuntu

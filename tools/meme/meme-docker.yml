@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/meme:5.1.1--py27pl526h53063a7_3
+ dockerPull: quay.io/biocontainers/meme:5.4.1--py39pl5321hc097cdc_2
