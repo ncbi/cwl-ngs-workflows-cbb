@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'gffread'
     version:
-      - '0.11.7'
+      - '0.12.7'
     specs:
       - https://anaconda.org/bioconda/gffread

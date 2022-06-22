@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/gffread:0.11.7--h8b12597_0
+ dockerPull: quay.io/biocontainers/gffread:0.12.7--hd03093a_1
