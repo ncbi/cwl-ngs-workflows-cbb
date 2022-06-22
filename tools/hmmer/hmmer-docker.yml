@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/hmmer:3.3--he1b5a44_1
+ dockerPull: quay.io/biocontainers/hmmer:3.3.2--h87f3376_2
