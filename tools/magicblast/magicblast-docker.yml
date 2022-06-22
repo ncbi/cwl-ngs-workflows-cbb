@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/magicblast:1.5.0--h2d02072_0
+ dockerPull: quay.io/biocontainers/magicblast:1.6.0--hf1761c0_1
