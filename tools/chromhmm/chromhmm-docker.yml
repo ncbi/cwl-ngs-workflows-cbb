@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/chromhmm:1.15--0
+ dockerPull: quay.io/biocontainers/chromhmm:1.23--hdfd78af_0
