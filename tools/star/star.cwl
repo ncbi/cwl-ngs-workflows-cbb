@@ -244,16 +244,6 @@ outputs:
           var p = inputs.outFileNamePrefix?inputs.outFileNamePrefix:"";
           return p+"Aligned.out.bam";
         }
-    secondaryFiles:
-      - |
-        ${
-           var p=inputs.outFileNamePrefix?inputs.outFileNamePrefix:"";
-           return [
-             {"path": p+"Log.final.out", "class":"File"},
-             {"path": p+"SJ.out.tab", "class":"File"},
-             {"path": p+"Log.out", "class":"File"}
-           ];
-        }
   - id: bamRemDups
     type: File?
     outputBinding:
