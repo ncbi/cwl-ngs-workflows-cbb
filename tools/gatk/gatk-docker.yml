@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/gatk4:4.2.5.0--hdfd78af_0

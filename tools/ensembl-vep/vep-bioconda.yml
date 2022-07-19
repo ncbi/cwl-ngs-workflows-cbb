@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'ensembl-vep'
+    version:
+      - '104.3'
+    specs:
+      - https://anaconda.org/bioconda/ensembl-vep
