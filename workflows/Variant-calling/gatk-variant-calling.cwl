@@ -22,9 +22,6 @@ inputs:
   genome_prefix: string
   total_threads: int
   haplotype_threads: int
-  vep_threads: int
-  species: string
-  vep_cache_dir: Directory
   snp_filters:
     type: {"type": "array", "items": {"type": "array", "items": "string"}}
   indel_filters:
