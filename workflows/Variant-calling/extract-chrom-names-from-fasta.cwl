@@ -44,10 +44,28 @@ steps:
       file: awk/output
       text: { default: '{print $1}' }
     out: [ output ]
+  grep2:
+    run: ../../tools/basic/grep.cwl
+    in:
+      v: {default: True}
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot;}
+      pattern: { default: '_' }
+      file: awk2/output
+    out: [ output ]
+  grep3:
+    run: ../../tools/basic/grep.cwl
+    in:
+      v: { default: True }
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot;}
+      pattern: { default: 'chrEBV' }
+      file: grep2/output
+    out: [ output ]
   chr_list:
     run: ../../tools/basic/lines2arraystring.cwl
     in:
-      file: awk2/output
+      file: grep3/output
     out: [output]
 
 
