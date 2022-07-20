@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'circexplorer2'
+    version:
+      - '2.3.8'
+    specs:
+      - https://anaconda.org/bioconda/circexplorer2

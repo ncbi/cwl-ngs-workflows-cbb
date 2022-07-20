@@ -25,7 +25,7 @@ expression:
   "${
       var lines = inputs.file.contents.split('\\n');
       var strings = [];
-      for (var i = 1; i < lines.length; i++) {
+      for (var i = 0; i < lines.length; i++) {
         if (lines[i] != ''){
           strings.push(lines[i]);
         }

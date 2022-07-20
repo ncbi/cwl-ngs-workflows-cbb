@@ -56,7 +56,7 @@ requirements:
                 item_len = len(items)
                 while items:
                     overlap = list(takewhile(lambda item:item[0] <= items[0][1],items))
-                    overlaps.append((min(overlap,key=itemgetter(1))[0],max(overlap,key=itemgetter(1))[1]))
+                    overlaps.append((min(overlap,key=itemgetter(0))[0],max(overlap,key=itemgetter(1))[1]))
                     items = items[len(overlap):]
                 if len(overlaps) > 1 and len(overlaps) != item_len:
                     overlaps = find_overlaps(overlaps)

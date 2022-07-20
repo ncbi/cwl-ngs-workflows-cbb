@@ -63,18 +63,8 @@ steps:
             }
             return nameroot;
           }
-      alignEndsType: { default: "Local" }
-      alignSJDBoverhangMin: { default: 1 }
-      alignSJoverhangMin: { default: 15 }
       genomeDir: genomeDir
-      limitOutSJcollapsed: { default: 1000000 }
-      limitSjdbInsertNsj: { default: 1000000 }
-      outFilterMatchNminOverLread: { default: 0 }
-      outFilterMismatchNmax: { default: 33 }
-      outFilterMismatchNoverLmax: { default: 0.3 }
-      outFilterMultimapNmax: { default: 100 }
-      outFilterScoreMinOverLread: { default: 0.3 }
-      outFilterType: { default: "BySJout" }
+      twopassMode: { default: "Basic" }
       outSAMtype:
         default:
           - BAM
@@ -82,11 +72,7 @@ steps:
       outSAMunmapped: { default: "None" }
       outStd: { default: "Log" }
       readFilesCommand: { default: "zcat" }
-      seedSearchStartLmax: { default: 12 }
       threads: threads
-      twopassMode: { default: "Basic" }
-      winAnchorMultimapNmax: { default: 50 }
-      quantMode: { default: "GeneCounts" }
       chimSegmentMin: { default: 10 }
     out: [aligned, bamRemDups, mappingstats, readspergene, transcriptomesam, chimeric]
   bam_sort:

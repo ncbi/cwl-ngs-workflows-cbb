@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/circexplorer2:2.3.8--pyh864c0ab_1

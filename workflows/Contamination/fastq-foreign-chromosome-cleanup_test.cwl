@@ -54,6 +54,31 @@ outputs:
   tax_group_8_ids:
     outputSource: screen_taxonomic_group_8/aligned_ids
     type: File
+  tax_group_9_ids:
+    outputSource: screen_taxonomic_group_9/aligned_ids
+    type: File
+  tax_group_10_ids:
+    outputSource: screen_taxonomic_group_10/aligned_ids
+    type: File
+  tax_group_11_ids:
+    outputSource: screen_taxonomic_group_11/aligned_ids
+    type: File
+  tax_group_12_ids:
+    outputSource: screen_taxonomic_group_12/aligned_ids
+    type: File
+  tax_group_13_ids:
+    outputSource: screen_taxonomic_group_13/aligned_ids
+    type: File
+  tax_group_14_ids:
+    outputSource: screen_taxonomic_group_14/aligned_ids
+    type: File
+  tax_group_15_ids:
+    outputSource: screen_taxonomic_group_15/aligned_ids
+    type: File
+  tax_group_16_ids:
+    outputSource: screen_taxonomic_group_16/aligned_ids
+    type: File
+
 
 steps:
   screen_target_taxonomic_group:

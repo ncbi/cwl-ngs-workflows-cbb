@@ -69,7 +69,6 @@ steps:
           - Unsorted
       outSAMunmapped: { default: "Within" }
       outStd: { default: "Log" }
-      readFilesCommand: { default: "zcat" }
       seedSearchStartLmax: { default: 12 }
       threads: threads
       twopassMode: { default: "Basic" }
