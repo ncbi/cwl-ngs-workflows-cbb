@@ -65,7 +65,7 @@ steps:
   chr_list:
     run: ../../tools/basic/lines2arraystring.cwl
     in:
-      file: grep/output
+      file: grep3/output
     out: [output]
 
 
