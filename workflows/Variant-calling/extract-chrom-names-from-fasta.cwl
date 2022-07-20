@@ -35,10 +35,19 @@ steps:
       file: grep/output
       text: { default: '{print $2}' }
     out: [output]
+  awk2:
+    run: ../../tools/basic/awk.cwl
+    in:
+      F: { default: " " }
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
+      file: awk/output
+      text: { default: '{print $1}' }
+    out: [ output ]
   chr_list:
     run: ../../tools/basic/lines2arraystring.cwl
     in:
-      file: awk/output
+      file: awk2/output
     out: [output]
 
 
