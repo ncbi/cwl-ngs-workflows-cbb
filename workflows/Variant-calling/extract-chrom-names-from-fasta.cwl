@@ -26,42 +26,42 @@ steps:
       pattern: { default: '^>chr' }
       file: file
     out: [output]
-#  awk:
-#    run: ../../tools/basic/awk.cwl
-#    in:
-#      F: { default: ">" }
-#      outFileName:
-#        valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
-#      file: grep/output
-#      text: { default: '{print $2}' }
-#    out: [output]
-#  awk2:
-#    run: ../../tools/basic/awk.cwl
-#    in:
-#      F: { default: " " }
-#      outFileName:
-#        valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
-#      file: awk/output
-#      text: { default: '{print $1}' }
-#    out: [ output ]
-#  grep2:
-#    run: ../../tools/basic/grep.cwl
-#    in:
-#      v: {default: True}
-#      outFileName:
-#        valueFrom: ${ return inputs.file.nameroot;}
-#      pattern: { default: '_' }
-#      file: awk2/output
-#    out: [ output ]
-#  grep3:
-#    run: ../../tools/basic/grep.cwl
-#    in:
-#      v: { default: True }
-#      outFileName:
-#        valueFrom: ${ return inputs.file.nameroot;}
-#      pattern: { default: 'chrEBV' }
-#      file: grep2/output
-#    out: [ output ]
+  awk:
+    run: ../../tools/basic/awk.cwl
+    in:
+      F: { default: ">" }
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
+      file: grep/output
+      text: { default: '{print $2}' }
+    out: [output]
+  awk2:
+    run: ../../tools/basic/awk.cwl
+    in:
+      F: { default: " " }
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
+      file: awk/output
+      text: { default: '{print $1}' }
+    out: [ output ]
+  grep2:
+    run: ../../tools/basic/grep.cwl
+    in:
+      v: {default: True}
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot;}
+      pattern: { default: '_' }
+      file: awk2/output
+    out: [ output ]
+  grep3:
+    run: ../../tools/basic/grep.cwl
+    in:
+      v: { default: True }
+      outFileName:
+        valueFrom: ${ return inputs.file.nameroot;}
+      pattern: { default: 'chrEBV' }
+      file: grep2/output
+    out: [ output ]
   chr_list:
     run: ../../tools/basic/lines2arraystring.cwl
     in:
