@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/cd-hit:4.8.1--h5b5514e_7
