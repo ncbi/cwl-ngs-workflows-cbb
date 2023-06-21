@@ -179,7 +179,7 @@ requirements:
           data = p.map(build_segments_worker, transcripts_list)
           print('\n\nPrinting results...')
           count = 0
-     _count = 0
+          vect_count = 0
           with open('{}_novect.fsa'.format(prefix), "w") as output_handle, open('{}_vect.ids'.format(prefix), "w") as vect_handle:
               for d in range(1, len(transcripts_list) + 1):
                   with open('{}_novect.fsa'.format(d)) as input_handle:

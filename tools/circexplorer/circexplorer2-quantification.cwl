@@ -128,7 +128,7 @@ requirements:
           
               df1 = pandas.read_csv(circ_file, sep='\t', header=None, names=circexplorer_cols)
               df1 = df1.sort_values(by=['chrom', 'start', 'end'])
-              df1 = df1[df1['readNumber'] > min_reads]
+              df1 = df1[df1['readNumber'] >= min_reads]
               print('{} circRNA to quantify'.format(len(df1)))
           
               with mp.Pool(processes=threads) as pool:
