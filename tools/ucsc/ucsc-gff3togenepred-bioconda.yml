@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'ucsc-gff3togenepred'
     version:
-      - '377'
+      - '477'
     specs:
       - https://anaconda.org/bioconda/ucsc-gff3togenepred

@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/ucsc-gtftogenepred:377--h446ed27_3
+ dockerPull: quay.io/biocontainers/ucsc-gtftogenepred:447--h954228d_0

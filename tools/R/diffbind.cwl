@@ -7,12 +7,12 @@ doc: Compute differentially bound sites from multiple ChIP-seq experiments using
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-diffbind:3.4.11--r41h619a076_0
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:3.8.0--r42hc247a5b_0
   SoftwareRequirement:
     packages:
       - package: 'bioconductor-diffbind'
         version:
-          - '3.4.11'
+          - '3.8.0'
         specs:
           - https://anaconda.org/bioconda/bioconductor-diffbind
 

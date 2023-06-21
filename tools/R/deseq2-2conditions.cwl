@@ -7,12 +7,12 @@ doc: Deseq2 comparison for two conditions
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-diffbind:2.16.0--r40h5f743cb_2
+    dockerPull: quay.io/biocontainers/bioconductor-diffbind:3.8.0--r42hc247a5b_0
   SoftwareRequirement:
     packages:
       - package: 'bioconductor-diffbind'
         version:
-          - '3.4.11'
+          - '3.8.0'
         specs:
           - https://anaconda.org/bioconda/bioconductor-diffbind
 

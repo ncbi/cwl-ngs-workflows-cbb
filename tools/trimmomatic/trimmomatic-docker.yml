@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/trimmomatic:0.39--1
+ dockerPull: quay.io/biocontainers/trimmomatic:0.39--hdfd78af_2
