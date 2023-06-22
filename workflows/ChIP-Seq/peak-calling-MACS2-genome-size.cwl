@@ -47,10 +47,10 @@ outputs:
     outputSource: homer_annotate_peaks/annStats_out
     type: File[]?
   lambda_tdf_out:
-    outputSource: lambda_bdg_to_tdf/out_tdf
+    outputSource: macs_callpeak_q_value/lambda
     type: File[]
   pileup_tdf_out:
-    outputSource: pileup_bdg_to_tdf/out_tdf
+    outputSource: macs_callpeak_q_value/pileup
     type: File[]
 
 steps:
@@ -141,26 +141,6 @@ steps:
       d: homer_tags/tags_directory
       fpkm: {default: True}
     out: [output,annStats_out]
-  lambda_bdg_to_tdf:
-    run: ../../tools/igvtools/igvtools-totdf.cwl
-    scatter: i
-    in:
-      i: macs_callpeak_q_value/lambda
-      s: genome_size
-      o:
-        valueFrom: ${ return inputs.i.nameroot + ".tdf";}
-      z: {default: 5}
-    out: [out_tdf]
-  pileup_bdg_to_tdf:
-    run: ../../tools/igvtools/igvtools-totdf.cwl
-    scatter: i
-    in:
-      i: macs_callpeak_q_value/pileup
-      s: genome_size
-      o:
-        valueFrom: ${ return inputs.i.nameroot + ".tdf";}
-      z: {default: 5}
-    out: [out_tdf]
 
 $namespaces:
   s: http://schema.org/
