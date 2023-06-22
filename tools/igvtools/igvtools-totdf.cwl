@@ -29,7 +29,11 @@ inputs:
     inputBinding:
       position: 3
   g:
-    type: string
+    type: string?
+    inputBinding:
+      position: 4
+  s:
+    type: File?
     inputBinding:
       position: 4
   f:
