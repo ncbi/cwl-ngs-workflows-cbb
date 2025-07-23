@@ -1,11 +1,11 @@
 # Base Image
-FROM ubuntu:18.04
+FROM ubuntu:24.04
 
 # Metadata
-LABEL base.image="ubuntu:18.04"
+LABEL base.image="ubuntu:24.04"
 LABEL version="1"
 LABEL software="R"
-LABEL software.version="4.10"
+LABEL software.version="5.1"
 LABEL description="This image provides homer with ORG"
 LABEL tags="Homer"
 

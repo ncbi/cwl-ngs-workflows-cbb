@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/homer:4.11--pl5262h9f5acd7_8
+ dockerPull: quay.io/biocontainers/homer:5.1--pl5262h9948957_0
