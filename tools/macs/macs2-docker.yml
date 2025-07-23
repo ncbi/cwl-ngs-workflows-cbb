@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/macs2:2.2.7.1--py36h91eb985_5
+ dockerPull: quay.io/biocontainers/macs2:2.2.9.1--py39hbcbf7aa_3
