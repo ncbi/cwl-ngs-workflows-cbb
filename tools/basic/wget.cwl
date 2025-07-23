@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: CommandLineTool
 
 label: wget
@@ -10,7 +10,7 @@ requirements:
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/gnu-wget:1.18--h5bf99c6_5
+    dockerPull: quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10
 
   SoftwareRequirement:
     packages:
