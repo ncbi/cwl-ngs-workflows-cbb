@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/trinity:2.13.2--h15cb65e_2
+ dockerPull: quay.io/biocontainers/trinity:2.15.2--pl5321h077b44d_5

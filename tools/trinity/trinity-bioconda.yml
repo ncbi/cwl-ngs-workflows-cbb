@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'trinity'
     version:
-      - '2.13.2'
+      - '2.15.2'
     specs:
       - https://anaconda.org/bioconda/trinity
