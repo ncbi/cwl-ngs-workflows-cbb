@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: Workflow
 
 requirements:
@@ -9,7 +9,7 @@ requirements:
   - class: ScatterFeatureRequirement
 
 hints:
-  cwltool:LoadListingRequirement:
+  LoadListingRequirement:
     loadListing: no_listing
 
 label: trinity_denovo_assembly_quantification_pe
