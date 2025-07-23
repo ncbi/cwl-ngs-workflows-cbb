@@ -1,5 +1,5 @@
 class: Workflow
-cwlVersion: v1.0
+cwlVersion: v1.2
 id: download_quality_control
 doc: >-
   This workflow download an SRA accession and perform quality control on it
