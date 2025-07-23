@@ -1,5 +1,5 @@
 class: Workflow
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 id: chip_seq_alignment
 doc: This workflow aligns ChIp-Seq samples
