@@ -1,5 +1,5 @@
 class: CommandLineTool
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 id: fasterq_dump
 label: fasterq_dump
