@@ -4,8 +4,7 @@ cwlVersion: v1.2
 doc: SORT command
 label: sort
 hints:
-  - class: DockerRequirement
-    dockerPull: 'ubuntu:18.04'
+  - $import: ubuntu-docker.yml
 
 requirements:
   - class: InlineJavascriptRequirement

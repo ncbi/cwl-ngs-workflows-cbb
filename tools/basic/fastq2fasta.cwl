@@ -8,7 +8,7 @@ requirements:
   ShellCommandRequirement: {}
 
 hints:
-  - $import: ../../tools/basic/ubuntu-docker.yml
+  - $import: ubuntu-docker.yml
 
 inputs:
   fastq1:
