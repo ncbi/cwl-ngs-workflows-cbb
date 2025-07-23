@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/bwa:0.7.17--he4a0461_11
+ dockerPull: quay.io/biocontainers/bwa:0.7.19--h577a1d6_1
