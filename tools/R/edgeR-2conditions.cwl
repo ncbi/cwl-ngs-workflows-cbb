@@ -1,20 +1,13 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: CommandLineTool
 
 label: EdgeR
 doc: Differential expression analysis of RNA-seq expression profiles with biological replication
 
 hints:
-  DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-diffbind:3.8.0--r42hc247a5b_0
-  SoftwareRequirement:
-    packages:
-      - package: 'bioconductor-diffbind'
-        version:
-          - '3.8.0'
-        specs:
-          - https://anaconda.org/bioconda/bioconductor-diffbind
+  - $import: diffbind-docker.yml
+  - $import: diffbind-bioconda.yml
 
 requirements:
   InlineJavascriptRequirement: {}

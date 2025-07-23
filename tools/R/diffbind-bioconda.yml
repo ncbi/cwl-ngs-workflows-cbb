@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'bioconductor-diffbind'
+    version:
+      - '3.16.0'
+    specs:
+      - https://anaconda.org/bioconda/bioconductor-diffbind

@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: CommandLineTool
 
 label: ChIPQC
@@ -7,12 +7,12 @@ doc: Quality metrics for ChIPseq data.
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-chipqc:1.24.0--r40_0
+    dockerPull: quay.io/biocontainers/bioconductor-chipqc:1.42.0--r44hdfd78af_0
   SoftwareRequirement:
     packages:
       - package: 'bioconductor-chipqc'
         version:
-          - '1.24.0'
+          - '1.42.0'
         specs:
           - https://anaconda.org/bioconda/bioconductor-chipqc
 

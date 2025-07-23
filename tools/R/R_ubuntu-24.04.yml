@@ -1,0 +1,4 @@
+  class: DockerRequirement
+  dockerImageId: r-4.5_ubuntu-24.04
+  dockerFile:
+    $include: Dockerfile_R-4.5_ubuntu-24.04

@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: CommandLineTool
 
 label: Correlation_Json
@@ -140,7 +140,7 @@ requirements:
 
 
 hints:
-  - $import: R_ubuntu-18.04.yml
+  - $import: R_ubuntu-24.04.yml
 
 inputs:
   matrix:

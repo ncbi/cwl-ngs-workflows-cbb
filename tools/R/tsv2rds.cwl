@@ -1,12 +1,12 @@
 class: CommandLineTool
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 label: tsv2rds
 doc: Convert TSV to R table
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/r-genomictools:0.2.9.7--r40h0357c0b_0
+    dockerPull: quay.io/biocontainers/r-genomictools:0.2.9.7--r44h40dc89f_7
   SoftwareRequirement:
     packages:
       - package: 'r-genomictools'

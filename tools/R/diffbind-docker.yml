@@ -1,0 +1,2 @@
+ class: DockerRequirement
+ dockerPull: quay.io/biocontainers/bioconductor-diffbind:3.8.0--r42hc247a5b_0
