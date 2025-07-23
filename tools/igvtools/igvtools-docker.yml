@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/igvtools:2.14.1--hdfd78af_0
+ dockerPull: quay.io/biocontainers/igvtools:2.17.3--hdfd78af_0
