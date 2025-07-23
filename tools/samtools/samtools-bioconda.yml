@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'samtools'
     version:
-      - '1.17'
+      - '1.22.1'
     specs:
       - https://anaconda.org/bioconda/samtools
