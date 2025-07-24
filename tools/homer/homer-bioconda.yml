@@ -2,6 +2,8 @@ class: SoftwareRequirement
 packages:
   - package: 'homer'
     version:
-      - '5.1'
+      - '4.11'
     specs:
       - https://anaconda.org/bioconda/homer
+
+# version 5.1 is failing
