@@ -40,6 +40,7 @@ steps:
     label: Trinity de Novo assembly
     in:
       max_memory: max_memory
+      no_version_check: { default: True }
       CPU: threads
       output: output
       seqType: seqType
