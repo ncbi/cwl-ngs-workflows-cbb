@@ -12,7 +12,6 @@ requirements:
   ScatterFeatureRequirement: {}
 
 inputs:
-  genome_size: File
   genome_fasta: File
   genome_gtf: File
   tagAlign_gz: File[]
