@@ -2,6 +2,8 @@ class: SoftwareRequirement
 packages:
   - package: 'macs2'
     version:
-      - '2.2.9.1'
+      - '2.2.7.1'
     specs:
       - https://anaconda.org/bioconda/macs2
+
+# Version 2.2.9.1 is not working https://github.com/macs3-project/MACS/issues/115
