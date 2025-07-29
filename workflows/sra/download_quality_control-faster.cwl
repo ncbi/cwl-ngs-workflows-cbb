@@ -25,7 +25,7 @@ outputs:
     outputSource: fastqc/out_zip
     type: {"type": "array", "items": {"type": "array", "items": "File"}}
   fastq:
-    outputSource: fastq_dump/output
+    outputSource: gzip_file/output
     type: {"type": "array", "items": {"type": "array", "items": "File"}}
 
 steps:

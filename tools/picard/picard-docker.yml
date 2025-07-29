@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/picard:2.27.3--hdfd78af_0
+ dockerPull: quay.io/biocontainers/picard:3.4.0--hdfd78af_0

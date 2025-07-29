@@ -1,5 +1,5 @@
 class: Workflow
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 id: bwa_alignment_sort
 doc: This workflow aligns the fastq files using bwa, sort and index the BAM file
@@ -40,11 +40,13 @@ steps:
 $namespaces:
   s: http://schema.org/
 
+$schemas:
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-$schemas:
-  - https://schema.org/version/latest/schemaorg-current-http.rdf
+

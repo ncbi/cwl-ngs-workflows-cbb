@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'gatk4'
     version:
-      - '4.2.5.0'
+      - '4.6.2.0'
     specs:
       - https://anaconda.org/bioconda/gatk4

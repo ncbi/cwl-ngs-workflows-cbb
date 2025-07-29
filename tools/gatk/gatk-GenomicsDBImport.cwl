@@ -1,7 +1,7 @@
 class: CommandLineTool
 cwlVersion: v1.2
 
-label: gatk-MarkDuplicatesSpark
+label: gatk-GenomicsDBImport
 doc: GATK suite
 
 hints:
@@ -9,39 +9,41 @@ hints:
   - $import: gatk-bioconda.yml
 
 requirements:
+  ShellCommandRequirement: {}
   InlineJavascriptRequirement: {}
-  ResourceRequirement:
-    ramMin: 1024
 
 inputs:
-  I:
-    type: File
+  genomicsdb_workspace_path:
+    type: string
     inputBinding:
       position: 1
-      prefix: -I
-  O:
+      prefix: --genomicsdb-workspace-path
+  L:
     type: string
     inputBinding:
       position: 2
-      prefix: -O
-  M:
-    type: string?
+      prefix: -L
+  V:
+    type: File[]
     inputBinding:
-      position: 2
-      prefix: -M
+      shellQuote: False
+      position: 3
+      valueFrom: |
+        ${
+           var listing = "";
+           for (var i = 0; i < inputs.V.length; i++) {
+              listing += " -V " + inputs.V[i].path;
+           }
+           return listing;
+         }
 
 outputs:
   output:
-    type: File
-    secondaryFiles: [.bai, .sbi]
+    type: Directory
     outputBinding:
-      glob: $(inputs.O)
-  metrics:
-    type: File
-    outputBinding:
-      glob: $(inputs.M)
+      glob: $(inputs.genomicsdb_workspace_path)
 
-baseCommand: [gatk, MarkDuplicatesSpark]
+baseCommand: [gatk, GenomicsDBImport]
 
 $namespaces:
   s: http://schema.org/

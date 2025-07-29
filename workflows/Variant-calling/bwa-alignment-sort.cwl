@@ -1,5 +1,5 @@
 class: Workflow
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 id: bwa_alignment_sort
 doc: This workflow aligns the fastq files using bwa, sort and index the BAM file
@@ -66,7 +66,7 @@ steps:
       input: alignment/out_stdout
       isbam: {default: true}
       output_name:
-        valueFrom: '${ return inputs.input.nameroot + ".bam";}'
+        valueFrom: ${ return inputs.input.nameroot + ".bam";}
       threads: threads
     out: [output]
   bam_flagstat:
@@ -75,7 +75,7 @@ steps:
     in:
       in_bam: sam_to_bam/output
       stdout:
-        valueFrom: '${ return inputs.in_bam.nameroot + ".flagstat";}'
+        valueFrom: ${ return inputs.in_bam.nameroot + ".flagstat";}
     out: [out_stdout]
   bam_stats:
     run: ../../tools/samtools/samtools-stats.cwl
@@ -83,7 +83,7 @@ steps:
     in:
       in_bam: sam_to_bam/output
       stdout:
-        valueFrom: '${ return inputs.in_bam.nameroot + ".stats";}'
+        valueFrom: ${ return inputs.in_bam.nameroot + ".stats";}
     out: [out_stdout]
   sort_and_index:
     run: samtools-sort_index.cwl
@@ -96,11 +96,12 @@ steps:
 $namespaces:
   s: http://schema.org/
 
+
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0002-4108-5982
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-$schemas:
-  - https://schema.org/version/latest/schemaorg-current-http.rdf
+

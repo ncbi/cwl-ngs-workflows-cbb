@@ -1,7 +1,7 @@
 class: CommandLineTool
 cwlVersion: v1.2
 
-label: gatk-MarkDuplicatesSpark
+label: gatk-SelectVariants
 doc: GATK suite
 
 hints:
@@ -9,39 +9,55 @@ hints:
   - $import: gatk-bioconda.yml
 
 requirements:
+  LoadListingRequirement:
+    loadListing: no_listing
   InlineJavascriptRequirement: {}
   ResourceRequirement:
     ramMin: 1024
 
 inputs:
-  I:
-    type: File
+  V:
+    type: File?
+    secondaryFiles: .idx
     inputBinding:
       position: 1
-      prefix: -I
+      prefix: -V
+  db:
+    type: Directory?
+    inputBinding:
+      position: 1
+      prefix: -V
+      valueFrom: ${ return "gendb://" + self.path;}
+  R:
+    type: File?
+    secondaryFiles: [.fai, ^.dict]
+    inputBinding:
+      position: 3
+      prefix: -R
   O:
     type: string
     inputBinding:
       position: 2
       prefix: -O
-  M:
+  selectType:
     type: string?
     inputBinding:
-      position: 2
-      prefix: -M
+      position: 4
+      prefix: --select-type-to-include
+  exclude-filtered:
+    type: boolean?
+    inputBinding:
+      position: 4
+      prefix: --exclude-filtered
 
 outputs:
   output:
     type: File
-    secondaryFiles: [.bai, .sbi]
+    secondaryFiles: .idx
     outputBinding:
       glob: $(inputs.O)
-  metrics:
-    type: File
-    outputBinding:
-      glob: $(inputs.M)
 
-baseCommand: [gatk, MarkDuplicatesSpark]
+baseCommand: [gatk, SelectVariants, -OVI]
 
 $namespaces:
   s: http://schema.org/

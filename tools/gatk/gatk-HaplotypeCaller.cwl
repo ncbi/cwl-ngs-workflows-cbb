@@ -1,5 +1,5 @@
 class: CommandLineTool
-cwlVersion: v1.0
+cwlVersion: v1.2
 
 label: gatk-HaplotypeCaller
 doc: GATK suite
@@ -43,6 +43,16 @@ inputs:
     inputBinding:
       position: 5
       prefix: --intervals
+  ERC:
+    type: string?
+    inputBinding:
+      position: 6
+      prefix: --emitRefConfidence
+  create_output_variant_index:
+    type: string?
+    inputBinding:
+      position: 7
+      prefix: --create-output-variant-index
 
 outputs:
   output:

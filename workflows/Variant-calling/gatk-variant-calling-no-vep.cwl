@@ -22,9 +22,6 @@ inputs:
   genome_prefix: string
   total_threads: int
   haplotype_threads: int
-  vep_threads: int
-  species: string
-  vep_cache_dir: Directory
   snp_filters:
     type: {"type": "array", "items": {"type": "array", "items": "string"}}
   indel_filters:
@@ -52,12 +49,6 @@ outputs:
     outputSource: gatk_select_variants_indels_filtered_recal/output
     type: File
     secondaryFiles: .idx
-  snp_vep_out:
-    outputSource: snp_vep/output
-    type: File
-  indels_vep_out:
-    outputSource: indels_vep/output
-    type: File
 
 steps:
   get_cromosomes:
@@ -214,16 +205,6 @@ steps:
       O:
         valueFrom: ${ return inputs.I.nameroot.replace("_recal_reads", "_post_recal_data.table"); }
     out: [output]
-# This step needs Rscript
-#  gatk_analyzecovariates:
-#    run: ../../tools/gatk/gatk-AnalyzeCovariates.cwl
-#    in:
-#      before: gatk_baserecalibrator_pre/output
-#      after: gatk_baserecalibrator_post/output
-#      plots:
-#        valueFrom: ${ return inputs.before.nameroot.replace("_recal_data", "recalibration_plots.pdf"); }
-#    out: [output]
-  # Recall steps
   split_bam_chrom_recal:
     run: ../../tools/samtools/samtools-view-indexed.cwl
     scatter: region
@@ -315,41 +296,4 @@ steps:
       O:
         valueFrom: ${ return inputs.V.nameroot.replace("_filtered_indels_recal", "_indels.vcf"); }
     out: [output]
-  snp_vep:
-    run: ../../tools/ensembl-vep/vep.cwl
-    in:
-      i: gatk_select_variants_snp_filtered_recal/output
-      o:
-        valueFrom: ${ return inputs.i.nameroot + "_annotated.tsv" }
-      species: species
-      check_existing: { default: True }
-      cache: { default: True }
-      offline: { default: True }
-      dir: vep_cache_dir
-      gene_phenotype: { default: True }
-      regulatory: { default: True }
-      allele_number: { default: True }
-      show_ref_allele: { default: True }
-      symbol: { default: True }
-      protein: { default: True }
-      threads: vep_threads
-    out: [output]
-  indels_vep:
-    run: ../../tools/ensembl-vep/vep.cwl
-    in:
-      i: gatk_select_variants_indels_filtered_recal/output
-      o:
-        valueFrom: ${ return inputs.i.nameroot + "_annotated.tsv" }
-      species: species
-      check_existing: { default: True }
-      cache: { default: True }
-      offline: { default: True }
-      dir: vep_cache_dir
-      gene_phenotype: { default: True }
-      regulatory: { default: True }
-      allele_number: { default: True }
-      show_ref_allele: { default: True }
-      symbol: { default: True }
-      protein: { default: True }
-      threads: vep_threads
-    out: [output]
+

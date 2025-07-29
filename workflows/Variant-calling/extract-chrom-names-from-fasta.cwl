@@ -1,5 +1,5 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: Workflow
 
 requirements:
@@ -23,7 +23,7 @@ steps:
     in:
       outFileName:
         valueFrom: ${ return inputs.file.nameroot;}
-      pattern: { default: '^>chr' }
+      pattern: { default: '^>' }
       file: file
     out: [output]
   awk:

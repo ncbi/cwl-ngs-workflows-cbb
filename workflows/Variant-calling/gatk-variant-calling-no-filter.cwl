@@ -22,9 +22,6 @@ inputs:
   genome_prefix: string
   total_threads: int
   haplotype_threads: int
-  vep_threads: int
-  species: string
-  vep_cache_dir: Directory
   snp_filters:
     type: {"type": "array", "items": {"type": "array", "items": "string"}}
   indel_filters:
@@ -44,20 +41,13 @@ outputs:
   mark_duplicates_metrics:
     outputSource: mark_duplicates/metrics
     type: File
-  snp_out:
-    outputSource: gatk_select_variants_snp_filtered_recal/output
-    type: File
-    secondaryFiles: .idx
-  indels_out:
-    outputSource: gatk_select_variants_indels_filtered_recal/output
-    type: File
-    secondaryFiles: .idx
-  snp_vep_out:
-    outputSource: snp_vep/output
-    type: File
-  indels_vep_out:
-    outputSource: indels_vep/output
-    type: File
+  gvcf_list:
+    outputSource: gatk_haplotypecaller_recal/output
+    type:
+      type: array
+      items:
+        type: File
+        secondaryFiles: [ .tbi ]
 
 steps:
   get_cromosomes:
@@ -214,16 +204,6 @@ steps:
       O:
         valueFrom: ${ return inputs.I.nameroot.replace("_recal_reads", "_post_recal_data.table"); }
     out: [output]
-# This step needs Rscript
-#  gatk_analyzecovariates:
-#    run: ../../tools/gatk/gatk-AnalyzeCovariates.cwl
-#    in:
-#      before: gatk_baserecalibrator_pre/output
-#      after: gatk_baserecalibrator_post/output
-#      plots:
-#        valueFrom: ${ return inputs.before.nameroot.replace("_recal_data", "recalibration_plots.pdf"); }
-#    out: [output]
-  # Recall steps
   split_bam_chrom_recal:
     run: ../../tools/samtools/samtools-view-indexed.cwl
     scatter: region
@@ -252,104 +232,9 @@ steps:
       R: genome_fasta
       I: index_split_bam_recal/output
       intervals: get_cromosomes/output
+      ERC: { default: "GVCF" }
+      create_output_variant_index: { default: "true" }
       O:
-        valueFrom: ${ return inputs.I.nameroot + "_raw_variants_recal.vcf"; }
-    out: [output]
-  gather_vcf_recal:
-    run: ../../tools/gatk/gatk-GatherVcfs.cwl
-    in:
-      I: gatk_haplotypecaller_recal/output
-      O:
-        valueFrom: ${ var name = inputs.I[0].nameroot; return name.substring(0, name.indexOf("_recal_reads")) + "_raw_variants_recal.vcf"; }
+        valueFrom: ${ return inputs.I.nameroot + "_raw_variants_recal.g.vcf"; }
     out: [output]
 
-  gatk_select_variants_snp_recal:
-    run: ../../tools/gatk/gatk-SelectVariants.cwl
-    in:
-      R: genome_fasta
-      V: gather_vcf_recal/output
-      selectType: { default: "SNP"}
-      O:
-        valueFrom: ${ return inputs.V.nameroot.replace("_raw_variants_recal", "_raw_snps_recal.vcf"); }
-    out: [output]
-  gatk_select_variants_indels_recal:
-    run: ../../tools/gatk/gatk-SelectVariants.cwl
-    in:
-      R: genome_fasta
-      V: gather_vcf_recal/output
-      selectType: { default: "INDEL"}
-      O:
-        valueFrom: ${ return inputs.V.nameroot.replace("_raw_variants_recal", "_raw_indels_recal.vcf"); }
-    out: [output]
-  gatk_variant_filtration_snp_recal:
-    run: ../../tools/gatk/gatk-VariantFiltration.cwl
-    in:
-      R: genome_fasta
-      V: gatk_select_variants_snp_recal/output
-      O:
-        valueFrom: ${ return inputs.V.nameroot.replace("_raw_snps_recal", "_filtered_snps_recal.vcf"); }
-      filters: snp_filters
-    out: [output]
-  gatk_variant_filtration_indels_recal:
-    run: ../../tools/gatk/gatk-VariantFiltration.cwl
-    in:
-      R: genome_fasta
-      V: gatk_select_variants_indels_recal/output
-      O:
-        valueFrom: ${ return inputs.V.nameroot.replace("_raw_indels_recal", "_filtered_indels_recal.vcf"); }
-      filters: indel_filters
-    out: [output]
-  gatk_select_variants_snp_filtered_recal:
-    run: ../../tools/gatk/gatk-SelectVariants.cwl
-    in:
-      V: gatk_variant_filtration_snp_recal/output
-      exclude-filtered: { default: True}
-      O:
-        valueFrom: ${ return inputs.V.nameroot.replace("_filtered_snps_recal", "_snps.vcf"); }
-    out: [output]
-  gatk_select_variants_indels_filtered_recal:
-    run: ../../tools/gatk/gatk-SelectVariants.cwl
-    in:
-      V: gatk_variant_filtration_indels_recal/output
-      exclude-filtered: { default: True}
-      O:
-        valueFrom: ${ return inputs.V.nameroot.replace("_filtered_indels_recal", "_indels.vcf"); }
-    out: [output]
-  snp_vep:
-    run: ../../tools/ensembl-vep/vep.cwl
-    in:
-      i: gatk_select_variants_snp_filtered_recal/output
-      o:
-        valueFrom: ${ return inputs.i.nameroot + "_annotated.tsv" }
-      species: species
-      check_existing: { default: True }
-      cache: { default: True }
-      offline: { default: True }
-      dir: vep_cache_dir
-      gene_phenotype: { default: True }
-      regulatory: { default: True }
-      allele_number: { default: True }
-      show_ref_allele: { default: True }
-      symbol: { default: True }
-      protein: { default: True }
-      threads: vep_threads
-    out: [output]
-  indels_vep:
-    run: ../../tools/ensembl-vep/vep.cwl
-    in:
-      i: gatk_select_variants_indels_filtered_recal/output
-      o:
-        valueFrom: ${ return inputs.i.nameroot + "_annotated.tsv" }
-      species: species
-      check_existing: { default: True }
-      cache: { default: True }
-      offline: { default: True }
-      dir: vep_cache_dir
-      gene_phenotype: { default: True }
-      regulatory: { default: True }
-      allele_number: { default: True }
-      show_ref_allele: { default: True }
-      symbol: { default: True }
-      protein: { default: True }
-      threads: vep_threads
-    out: [output]
