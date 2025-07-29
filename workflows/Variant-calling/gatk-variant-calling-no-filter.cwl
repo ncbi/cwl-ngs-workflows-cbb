@@ -47,7 +47,6 @@ outputs:
       type: array
       items:
         type: File
-        secondaryFiles: [ .tbi ]
 
 steps:
   get_cromosomes:
