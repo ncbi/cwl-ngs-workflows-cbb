@@ -57,6 +57,7 @@ inputs:
 outputs:
   output:
     type: File
+    secondaryFiles: .tbi
     outputBinding:
       glob: $(inputs.O)
 
