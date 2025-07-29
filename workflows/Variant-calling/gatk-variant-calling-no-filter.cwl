@@ -43,10 +43,7 @@ outputs:
     type: File
   gvcf_list:
     outputSource: gatk_haplotypecaller_recal/output
-    type:
-      type: array
-      items:
-        type: File
+    type: File[]
 
 steps:
   get_cromosomes:
