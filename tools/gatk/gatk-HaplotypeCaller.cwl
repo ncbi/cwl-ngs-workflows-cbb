@@ -16,7 +16,7 @@ requirements:
     ramMax: 64000
   EnvVarRequirement:
     envDef:
-      OMP_NUM_THREADS: $(inputs.threads)
+      OMP_NUM_THREADS: "$(inputs.threads)"
 
 inputs:
   I:
