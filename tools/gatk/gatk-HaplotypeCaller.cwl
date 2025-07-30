@@ -13,7 +13,7 @@ requirements:
   ResourceRequirement:
     coresMin: $(inputs.threads)
     ramMin: 8000
-    ramMax: 16000
+    ramMax: 64000
   EnvVarRequirement:
     envDef:
       OMP_NUM_THREADS: $(inputs.threads)
