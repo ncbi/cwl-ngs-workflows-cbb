@@ -50,7 +50,7 @@ inputs:
     type: string?
     inputBinding:
       position: 6
-      prefix: --emitRefConfidence
+      prefix: -ERC
   create_output_variant_index:
     type: string?
     inputBinding:
@@ -63,7 +63,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, HaplotypeCaller]
+baseCommand: [gatk, --java-options, -Xmx16G, HaplotypeCaller]
 
 $namespaces:
   s: http://schema.org/
