@@ -200,34 +200,35 @@ steps:
       O:
         valueFrom: ${ return inputs.I.nameroot.replace("_recal_reads", "_post_recal_data.table"); }
     out: [output]
-  split_bam_chrom_recal:
-    run: ../../tools/samtools/samtools-view-indexed.cwl
-    scatter: region
-    in:
-      isbam: {default: True }
-      input: recal_reads_bam_index/indexed_bam
-      threads: {default: 1 }
-      region: get_cromosomes/output
-      output_name:
-        valueFrom: ${ return inputs.input.nameroot + "_" + inputs.region + ".bam"; }
-    out: [output]
-  index_split_bam_recal:
-    run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
-    scatter: I
-    in:
-      I: split_bam_chrom_recal/output
-      O:
-        valueFrom: ${ return inputs.I.basename + ".sbi"; }
-    out: [output]
+#  split_bam_chrom_recal:
+#    run: ../../tools/samtools/samtools-view-indexed.cwl
+#    scatter: region
+#    in:
+#      isbam: {default: True }
+#      input: recal_reads_bam_index/indexed_bam
+#      threads: {default: 1 }
+#      region: get_cromosomes/output
+#      output_name:
+#        valueFrom: ${ return inputs.input.nameroot + "_" + inputs.region + ".bam"; }
+#    out: [output]
+#  index_split_bam_recal:
+#    run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
+#    scatter: I
+#    in:
+#      I: split_bam_chrom_recal/output
+#      O:
+#        valueFrom: ${ return inputs.I.basename + ".sbi"; }
+#    out: [output]
   gatk_haplotypecaller_recal:
     run: ../../tools/gatk/gatk-HaplotypeCaller.cwl
-    scatter: [I, intervals]
-    scatterMethod: dotproduct
+#    scatter: [I, intervals]
+#    scatterMethod: dotproduct
     in:
       threads: haplotype_threads
       R: genome_fasta
-      I: index_split_bam_recal/output
-      intervals: get_cromosomes/output
+      I: recal_reads_bam_index/indexed_bam
+#      I: index_split_bam_recal/output
+#      intervals: get_cromosomes/output
       ERC: { default: "GVCF" }
       create_output_variant_index: { default: "true" }
       O:
