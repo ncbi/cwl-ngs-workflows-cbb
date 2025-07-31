@@ -18,13 +18,19 @@ inputs:
   I:
     type: File
     inputBinding:
-      position: 1
+      position: 3
       prefix: -I
   java_options:
     type: string?
     inputBinding:
-      position: 2
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "IndexFeatureFile"
+    inputBinding:
+      position: 2
+      shellQuote: False
 
 outputs:
   output:
@@ -33,7 +39,7 @@ outputs:
     outputBinding:
       glob: $(inputs.I.basename)
 
-baseCommand: [gatk, IndexFeatureFile]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

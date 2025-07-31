@@ -17,28 +17,34 @@ inputs:
   I:
     type: File
     inputBinding:
-      position: 1
+      position: 3
       prefix: -I
   O:
     type: string
     inputBinding:
-      position: 2
+      position: 4
       prefix: -O
   M:
     type: string?
     inputBinding:
-      position: 2
+      position: 5
       prefix: -M
   ASO:
     type: string?
     inputBinding:
-      position: 3
+      position: 6
       prefix: -ASO
   java_options:
     type: string?
     inputBinding:
-      position: 4
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "MarkDuplicates"
+    inputBinding:
+      position: 2
+      shellQuote: False
 
 outputs:
   output:
@@ -51,7 +57,7 @@ outputs:
     outputBinding:
       glob: $(inputs.M)
 
-baseCommand: [gatk, MarkDuplicates]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

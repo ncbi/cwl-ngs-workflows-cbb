@@ -19,23 +19,23 @@ inputs:
     type: File
     secondaryFiles: [ .idx ]
     inputBinding:
-      position: 1
+      position: 4
       prefix: -V
   R:
     type: File
     secondaryFiles: [.fai, ^.dict]
     inputBinding:
-      position: 2
+      position: 5
       prefix: -R
   O:
     type: string
     inputBinding:
-      position: 3
+      position: 6
       prefix: -O
   filters:
     type: {"type": "array", "items": {"type": "array", "items": "string"}}
     inputBinding:
-      position: 4
+      position: 7
       shellQuote: false
       valueFrom: |
         ${
@@ -48,8 +48,20 @@ inputs:
   java_options:
     type: string?
     inputBinding:
-      position: 5
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "VariantFiltration"
+    inputBinding:
+      position: 2
+      shellQuote: False
+  gatk_subcommand:
+    type: string
+    default: "-OVI"
+    inputBinding:
+      position: 3
+      shellQuote: False
 
 outputs:
   output:
@@ -58,7 +70,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, VariantFiltration, -OVI]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

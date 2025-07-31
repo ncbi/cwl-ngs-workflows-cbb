@@ -20,40 +20,52 @@ inputs:
     type: File?
     secondaryFiles: [.idx]
     inputBinding:
-      position: 1
+      position: 4
       prefix: -V
   db:
     type: Directory?
     inputBinding:
-      position: 1
+      position: 5
       prefix: -V
       valueFrom: ${ return "gendb://" + self.path;}
   R:
     type: File?
     secondaryFiles: [.fai, ^.dict]
     inputBinding:
-      position: 3
+      position: 6
       prefix: -R
   O:
     type: string
     inputBinding:
-      position: 2
+      position: 7
       prefix: -O
   selectType:
     type: string?
     inputBinding:
-      position: 4
+      position: 8
       prefix: --select-type-to-include
   exclude-filtered:
     type: boolean?
     inputBinding:
-      position: 4
+      position: 9
       prefix: --exclude-filtered
   java_options:
     type: string?
     inputBinding:
-      position: 5
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "SelectVariants"
+    inputBinding:
+      position: 2
+      shellQuote: False
+  gatk_subcommand:
+    type: string
+    default: "-OVI"
+    inputBinding:
+      position: 3
+      shellQuote: False
 
 outputs:
   output:
@@ -62,7 +74,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, SelectVariants, -OVI]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

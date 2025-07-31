@@ -15,24 +15,30 @@ inputs:
   variants:
     type: File[]
     inputBinding:
-      position: 1
+      position: 3
       prefix: --variant
   R:
     type: File
     secondaryFiles: [.fai, ^.dict]
     inputBinding:
-      position: 2
+      position: 4
       prefix: -R
   O:
     type: string
     inputBinding:
-      position: 3
+      position: 5
       prefix: -O
   java_options:
     type: string?
     inputBinding:
-      position: 4
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "CombineGVCFs"
+    inputBinding:
+      position: 2
+      shellQuote: False
 
 outputs:
   output:
@@ -40,7 +46,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, CombineGVCFs]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

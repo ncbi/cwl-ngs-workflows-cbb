@@ -17,7 +17,7 @@ inputs:
     type: File[]
     inputBinding:
       shellQuote: False
-      position: 1
+      position: 3
       valueFrom: |
         ${
            var listing = "";
@@ -29,13 +29,19 @@ inputs:
   O:
     type: string
     inputBinding:
-      position: 2
+      position: 4
       prefix: -O
   java_options:
     type: string?
     inputBinding:
-      position: 3
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "GatherVcfs"
+    inputBinding:
+      position: 2
+      shellQuote: False
 
 outputs:
   output:
@@ -44,7 +50,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, GatherVcfs]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

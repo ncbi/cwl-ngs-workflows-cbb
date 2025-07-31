@@ -23,44 +23,50 @@ inputs:
     type: File
     secondaryFiles: [.bai, .sbi]
     inputBinding:
-      position: 1
+      position: 3
       prefix: -I
   R:
     type: File
     secondaryFiles: [.fai, ^.dict]
     inputBinding:
-      position: 2
+      position: 4
       prefix: -R
   O:
     type: string
     inputBinding:
-      position: 3
+      position: 5
       prefix: -O
   threads:
     type: int
     inputBinding:
-      position: 4
+      position: 6
       prefix: --native-pair-hmm-threads
   intervals:
     type: string?
     inputBinding:
-      position: 5
+      position: 7
       prefix: --intervals
   ERC:
     type: string?
     inputBinding:
-      position: 6
+      position: 8
       prefix: -ERC
   create_output_variant_index:
     type: string?
     inputBinding:
-      position: 7
+      position: 9
       prefix: --create-output-variant-index
   java_options:
     type: string?
     inputBinding:
-      position: 8
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "HaplotypeCaller"
+    inputBinding:
+      position: 2
+      shellQuote: False
 
 outputs:
   output:
@@ -68,7 +74,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, HaplotypeCaller]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

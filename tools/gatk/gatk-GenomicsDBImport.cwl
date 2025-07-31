@@ -16,18 +16,18 @@ inputs:
   genomicsdb_workspace_path:
     type: string
     inputBinding:
-      position: 1
+      position: 3
       prefix: --genomicsdb-workspace-path
   L:
     type: string
     inputBinding:
-      position: 2
+      position: 4
       prefix: -L
   V:
     type: File[]
     inputBinding:
       shellQuote: False
-      position: 3
+      position: 5
       valueFrom: |
         ${
            var listing = "";
@@ -39,8 +39,14 @@ inputs:
   java_options:
     type: string?
     inputBinding:
-      position: 4
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "GenomicsDBImport"
+    inputBinding:
+      position: 2
+      shellQuote: False
 
 outputs:
   output:
@@ -48,7 +54,7 @@ outputs:
     outputBinding:
       glob: $(inputs.genomicsdb_workspace_path)
 
-baseCommand: [gatk, GenomicsDBImport]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/

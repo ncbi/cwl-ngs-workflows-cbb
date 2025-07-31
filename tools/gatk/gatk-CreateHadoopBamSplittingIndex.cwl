@@ -18,19 +18,31 @@ inputs:
   I:
     type: File
     inputBinding:
-      position: 1
+      position: 4
       prefix: -I
   O:
     type: string
     inputBinding:
-      position: 2
+      position: 5
       prefix: -O
       valueFrom: ${ return inputs.I.basename + ".sbi" ;}
   java_options:
     type: string?
     inputBinding:
-      position: 3
+      position: 1
       prefix: --java-options
+  gatk_command:
+    type: string
+    default: "CreateHadoopBamSplittingIndex"
+    inputBinding:
+      position: 2
+      shellQuote: False
+  gatk_subcommand_1:
+    type: string
+    default: "--create-bai"
+    inputBinding:
+      position: 3
+      shellQuote: False
 
 outputs:
  output:
@@ -40,7 +52,7 @@ outputs:
       glob: $(inputs.I.basename)
 
 
-baseCommand: [gatk, CreateHadoopBamSplittingIndex, --create-bai]
+baseCommand: [gatk]
 
 $namespaces:
   s: http://schema.org/
