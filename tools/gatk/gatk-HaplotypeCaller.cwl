@@ -56,6 +56,11 @@ inputs:
     inputBinding:
       position: 7
       prefix: --create-output-variant-index
+  java_options:
+    type: string?
+    inputBinding:
+      position: 8
+      prefix: --java-options
 
 outputs:
   output:
@@ -63,7 +68,7 @@ outputs:
     outputBinding:
       glob: $(inputs.O)
 
-baseCommand: [gatk, --java-options, -Xmx16G, HaplotypeCaller]
+baseCommand: [gatk, HaplotypeCaller]
 
 $namespaces:
   s: http://schema.org/

@@ -36,6 +36,11 @@ inputs:
            }
            return listing;
          }
+  java_options:
+    type: string?
+    inputBinding:
+      position: 4
+      prefix: --java-options
 
 outputs:
   output:

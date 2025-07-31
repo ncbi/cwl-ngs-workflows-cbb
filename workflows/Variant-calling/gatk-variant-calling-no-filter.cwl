@@ -21,6 +21,7 @@ inputs:
   genome_index: Directory
   genome_prefix: string
   total_threads: int
+  java_options: string?
   haplotype_threads: int
   snp_filters:
     type: {"type": "array", "items": {"type": "array", "items": "string"}}
@@ -65,6 +66,7 @@ steps:
   mark_duplicates:
     run: ../../tools/gatk/gatk-MarkDuplicates.cwl
     in:
+      java_options: java_options
       I: alignment/sorted_indexed_bam
       O:
         valueFrom: ${ return inputs.I.nameroot + "_sorted_dedup_reads.bam"; }
@@ -91,6 +93,7 @@ steps:
     run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
     scatter: I
     in:
+      java_options: java_options
       I: split_bam_chrom/output
       O:
         valueFrom: ${ return inputs.I.basename + ".sbi"; }
@@ -104,12 +107,14 @@ steps:
       R: genome_fasta
       I: index_split_bam/output
       intervals: get_cromosomes/output
+      java_options: java_options
       O:
         valueFrom: ${ return inputs.I.nameroot + "_raw_variants.vcf"; }
     out: [output]
   gather_vcf:
     run: ../../tools/gatk/gatk-GatherVcfs.cwl
     in:
+      java_options: java_options
       I: gatk_haplotypecaller_pre/output
       O:
         valueFrom: ${ var name = inputs.I[0].nameroot; return name.substring(0, name.indexOf("_sorted_sorted_dedup_reads")) + "_haplotypecaller_1.vcf"; }
@@ -117,6 +122,7 @@ steps:
   gatk_select_variants_snp:
     run: ../../tools/gatk/gatk-SelectVariants.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       V: gather_vcf/output
       selectType: { default: "SNP"}
@@ -126,6 +132,7 @@ steps:
   gatk_select_variants_indels:
     run: ../../tools/gatk/gatk-SelectVariants.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       V: gather_vcf/output
       selectType: { default: "INDEL"}
@@ -135,6 +142,7 @@ steps:
   gatk_variant_filtration_snp:
     run: ../../tools/gatk/gatk-VariantFiltration.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       V: gatk_select_variants_snp/output
       O:
@@ -144,6 +152,7 @@ steps:
   gatk_variant_filtration_indels:
     run: ../../tools/gatk/gatk-VariantFiltration.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       V: gatk_select_variants_indels/output
       O:
@@ -153,6 +162,7 @@ steps:
   gatk_select_variants_snp_filtered:
     run: ../../tools/gatk/gatk-SelectVariants.cwl
     in:
+      java_options: java_options
       V: gatk_variant_filtration_snp/output
       exclude-filtered: { default: True}
       O:
@@ -161,6 +171,7 @@ steps:
   gatk_select_variants_indels_filtered:
     run: ../../tools/gatk/gatk-SelectVariants.cwl
     in:
+      java_options: java_options
       V: gatk_variant_filtration_indels/output
       exclude-filtered: { default: True}
       O:
@@ -169,6 +180,7 @@ steps:
   gatk_baserecalibrator_pre:
     run: ../../tools/gatk/gatk-BaseRecalibrator.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       I: index_bam/out_sam
       known_sites:
@@ -180,6 +192,7 @@ steps:
   gatk_applybqsr:
     run: ../../tools/gatk/gatk-ApplyBQSR.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       I: index_bam/out_sam
       bqsr: gatk_baserecalibrator_pre/output
@@ -195,6 +208,7 @@ steps:
   index_bam_recal:
     run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
     in:
+      java_options: java_options
       I: recal_reads_bam_index/out_sam
       O:
         valueFrom: ${ return inputs.I.basename + ".sbi"; }
@@ -202,6 +216,7 @@ steps:
   gatk_baserecalibrator_post:
     run: ../../tools/gatk/gatk-BaseRecalibrator.cwl
     in:
+      java_options: java_options
       R: genome_fasta
       I: index_bam_recal/output
       known_sites:
@@ -213,6 +228,7 @@ steps:
   bam_recal:
     run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
     in:
+      java_options: java_options
       I: recal_reads_bam_index/out_sam
       O:
         valueFrom: ${ return inputs.I.basename + ".sbi"; }
@@ -225,6 +241,7 @@ steps:
       I: bam_recal/output
       ERC: { default: "GVCF" }
       create_output_variant_index: { default: "true" }
+      java_options: java_options
       O:
         valueFrom: ${ return inputs.I.nameroot + "_variants.g.vcf"; }
     out: [output]

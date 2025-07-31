@@ -26,6 +26,11 @@ inputs:
       position: 2
       prefix: -O
       valueFrom: ${ return inputs.I.basename + ".sbi" ;}
+  java_options:
+    type: string?
+    inputBinding:
+      position: 3
+      prefix: --java-options
 
 outputs:
  output:

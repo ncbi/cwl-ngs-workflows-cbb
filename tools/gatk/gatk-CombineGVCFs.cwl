@@ -28,6 +28,11 @@ inputs:
     inputBinding:
       position: 3
       prefix: -O
+  java_options:
+    type: string?
+    inputBinding:
+      position: 4
+      prefix: --java-options
 
 outputs:
   output:
