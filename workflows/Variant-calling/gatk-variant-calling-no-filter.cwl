@@ -35,15 +35,18 @@ outputs:
     outputSource: alignment/bam_stats_out
     type: File
   sorted_indexed_bam:
-    outputSource: recal_reads_bam_index/indexed_bam
+    outputSource: bam_recal/output
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [.bai,.sbi]
   mark_duplicates_metrics:
     outputSource: mark_duplicates/metrics
     type: File
-  gvcf_list:
+  gvcf_file:
     outputSource: gatk_haplotypecaller_recal/output
-    type: File[]
+    type: File
+  baserecalibrator_table:
+    outputSource: gatk_baserecalibrator_post/output
+    type: File
 
 steps:
   get_cromosomes:
@@ -69,16 +72,16 @@ steps:
         valueFrom: ${ return inputs.I.nameroot + "_dedup_metrics.txt"; }
     out: [output, metrics]
   index_bam:
-    run: ../../tools/samtools/samtools-index-bam.cwl
+    run: ../../tools/samtools/samtools-index.cwl
     in:
-      bam: mark_duplicates/output
-    out: [indexed_bam]
+      in_bam: mark_duplicates/output
+    out: [out_sam]
   split_bam_chrom:
     run: ../../tools/samtools/samtools-view-indexed.cwl
     scatter: region
     in:
       isbam: {default: True }
-      input: index_bam/indexed_bam
+      input: index_bam/out_sam
       threads: {default: 1 }
       region: get_cromosomes/output
       output_name:
@@ -167,7 +170,7 @@ steps:
     run: ../../tools/gatk/gatk-BaseRecalibrator.cwl
     in:
       R: genome_fasta
-      I: index_bam/indexed_bam
+      I: index_bam/out_sam
       known_sites:
         - gatk_select_variants_snp_filtered/output
         - gatk_select_variants_indels_filtered/output
@@ -178,60 +181,50 @@ steps:
     run: ../../tools/gatk/gatk-ApplyBQSR.cwl
     in:
       R: genome_fasta
-      I: index_bam/indexed_bam
+      I: index_bam/out_sam
       bqsr: gatk_baserecalibrator_pre/output
       O:
         valueFrom: ${ return inputs.I.nameroot.replace("_sorted_sorted_dedup_reads", "_recal_reads.bam"); }
     out: [output]
   recal_reads_bam_index:
-    run: ../../tools/samtools/samtools-index-bam.cwl
+    run: ../../tools/samtools/samtools-index.cwl
     label: Samtools-index
     in:
-      bam: gatk_applybqsr/output
-    out: [indexed_bam]
+      in_bam: gatk_applybqsr/output
+    out: [out_sam]
+  index_bam_recal:
+    run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
+    in:
+      I: recal_reads_bam_index/out_sam
+      O:
+        valueFrom: ${ return inputs.I.basename + ".sbi"; }
+    out: [ output ]
   gatk_baserecalibrator_post:
     run: ../../tools/gatk/gatk-BaseRecalibrator.cwl
     in:
       R: genome_fasta
-      I: recal_reads_bam_index/indexed_bam
+      I: index_bam_recal/output
       known_sites:
         - gatk_select_variants_snp_filtered/output
         - gatk_select_variants_indels_filtered/output
       O:
         valueFrom: ${ return inputs.I.nameroot.replace("_recal_reads", "_post_recal_data.table"); }
     out: [output]
-#  split_bam_chrom_recal:
-#    run: ../../tools/samtools/samtools-view-indexed.cwl
-#    scatter: region
-#    in:
-#      isbam: {default: True }
-#      input: recal_reads_bam_index/indexed_bam
-#      threads: {default: 1 }
-#      region: get_cromosomes/output
-#      output_name:
-#        valueFrom: ${ return inputs.input.nameroot + "_" + inputs.region + ".bam"; }
-#    out: [output]
-#  index_split_bam_recal:
-#    run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
-#    scatter: I
-#    in:
-#      I: split_bam_chrom_recal/output
-#      O:
-#        valueFrom: ${ return inputs.I.basename + ".sbi"; }
-#    out: [output]
+  bam_recal:
+    run: ../../tools/gatk/gatk-CreateHadoopBamSplittingIndex.cwl
+    in:
+      I: recal_reads_bam_index/out_sam
+      O:
+        valueFrom: ${ return inputs.I.basename + ".sbi"; }
+    out: [ output ]
   gatk_haplotypecaller_recal:
     run: ../../tools/gatk/gatk-HaplotypeCaller.cwl
-#    scatter: [I, intervals]
-#    scatterMethod: dotproduct
     in:
       threads: haplotype_threads
       R: genome_fasta
-      I: recal_reads_bam_index/indexed_bam
-#      I: index_split_bam_recal/output
-#      intervals: get_cromosomes/output
+      I: bam_recal/output
       ERC: { default: "GVCF" }
       create_output_variant_index: { default: "true" }
       O:
-        valueFrom: ${ return inputs.I.nameroot + "_raw_variants_recal.g.vcf"; }
+        valueFrom: ${ return inputs.I.nameroot + "_variants.g.vcf"; }
     out: [output]
-

@@ -69,7 +69,7 @@ inputs:
       read tag to strip (repeatable) [null]
   input:
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [ .bai ]
     inputBinding:
       position: 4
     doc: |

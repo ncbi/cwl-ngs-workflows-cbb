@@ -17,7 +17,7 @@ requirements:
 inputs:
   I:
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [.bai]
     inputBinding:
       position: 1
       prefix: -I

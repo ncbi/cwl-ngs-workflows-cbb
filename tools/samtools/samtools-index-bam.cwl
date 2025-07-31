@@ -1,4 +1,3 @@
-#!/usr/bin/env cwl-runner
 cwlVersion: v1.2
 class: CommandLineTool
 
@@ -24,7 +23,7 @@ inputs:
 outputs:
   indexed_bam:
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [.bai]
     outputBinding:
       glob: $(inputs.bam.basename)
 

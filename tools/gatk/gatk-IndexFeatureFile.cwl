@@ -24,7 +24,7 @@ inputs:
 outputs:
   output:
     type: File
-    secondaryFiles: .idx
+    secondaryFiles: [.idx]
     outputBinding:
       glob: $(inputs.I.basename)
 

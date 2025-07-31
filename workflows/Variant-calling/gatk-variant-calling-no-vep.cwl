@@ -37,18 +37,18 @@ outputs:
   sorted_indexed_bam:
     outputSource: recal_reads_bam_index/indexed_bam
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [.bai]
   mark_duplicates_metrics:
     outputSource: mark_duplicates/metrics
     type: File
   snp_out:
     outputSource: gatk_select_variants_snp_filtered_recal/output
     type: File
-    secondaryFiles: .idx
+    secondaryFiles: [.idx]
   indels_out:
     outputSource: gatk_select_variants_indels_filtered_recal/output
     type: File
-    secondaryFiles: .idx
+    secondaryFiles: [.idx]
 
 steps:
   get_cromosomes:

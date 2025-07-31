@@ -24,7 +24,7 @@ inputs:
 outputs:
   out_sam:
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [ .bai ]
     outputBinding:
       glob: $(inputs.in_bam.basename)
 

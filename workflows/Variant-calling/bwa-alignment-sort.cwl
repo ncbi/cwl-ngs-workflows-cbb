@@ -21,7 +21,7 @@ outputs:
   sorted_indexed_bam:
     outputSource: sort_and_index/sorted_indexed_bam
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [ .bai ]
   bam_flagstat_out:
     outputSource: bam_flagstat/out_stdout
     type: File
@@ -96,7 +96,8 @@ steps:
 $namespaces:
   s: http://schema.org/
 
-
+$schemas:
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
 
 s:author:
   - class: s:Person

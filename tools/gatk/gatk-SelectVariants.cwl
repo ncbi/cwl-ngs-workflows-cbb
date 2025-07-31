@@ -16,7 +16,7 @@ requirements:
 inputs:
   V:
     type: File
-    secondaryFiles: .idx
+    secondaryFiles: [ .idx ]
     inputBinding:
       position: 1
       prefix: -V
@@ -45,7 +45,7 @@ inputs:
 outputs:
   output:
     type: File
-    secondaryFiles: .idx
+    secondaryFiles: [.idx]
     outputBinding:
       glob: $(inputs.O)
 

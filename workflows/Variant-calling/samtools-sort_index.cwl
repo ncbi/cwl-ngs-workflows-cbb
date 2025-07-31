@@ -16,9 +16,9 @@ inputs:
 
 outputs:
   sorted_indexed_bam:
-    outputSource: bam_index/indexed_bam
+    outputSource: bam_index/out_sam
     type: File
-    secondaryFiles: .bai
+    secondaryFiles: [ .bai ]
 
 steps:
   bam_sort:
@@ -31,17 +31,14 @@ steps:
       threads: threads
     out: [out_sam]
   bam_index:
-    run: ../../tools/samtools/samtools-index-bam.cwl
+    run: ../../tools/samtools/samtools-index.cwl
     label: Samtools-index
     in:
-      bam: bam_sort/out_sam
-    out: [indexed_bam]
+      in_bam: bam_sort/out_sam
+    out: [out_sam]
 
 $namespaces:
   s: http://schema.org/
-
-$schemas:
-  - https://schema.org/version/latest/schemaorg-current-http.rdf
 
 s:author:
   - class: s:Person
@@ -49,4 +46,5 @@ s:author:
     s:email: mailto:r78v10a07@gmail.com
     s:name: Roberto Vera Alvarez
 
-
+$schemas:
+  - https://schema.org/version/latest/schemaorg-current-http.rdf
