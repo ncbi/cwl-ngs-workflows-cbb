@@ -8,24 +8,35 @@ hints:
   DockerRequirement:
     dockerImageId: cwl-ngs-workflows-cbb-encode:3.12
     dockerFile: |
-      # Base Image
-      FROM quay.io/biocontainers/python:3.12
-
-      # Metadata
-      LABEL base.image="quay.io/biocontainers/python:3.12"
-      LABEL version="1"
-      LABEL software="Python3"
-      LABEL software.version="3.12"
-      LABEL description="Python based docker image"
-      LABEL tags="Python"
-
-      # Maintainer
-      MAINTAINER Roberto Vera Alvarez <r78v10a07@gmail.com>
-
+      FROM ubuntu:24.04
+      ENV DEBIAN_FRONTEND="noninteractive"
       USER root
-      # Adding Python packages
-      RUN python -m pip install \
-          pandas==2.3.1 openpyxl==3.1.5 requests==2.32.4 tqdm==4.67.1
+      ENV LC_ALL="C.UTF-8"
+      ENV PATH="/root/.local/bin:$PATH"
+      
+      RUN apt-get update &&  apt-get install -y \
+            dnsutils  \
+            curl && \
+          apt-get clean && apt-get purge && \
+          rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  && \
+          curl -o /tmp/Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+          bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local/conda && \
+          /usr/local/conda/bin/conda init && \
+          /usr/local/conda/bin/conda tos accept --channel https://repo.anaconda.com/pkgs/main && \
+          /usr/local/conda/bin/conda tos accept --channel https://repo.anaconda.com/pkgs/r && \
+          /usr/local/conda/bin/conda update conda && \
+          /usr/local/conda/bin/conda update --all && \
+          /usr/local/conda/bin/conda config --add channels defaults && \
+          /usr/local/conda/bin/conda config --add channels bioconda && \
+          /usr/local/conda/bin/conda config --add channels conda-forge && \
+          /usr/local/conda/bin/conda create -n py3.12 python=3.12 && \
+          /usr/local/conda/bin/conda clean --all && \
+          rm /tmp/Miniconda3-latest-Linux-x86_64.sh && \
+          apt-get remove -y curl
+      
+      ENV PATH="/usr/local/conda/envs/py3.12/bin:${PATH}"
+      RUN /usr/local/conda/envs/py3.12/bin/python -m pip install pandas==2.3.1 openpyxl==3.1.5 requests==2.32.4 tqdm==4.67.1
+
   SoftwareRequirement:
     packages:
       - package: 'pandas'
@@ -106,7 +117,7 @@ requirements:
                       analyses = file_obj.get('analyses')
                       good = False
                       for a in analyses:
-                          if a.get('pipeline_version') == "1.5.1":
+                          if str(a.get('pipeline_version')) == "1.5.1":
                               good = True
                               break
                       if good:
