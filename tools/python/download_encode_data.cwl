@@ -94,14 +94,10 @@ requirements:
           def download_experiment_reads(data, experiment, r1, r2):
               r1_url = f"{base_url}/files/{r1}/@@download/{r1}.fastq.gz"
               file_name = f"{experiment}_1.fastq.gz"
-              output_path = os.path.join(output_dir, file_name)
-              if not os.path.exists(output_path):
-                  download_file(r1_url, output_path)
+              download_file(r1_url, file_name)
               r2_url = f"{base_url}/files/{r2}/@@download/{r2}.fastq.gz"
               file_name = f"{experiment}_2.fastq.gz"
-              output_path = os.path.join(output_dir, file_name)
-              if not os.path.exists(output_path):
-                  download_file(r1_url, output_path)
+              download_file(r1_url, file_name)
           
           def download_bed_narrowPeak(data, experiment, genome):
               for file_obj in data.get("files", []):
@@ -117,11 +113,7 @@ requirements:
                           href = file_obj.get("href")
                           output_prefix = file_obj.get("output_type").replace(' ', '_')
                           file_name = f"{experiment}_{output_prefix}_narrowPeak.bed.gz"
-                          output_path = os.path.join(output_dir, file_name)
-                          if not os.path.exists(output_path):
-                              download_file(f"{base_url}{href}", output_path)
-              
-          
+                          download_file(f"{base_url}{href}", file_name)
           
           api_url = f"{base_url}/experiments/{experiment}/?format=json"
           response = requests.get(api_url, headers={"Accept": "application/json"})
