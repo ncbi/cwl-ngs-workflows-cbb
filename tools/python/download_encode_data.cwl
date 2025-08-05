@@ -67,8 +67,7 @@ requirements:
           experiment = sys.argv[1]
           r1 = sys.argv[2]
           r2 = sys.argv[3]
-          target = sys.argv[4]
-          genome = sys.argv[5]
+          genome = sys.argv[4]
           
           def download_file(download_url, output_path):
               file_name = os.path.basename(output_path)
@@ -144,14 +143,10 @@ inputs:
     type: string
     inputBinding:
       position: 3
-  - id: target
-    type: string
-    inputBinding:
-      position: 4
   - id: genome
     type: string
     inputBinding:
-      position: 5
+      position: 4
 outputs:
   - id: output
     type: File[]
