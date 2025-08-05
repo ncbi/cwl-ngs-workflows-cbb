@@ -1,2 +1,2 @@
  class: DockerRequirement
- dockerPull: quay.io/biocontainers/bowtie2:2.4.5--py39hd2f7db1_2
+ dockerPull: quay.io/biocontainers/bowtie2:2.5.4--he96a11b_6

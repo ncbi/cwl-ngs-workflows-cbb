@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'bowtie2'
     version:
-      - '2.4.5'
+      - '2.5.4'
     specs:
       - https://anaconda.org/bioconda/bowtie2
