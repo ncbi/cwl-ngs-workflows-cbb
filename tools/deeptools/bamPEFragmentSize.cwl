@@ -2,8 +2,8 @@
 cwlVersion: v1.2
 class: CommandLineTool
 
-label: multiBamSummary
-doc: computes the read coverages for genomic regions for typically two or more BAM files
+label: bamPEFragmentSize
+doc: Calculates the fragment sizes for read pairs given a BAM file from paired-end sequencing
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -22,65 +22,74 @@ inputs:
     inputBinding:
       position: 1
       prefix: --bamfiles
-  o:
-    type: string
-    inputBinding:
-      position: 2
-      prefix: --outFileName
-      valueFrom: '${ return inputs.b.nameroot + ".npz";}'
-  BED:
-    type: File
-    inputBinding:
-      position: 3
-      prefix: --BED
-  bl:
-    type: File?
-    inputBinding:
-      position: 7
-      prefix: --blackListFileName
   p:
     type: int
     inputBinding:
       position: 2
       prefix: --numberOfProcessors
+  o:
+    type: string
+    inputBinding:
+      position: 3
+      prefix: --histogram
+      valueFrom: '${ return inputs.b.nameroot + ".png";}'
+  samplesLabel:
+    type: string?
+    inputBinding:
+      position: 3
+      prefix: --samplesLabel
+  T:
+    type: string?
+    inputBinding:
+      position: 4
+      prefix: --plotTitle
+  maxFragmentLength:
+    type: int?
+    inputBinding:
+      position: 5
+      prefix: --maxFragmentLength
+  bs:
+    type: int?
+    inputBinding:
+      position: 6
+      prefix: --binSize
+  n:
+    type: int?
+    inputBinding:
+      position: 6
+      prefix: --distanceBetweenBins
+  bl:
+    type: File?
+    inputBinding:
+      position: 7
+      prefix: --blackListFileName
+  outRawFragmentLengths:
+    type: string
+    inputBinding:
+      position: 8
+      prefix: --outRawFragmentLengths
+      valueFrom: '${ return inputs.b.nameroot + "_fragment_length.tsv";}'
   verbose:
     type: boolean?
     inputBinding:
       position: 9
       prefix: --verbose
-  genomeChunkSize:
-    type: int?
-    inputBinding:
-      position: 6
-      prefix: --genomeChunkSize
-  region:
-    type: string?
-    inputBinding:
-      position: 6
-      prefix: --region
-  smartLabels:
-    type: string?
-    inputBinding:
-      position: 6
-      prefix: --smartLabels
-  labels:
-    type: string?
-    inputBinding:
-      position: 6
-      prefix: --labels
 
 outputs:
   out_stdout:
     type: stdout
-  npz:
+  histogram:
     type: File
     outputBinding:
       glob: $(inputs.o)
-
+  fragment_length:
+    type: File
+    outputBinding:
+      glob: $(inputs.outRawFragmentLengths)
 
 stdout: $(inputs.in_stdout)
 
-baseCommand: ["multiBamSummary"]
+baseCommand: ["bamPEFragmentSize"]
 
 s:author:
   - class: s:Person
