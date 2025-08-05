@@ -1,0 +1,7 @@
+class: SoftwareRequirement
+packages:
+  - package: 'macs3'
+    version:
+      - '3.0.3'
+    specs:
+      - https://anaconda.org/bioconda/macs2
