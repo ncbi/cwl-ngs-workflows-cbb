@@ -133,19 +133,19 @@ requirements:
 
 inputs:
   - id: experiment
-    type: String
+    type: string
     inputBinding:
       position: 1
   - id: r1
-    type: String
+    type: string
     inputBinding:
       position: 2
   - id: r2
-    type: String
+    type: string
     inputBinding:
       position: 3
   - id: target
-    type: String
+    type: string
     inputBinding:
       position: 4
   - id: genome
