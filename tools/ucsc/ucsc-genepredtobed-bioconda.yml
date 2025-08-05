@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'ucsc-genepredtobed'
     version:
-      - '477'
+      - '482'
     specs:
       - https://anaconda.org/bioconda/ucsc-genepredtobed

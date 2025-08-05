@@ -2,6 +2,6 @@ class: SoftwareRequirement
 packages:
   - package: 'ucsc-genepredtogtf'
     version:
-      - '377'
+      - '482'
     specs:
       - https://anaconda.org/bioconda/ucsc-genepredtogtf
