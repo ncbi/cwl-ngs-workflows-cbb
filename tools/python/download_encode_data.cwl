@@ -143,7 +143,7 @@ outputs:
   - id: output
     type: File[]
     outputBinding:
-      glob: $(inputs.experiment.nameroot)*
+      glob: $(inputs.experiment)*
 
 baseCommand: ["python","my.py"]
 
