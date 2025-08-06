@@ -91,6 +91,31 @@ inputs:
     inputBinding:
       position: 1
       prefix: --very-sensitive-local
+  no_discordant:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --no-discordant
+  no_mixed:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --no-mixed
+  omit_sec_seq:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --omit-sec-seq
+  xeq:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --xeq
+  reorder:
+    type: boolean?
+    inputBinding:
+      position: 1
+      prefix: --reorder
   x:
     type: File
     secondaryFiles:
