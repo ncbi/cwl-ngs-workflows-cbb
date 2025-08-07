@@ -105,6 +105,19 @@ inputs:
     inputBinding:
       position: 1
       prefix: '-t'
+  k:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -k
+    doc: minimum seed length [19]
+  c:
+    type: int?
+    inputBinding:
+      position: 1
+      prefix: -c
+    doc: skip seeds with more than INT occurrences [500]
+
 
 outputs:
   out_stdout:

@@ -12,7 +12,7 @@ label: "Subsample BAM file creating a tagAlign and pseudoreplicates"
 doc: "This workflow creates a subsample from a BAM file creating a tagAlign and pseudoreplicates"
 
 inputs:
-    bam_file: File
+    bed_file: File
     nreads: int
 
 outputs:
@@ -30,7 +30,7 @@ steps:
     create_tagalign:
         run: create-tagAlign.cwl
         in:
-          bam_file: bam_file
+          bed_file: bed_file
         out: [output]
     gzip_cat:
         run: ../../tools/basic/gzip.cwl

@@ -10,7 +10,7 @@ label: "Create tagAlign file"
 doc: "This workflow creates tagAlign file"
 
 inputs:
-    bam_file: File
+    bed_file: File
 
 outputs:
     output:
@@ -18,19 +18,12 @@ outputs:
         type: File
 
 steps:
-    bamtobed:
-        run: ../../tools/bedtools/bedtools-bamtobed.cwl
-        in:
-          stdout:
-            valueFrom: ${ return inputs.i.nameroot + ".bed";}
-          i: bam_file
-        out: [out_stdout]
     awk:
         run: ../../tools/basic/awk.cwl
         in:
           outFileName:
             valueFrom: ${ return inputs.file.nameroot + ".tagAlign";}
-          file: bamtobed/out_stdout
+          file: bed_file
           text: { default: 'BEGIN{OFS="\t"}{$4="N";$5="1000";print $0}'  }
         out: [output]
     gzip:

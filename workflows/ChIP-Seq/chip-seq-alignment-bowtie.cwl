@@ -12,10 +12,18 @@ requirements:
   ScatterFeatureRequirement: {}
 
 inputs:
-  bwa_k: int?
-  bwa_c: int?
-  genome_index: Directory
-  genome_prefix: string
+  all: boolean?
+  k: int?
+  very_sensitive: boolean?
+  bowtie_index:
+    type: File
+    secondaryFiles:
+      - .1.bt2
+      - .2.bt2
+      - .3.bt2
+      - .4.bt2
+      - .rev.1.bt2
+      - .rev.2.bt2
   reads:
     type: {"type": "array", "items": {"type": "array", "items": "File"}}
   readsquality: int
@@ -62,16 +70,16 @@ outputs:
 
 steps:
   alignment:
-    run: ../Alignments/bwa-alignment.cwl
+    run: bowtie-alignment.cwl
     label: bwa alignment workflow for single-end samples
     scatter: reads
     in:
       reads: reads
-      genome_index: genome_index
-      genome_prefix: genome_prefix
+      bowtie_index: bowtie_index
+      very_sensitive: very_sensitive
+      all: all
+      k: k
       threads: threads
-      bwa_k: bwa_k
-      bwa_c: bwa_c
     out: [bam_out, bam_flagstat_out, bam_stats_out]
   filtered_bam:
     run: ../../tools/samtools/samtools-view.cwl

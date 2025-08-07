@@ -10,9 +10,9 @@ label: "Compute library complexity"
 doc: "This workflow compute library complexity"
 
 inputs:
-    bam_file:
+    bed_file:
         type: File
-        doc: BAM file to be analyzed
+        doc: BED file to be analyzed
 
 outputs:
     out:
@@ -20,19 +20,12 @@ outputs:
         outputSource: count_awk/output
 
 steps:
-    bamtobed:
-        run: ../../tools/bedtools/bedtools-bamtobed.cwl
-        in:
-          stdout:
-            valueFrom: ${ return inputs.i.nameroot + ".bed";}
-          i: bam_file
-        out: [out_stdout]
     first_awk:
         run: ../../tools/basic/awk.cwl
         in:
           outFileName:
             valueFrom: ${ return inputs.file.nameroot + ".awk";}
-          file: bamtobed/out_stdout
+          file: bed_file
           text: { default: 'BEGIN{OFS="\t"}{print $1,$2,$3,$6}' }
         out: [output]
     filter_chrM:

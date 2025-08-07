@@ -1,9 +1,9 @@
 class: Workflow
 cwlVersion: v1.2
 
-id: bwa_alignment
-doc: This workflow aligns the fastq files using bwa
-label: bwa alignment workflow
+id: bowtie_alignment
+doc: This workflow aligns the fastq files using bowtie
+label: bowtie alignment workflow
 
 requirements:
   InlineJavascriptRequirement: {}
@@ -11,12 +11,21 @@ requirements:
   SubworkflowFeatureRequirement: {}
 
 inputs:
+  all: boolean?
+  k: int?
+  very_sensitive: boolean?
   reads: File[]
-  genome_index: Directory
-  genome_prefix: string
+  bowtie_index:
+    type: File
+    secondaryFiles:
+      - .1.bt2
+      - .2.bt2
+      - .3.bt2
+      - .4.bt2
+      - .rev.1.bt2
+      - .rev.2.bt2
+
   threads: int?
-  bwa_k: in?
-  bwa_c: int?
 
 outputs:
   bam_out:
@@ -30,23 +39,34 @@ outputs:
     type: File
 
 steps:
-  bwa_mem:
-    run: ../../tools/bwa/bwa-mem.cwl
-    label: bwa-mem
+  alignment:
+    run: ../../tools/bowtie/bowtie2.cwl
     in:
-      M: {default: true}
-      index: genome_index
-      reads: reads
-      prefix: genome_prefix
-      t: threads
-      k: bwa_k
-      c: bwa_c
-    out: [out_stdout]
+      p: threads
+      q: { default: true }
+      all: all
+      k: k
+      S: { default: true }
+      x: bowtie_index
+      no_discordant: { default: true }
+      no_mixed: { default: true }
+      very_sensitive: very_sensitive
+      no_unal: { default: true }
+      omit_sec_seq: { default: true }
+      xeq: { default: true }
+      reorder: { default: true }
+      fastq1:
+        source: reads
+        valueFrom: $(self[0])
+      fastq2:
+        source: reads
+        valueFrom: $(self[1])
+    out: [output]
   samtools_view:
     run: ../../tools/samtools/samtools-view.cwl
     label: Samtools-view
     in:
-      input: bwa_mem/out_stdout
+      input: alignment/output
       isbam: {default: true}
       output_name:
         valueFrom: '${ return inputs.input.nameroot + ".bam";}'
